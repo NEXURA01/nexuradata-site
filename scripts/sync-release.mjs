@@ -22,6 +22,10 @@ const shouldCopyRootEntry = (entry) => {
     return true;
   }
 
+  if (entry === ".well-known") {
+    return true;
+  }
+
   if (rootFiles.has(entry)) {
     return true;
   }

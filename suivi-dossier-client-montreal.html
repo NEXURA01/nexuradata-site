@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Suivi de dossier client | NEXURA Montréal</title>
+  <meta name="description" content="Portail de suivi de dossier client NEXURA à Montréal. Consultez l'état d'une demande avec un numéro de dossier et un code d'accès transmis par le laboratoire.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#172423">
+  <link rel="canonical" href="https://nexura.ca/suivi-dossier-client-montreal.html">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Navigation principale">
+      <a class="brand" href="index.html" aria-label="NEXURA, retour à l'accueil">
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <span class="brand-text">NEXURA</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html#contact">Ouvrir un dossier</a>
+        <a href="index.html" class="button button-outline button-small">Retour au site</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenu" class="page-shell">
+    <div class="container">
+      <header class="page-hero">
+        <p class="eyebrow">Portail client</p>
+        <h1>Suivi de l'état de votre demande</h1>
+        <p class="page-intro">
+          L'accès au suivi se fait à l'aide d'un numéro de dossier et d'un code d'accès transmis par
+          NEXURA. Le portail affiche uniquement l'état utile du dossier, sans exposer de détails
+          sensibles non nécessaires.
+        </p>
+      </header>
+
+      <div class="status-layout">
+        <section class="page-card status-gate">
+          <h2>Accéder au suivi</h2>
+          <form class="status-form" data-status-form novalidate>
+            <label class="field">
+              <span>Numéro de dossier</span>
+              <input type="text" name="dossier" placeholder="Exemple : NX-2026-0412" required>
+            </label>
+
+            <label class="field">
+              <span>Code d'accès</span>
+              <input type="password" name="code" placeholder="Code transmis par NEXURA" required>
+            </label>
+
+            <div class="form-actions">
+              <button type="submit" class="button button-primary">Consulter le dossier</button>
+              <a href="mailto:contact@nexura.ca?subject=Demande%20de%20suivi%20NEXURA" class="button button-secondary">Demander une mise à jour</a>
+            </div>
+
+            <p class="form-note">
+              En l'absence d'un accès valide, aucune information de dossier n'est affichée. Pour des
+              raisons de confidentialité, ce portail ne doit pas exposer de données sensibles sans
+              contrôle d'accès. La version publique doit être reliée à un accès serveur sécurisé avant
+              activation complète.
+            </p>
+            <p class="form-status" data-status-form-message aria-live="polite"></p>
+          </form>
+        </section>
+
+        <aside class="contact-rail">
+          <article class="contact-card">
+            <h3>États affichés</h3>
+            <ul class="contact-list">
+              <li>Dossier reçu</li>
+              <li>Évaluation en cours</li>
+              <li>Soumission envoyée</li>
+              <li>Intervention autorisée</li>
+              <li>Traitement en cours</li>
+              <li>Restitution ou remise prévue</li>
+            </ul>
+          </article>
+
+          <article class="contact-card">
+            <h3>Confidentialité</h3>
+            <p>Le portail doit rester limité à l'état du dossier, aux prochaines étapes et aux informations nécessaires au client concerné.</p>
+          </article>
+
+          <article class="contact-card">
+            <h3>Besoin urgent</h3>
+            <a href="tel:+18885550199">+1 (888) 555-0199</a>
+            <p>Utilisez l'appel direct si le niveau d'urgence a changé depuis l'ouverture du dossier.</p>
+          </article>
+        </aside>
+      </div>
+
+      <section class="status-panel page-card" data-status-panel hidden>
+        <div class="status-panel-head">
+          <div>
+            <p class="guide-meta">Dossier</p>
+            <h2 data-status-case>NX-0000-0000</h2>
+          </div>
+          <div class="status-badge" data-status-badge>État</div>
+        </div>
+
+        <div class="status-meta">
+          <p><strong>Dernière mise à jour:</strong> <span data-status-updated></span></p>
+          <p><strong>Support:</strong> <span data-status-support></span></p>
+          <p><strong>Prochaine étape:</strong> <span data-status-next></span></p>
+        </div>
+
+        <p class="status-summary" data-status-summary></p>
+
+        <div class="status-timeline" data-status-timeline></div>
+      </section>
+
+      <section class="page-grid">
+        <section class="page-card page-content">
+          <h2>Ce que le client doit voir</h2>
+          <ul>
+            <li>L'état courant du dossier.</li>
+            <li>La dernière mise à jour disponible.</li>
+            <li>La prochaine étape concrète.</li>
+            <li>Un canal clair pour joindre le laboratoire si quelque chose change.</li>
+          </ul>
+        </section>
+
+        <section class="page-card page-content">
+          <h2>Ce que le portail ne doit pas afficher publiquement</h2>
+          <ul>
+            <li>Données récupérées ou inventaires détaillés sans contrôle d'accès fort.</li>
+            <li>Pièces sensibles, captures ou éléments techniques inutiles au suivi.</li>
+            <li>Informations d'autres clients ou structures internes.</li>
+          </ul>
+        </section>
+      </section>
+
+      <div class="page-links">
+        <a class="button button-primary" href="index.html#contact">Ouvrir un nouveau dossier</a>
+        <a class="button button-secondary" href="reception-securisee-donnees-montreal.html">Voir le cadre de réception sécurisée</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>© <span data-year></span> NEXURA. Tous droits réservés.</p>
+    </div>
+  </footer>
+</body>
+</html>

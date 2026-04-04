@@ -1,0 +1,12 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">NEXURA</title>
+  <desc id="desc">Monogramme N en vert profond et cuivre sur fond ivoire.</desc>
+  <defs>
+    <linearGradient id="accent" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2d6b63"/>
+      <stop offset="1" stop-color="#b46b42"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="#f7f0e4"/>
+  <path d="M18 48V16h5l18 21V16h5v32h-5L23 27v21z" fill="url(#accent)"/>
+</svg>

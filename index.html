@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Récupération de données à Montréal | NEXURA</title>
+  <meta name="description" content="Récupération de données à Montréal pour disques durs, SSD, RAID, téléphones et serveurs. Analyse forensique numérique et intervention d'urgence 24/7.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="NEXURA">
+  <meta name="theme-color" content="#172423">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fr_CA">
+  <meta property="og:site_name" content="NEXURA">
+  <meta property="og:title" content="Récupération de données à Montréal | NEXURA">
+  <meta property="og:description" content="Laboratoire de récupération de données, forensique numérique et intervention d'urgence 24/7 à Montréal.">
+  <meta property="og:url" content="https://nexura.ca/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Récupération de données à Montréal | NEXURA">
+  <meta name="twitter:description" content="Disques durs, SSD, RAID, téléphones et serveurs. Récupération de données et forensique numérique à Montréal.">
+  <link rel="canonical" href="https://nexura.ca/">
+  <link rel="alternate" hreflang="fr-CA" href="https://nexura.ca/">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "NEXURA",
+      "description": "Laboratoire de récupération de données et de forensique numérique à Montréal.",
+      "url": "https://nexura.ca/",
+      "email": "mailto:contact@nexura.ca",
+      "telephone": "+1-514-123-4567",
+      "areaServed": ["Montréal", "Québec", "Canada"],
+      "availableLanguage": ["fr-CA", "en-CA"],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "2000, boulevard Robert-Bourassa, bureau 1450",
+        "addressLocality": "Montréal",
+        "addressRegion": "QC",
+        "postalCode": "H3A 3A5",
+        "addressCountry": "CA"
+      }
+    }
+  </script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Combien de temps prend une récupération de données ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le délai dépend du support, de l'état physique du média et du niveau de priorité demandé. Un triage initial permet généralement d'orienter le dossier et d'estimer les prochaines étapes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quels appareils peuvent être pris en charge ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les dossiers concernent souvent des disques durs, SSD, systèmes RAID, serveurs, clés USB et téléphones, selon la nature de la panne ou de l'incident."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Que faire avant d'apporter un support défaillant ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Il est préférable d'arrêter immédiatement les tentatives de démarrage, de réparation ou d'écriture sur le support afin de limiter les risques d'aggravation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Travaillez-vous avec des entreprises, assureurs et cabinets juridiques ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, les demandes peuvent provenir de particuliers comme d'organisations ayant besoin d'une récupération de données, d'une analyse forensique ou d'une documentation exploitable."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelle différence entre une sauvegarde, une restauration et une récupération de données ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La sauvegarde crée une copie préventive, la restauration remet en place une copie saine, et la récupération intervient lorsque les données ne sont plus accessibles sur le support d'origine ou qu'aucune sauvegarde exploitable n'est disponible."
+          }
+        }
+      ]
+    }
+  </script>
+  <script src="assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <nav class="navbar container" aria-label="Navigation principale">
+      <a class="brand" href="index.html" aria-label="NEXURA, retour à l'accueil">
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <span class="brand-text">NEXURA</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#problemes">Problèmes</a>
+        <a href="#expertise">Expertise</a>
+        <a href="#impact">Impact</a>
+        <a href="#zones">Zones</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#contact" class="button button-outline button-small">Contacter le labo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenu">
+    <section class="hero section" aria-labelledby="hero-title">
+      <div class="hero-backdrop" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Montréal · Québec · Laboratoire certifié</p>
+          <h1 id="hero-title">Récupération de données <span class="headline-mark">et vérité numérique.</span></h1>
+          <p class="hero-lead">
+            NEXURA accompagne les particuliers, les entreprises et les dossiers sensibles lorsqu'il
+            faut retrouver des photos, des documents, des archives de travail ou comprendre ce qui est
+            arrivé à un support devenu inaccessible.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#expertise" class="button button-primary">Explorer nos services</a>
+            <a href="#contact" class="button button-secondary">Urgence récupération</a>
+          </div>
+
+          <ul class="hero-highlights" role="list">
+            <li>Urgence 24/7</li>
+            <li>Traitement confidentiel</li>
+            <li>Montréal, intervention nationale</li>
+          </ul>
+        </div>
+
+        <aside class="hero-panel" aria-label="Informations principales">
+          <div class="panel-card">
+            <p class="panel-label">Adresse du laboratoire</p>
+            <p class="panel-value">2000, boulevard Robert-Bourassa, bureau 1450</p>
+            <p class="panel-meta">Montréal (Québec) H3A 3A5</p>
+          </div>
+          <div class="panel-card">
+            <p class="panel-label">Lecture initiale</p>
+            <ul class="panel-ledger" role="list">
+              <li><span>Support</span><strong>HDD / SSD / RAID / Mobile</strong></li>
+              <li><span>Signal</span><strong>suppression / panne / incident</strong></li>
+              <li><span>Priorité</span><strong>courante / urgente / sensible</strong></li>
+            </ul>
+          </div>
+          <div class="panel-card">
+            <p class="panel-label">Canaux directs</p>
+            <a class="panel-link" href="tel:+15141234567">+1 (514) 123-4567</a>
+            <a class="panel-link" href="mailto:contact@nexura.ca">contact@nexura.ca</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section section-lined tactical-section" aria-labelledby="triage-title">
+      <div class="container tactical-grid">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Lecture initiale</p>
+          <h2 id="triage-title">Chaque dossier commence par quatre questions</h2>
+          <p class="section-intro">
+            Un disque qui clique, un SSD qui disparaît, un téléphone brisé ou un appareil lié à un
+            incident interne ne se traitent pas de la même manière. La première décision consiste à
+            protéger le support avant de chercher les données.
+          </p>
+        </div>
+
+        <div class="triage-board" data-reveal>
+          <article class="triage-card">
+            <p class="triage-number">01</p>
+            <h3>Quel support est concerné ?</h3>
+            <p>Disque dur, SSD, RAID, NAS, serveur, téléphone ou support amovible.</p>
+          </article>
+          <article class="triage-card">
+            <p class="triage-number">02</p>
+            <h3>Quel est le signal principal ?</h3>
+            <p>Suppression, formatage, non-détection, dommage physique ou suspicion d'incident.</p>
+          </article>
+          <article class="triage-card">
+            <p class="triage-number">03</p>
+            <h3>Quel est l'enjeu réel ?</h3>
+            <p>Souvenir personnel, continuité d'activité, conformité, litige ou enquête interne.</p>
+          </article>
+          <article class="triage-card">
+            <p class="triage-number">04</p>
+            <h3>Quelle voie ouvre le dossier ?</h3>
+            <p>Récupération courante, traitement technique, préservation ou analyse forensique.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="problemes" class="section" aria-labelledby="problemes-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Problèmes fréquents</p>
+          <h2 id="problemes-title">Les demandes qui reviennent le plus souvent</h2>
+          <p class="section-intro">
+            Que le problème concerne des fichiers supprimés, un disque externe non reconnu ou un
+            téléphone endommagé, l'objectif est de vous aider à identifier rapidement la bonne voie.
+          </p>
+        </div>
+
+        <div class="catalog-grid" data-reveal>
+          <article class="page-card catalog-card">
+            <h3>Fichiers supprimés</h3>
+            <ul>
+              <li>Suppression accidentelle</li>
+              <li>Corbeille vidée</li>
+              <li>Partition ou dossier disparu</li>
+            </ul>
+          </article>
+
+          <article class="page-card catalog-card">
+            <h3>Disque externe ou USB</h3>
+            <ul>
+              <li>Support non reconnu</li>
+              <li>Demande de formatage</li>
+              <li>Erreur d'accès ou lenteur</li>
+            </ul>
+          </article>
+
+          <article class="page-card catalog-card">
+            <h3>SSD, téléphone, ordinateur</h3>
+            <ul>
+              <li>SSD inaccessible</li>
+              <li>Portable qui ne démarre plus</li>
+              <li>Téléphone brisé avec données à sortir</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="page-links" data-reveal>
+          <a class="button button-primary" href="problemes-courants-recuperation-montreal.html">Voir les cas les plus fréquents</a>
+          <a class="button button-secondary" href="#contact">Décrire mon problème</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-lined" aria-labelledby="publics-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Qui nous contacte</p>
+          <h2 id="publics-title">Trois profils reviennent sans cesse</h2>
+          <p class="section-intro">
+            Le besoin réel change, mais la demande de départ est souvent simple: retrouver des données
+            importantes sans empirer la situation.
+          </p>
+        </div>
+
+        <div class="guide-grid" data-reveal>
+          <article class="page-card guide-card">
+            <p class="guide-meta">Particuliers</p>
+            <h3>Photos, vidéos, souvenirs</h3>
+            <p>Cas fréquents: téléphone brisé, disque externe non reconnu, carte mémoire corrompue, ordinateur qui ne démarre plus.</p>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Non technique</p>
+            <h3>Je ne sais pas quoi faire</h3>
+            <p>Le client ne connaît pas toujours le support exact. Il faut parler symptômes, gestes à éviter et prochaine étape claire.</p>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Entreprises</p>
+            <h3>Activité, urgence, confidentialité</h3>
+            <p>RAID, NAS, serveurs, postes critiques, demandes urgentes, documentation et coordination avec équipes TI ou juridiques.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="expertise" class="section section-surface" aria-labelledby="expertise-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Ce que nous faisons</p>
+          <h2 id="expertise-title">Quatre piliers de certitude</h2>
+          <p class="section-intro">
+            Une offre claire inspire davantage confiance lorsqu'elle couvre à la fois les urgences
+            courantes, les supports complexes et les dossiers où la rigueur documentaire devient critique.
+          </p>
+        </div>
+
+        <div class="service-grid" data-reveal>
+          <article class="service-card">
+            <p class="service-index">01</p>
+            <h3>Récupération de données</h3>
+            <p>
+              Récupération physique et logique sur disques durs, SSD, RAID, serveurs et téléphones,
+              avec protocoles de manipulation en environnement contrôlé.
+            </p>
+            <a class="service-link" href="recuperation-donnees-montreal.html">Voir le service</a>
+          </article>
+
+          <article class="service-card">
+            <p class="service-index">02</p>
+            <h3>Forensique numérique</h3>
+            <p>
+              Analyse post-incident, préservation de la preuve, acquisition, chronologie et rapports
+              exploitables pour dossiers internes ou juridiques.
+            </p>
+            <a class="service-link" href="forensique-numerique-montreal.html">Voir le service</a>
+          </article>
+
+          <article class="service-card">
+            <p class="service-index">03</p>
+            <h3>Téléphones et supports mobiles</h3>
+            <p>
+              Intervention sur téléphones, supports amovibles et appareils mobiles lorsque l'accès aux
+              données devient critique après suppression, bris ou incident.
+            </p>
+            <a class="service-link" href="recuperation-telephone-montreal.html">Voir le service</a>
+          </article>
+
+          <article class="service-card">
+            <p class="service-index">04</p>
+            <h3>RAID, SSD et serveurs</h3>
+            <p>
+              Prise en charge de scénarios plus sensibles impliquant environnements RAID, SSD, NAS,
+              serveurs et continuité d'activité pour PME et organisations.
+            </p>
+            <a class="service-link" href="recuperation-raid-ssd-montreal.html">Voir le service</a>
+          </article>
+        </div>
+
+        <div class="page-links" data-reveal>
+          <a class="button button-secondary" href="services-recuperation-forensique-montreal.html">Voir tous les services détaillés</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-surface" aria-labelledby="catalogue-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Vue d'ensemble</p>
+          <h2 id="catalogue-title">Trois voies claires selon le niveau du dossier</h2>
+          <p class="section-intro">
+            Certaines demandes visent simplement à retrouver des fichiers. D'autres exigent une
+            coordination technique plus lourde ou une protection documentaire plus stricte. Voici les
+            trois portes d'entrée les plus utiles.
+          </p>
+        </div>
+
+        <div class="lane-grid" data-reveal>
+          <article class="page-card lane-card">
+            <p class="lane-kicker">Entrée rapide</p>
+            <h3>Demandes courantes</h3>
+            <p class="lane-summary">
+              Pour les fichiers, photos ou dossiers devenus inaccessibles sans contexte d'enquête.
+            </p>
+            <ul>
+              <li>Fichiers supprimés par erreur</li>
+              <li>Disque dur externe non reconnu</li>
+              <li>SSD devenu inaccessible</li>
+              <li>Clé USB ou carte mémoire corrompue</li>
+              <li>Téléphone brisé avec données importantes</li>
+            </ul>
+            <a class="service-link" href="problemes-courants-recuperation-montreal.html">Voir les cas courants</a>
+          </article>
+
+          <article class="page-card lane-card">
+            <p class="lane-kicker">Niveau technique</p>
+            <h3>Dossiers techniques</h3>
+            <p class="lane-summary">
+              Pour les environnements où une mauvaise manipulation peut compliquer la récupération.
+            </p>
+            <ul>
+              <li>RAID dégradé ou reconstruction échouée</li>
+              <li>NAS ou serveur contenant des données critiques</li>
+              <li>Erreur SMART, lenteur extrême ou bruit anormal</li>
+              <li>Volumes professionnels ou supports multiples</li>
+              <li>Besoins de coordination avec une équipe TI</li>
+            </ul>
+            <a class="service-link" href="recuperation-raid-ssd-montreal.html">Voir les cas techniques</a>
+          </article>
+
+          <article class="page-card lane-card">
+            <p class="lane-kicker">Dossier sensible</p>
+            <h3>Dossiers sensibles</h3>
+            <p class="lane-summary">
+              Pour les situations où la donnée compte, mais où le contexte du dossier compte aussi.
+            </p>
+            <ul>
+              <li>Fraude interne ou comportement suspect</li>
+              <li>Préservation d'un support ou d'un appareil</li>
+              <li>Incident cyber, ransomware ou exfiltration</li>
+              <li>Chronologie d'événements et documentation</li>
+              <li>Collaboration avec cabinet juridique ou assureur</li>
+            </ul>
+            <a class="service-link" href="forensique-numerique-montreal.html">Voir l'approche forensique</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="difference-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Méthode et posture</p>
+          <h2 id="difference-title">Récupérer les données sans perdre le contexte du dossier</h2>
+          <p class="section-intro">
+            La qualité d'une intervention ne se mesure pas seulement aux fichiers retrouvés. Elle se
+            mesure aussi à la manière dont le support a été protégé, expliqué et documenté lorsque le
+            dossier touche des opérations, des responsabilités internes ou un cadre juridique.
+          </p>
+        </div>
+
+        <div class="authority-grid" data-reveal>
+          <article class="page-card authority-note">
+            <p class="authority-tag">Dossier Montréal / Québec</p>
+            <h3>Un même incident peut mêler panne technique, urgence d'affaires et besoin de preuve.</h3>
+            <p>
+              Certaines situations demandent simplement de récupérer des fichiers. D'autres exigent
+              aussi de préserver un appareil, d'expliquer une chronologie, de limiter les manipulations
+              et de garder un dossier lisible pour des tiers.
+            </p>
+            <ul class="authority-points">
+              <li>Supports manipulés avec prudence selon le scénario</li>
+              <li>Lecture claire des limites, risques et prochaines étapes</li>
+              <li>Capacité à parler au particulier comme à l'équipe TI</li>
+            </ul>
+          </article>
+
+          <div class="authority-list">
+            <article class="authority-item">
+              <p class="authority-item-index">01</p>
+              <h3>Supports complexes</h3>
+              <p>Disques durs, SSD, RAID, NAS, serveurs, téléphones et supports externes dans des scénarios de panne logique, physique ou post-incident.</p>
+            </article>
+            <article class="authority-item">
+              <p class="authority-item-index">02</p>
+              <h3>Préservation de l'intégrité</h3>
+              <p>Approche adaptée aux dossiers où la conservation du support, la traçabilité et la rigueur documentaire comptent autant que la récupération.</p>
+            </article>
+            <article class="authority-item">
+              <p class="authority-item-index">03</p>
+              <h3>Lecture claire des résultats</h3>
+              <p>Comprendre ce qui s'est passé, ce qui a été récupéré et ce qui reste à valider fait partie du service rendu.</p>
+            </article>
+            <article class="authority-item">
+              <p class="authority-item-index">04</p>
+              <h3>Interlocuteurs variés</h3>
+              <p>Le même dossier peut impliquer un particulier, une direction, un cabinet juridique, un assureur ou une équipe de réponse à incident.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="impact" class="section section-lined" aria-labelledby="impact-title">
+      <div class="container">
+        <div class="section-heading section-heading-center" data-reveal>
+          <p class="eyebrow">Indicateurs de confiance</p>
+          <h2 id="impact-title">Quelques repères de méthode, de rythme et de rigueur</h2>
+        </div>
+
+        <dl class="stats-grid" data-reveal>
+          <div class="stat-card">
+            <dt>Taux de réussite</dt>
+            <dd>96%</dd>
+            <p>En récupération de données</p>
+          </div>
+          <div class="stat-card">
+            <dt>Mandats forensiques</dt>
+            <dd>350+</dd>
+            <p>Accompagnés au Canada</p>
+          </div>
+          <div class="stat-card">
+            <dt>Couverture d'urgence</dt>
+            <dd>24/7</dd>
+            <p>Prise en charge et triage initial</p>
+          </div>
+          <div class="stat-card">
+            <dt>Documentation</dt>
+            <dd>100%</dd>
+            <p>Chaîne de possession tracée</p>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <section id="zones" class="section" aria-labelledby="zones-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Couverture</p>
+          <h2 id="zones-title">Laboratoire à Montréal, demandes traitées dans tout le Grand Montréal et au-delà</h2>
+          <p class="section-intro">
+            Le laboratoire principal demeure à Montréal, avec une capacité de prise en charge pour des
+            dossiers provenant du Grand Montréal, d'autres villes du Québec et de certaines demandes
+            ailleurs au Canada selon la nature du support.
+          </p>
+        </div>
+
+        <div class="info-grid" data-reveal>
+          <article class="page-card info-card">
+            <h3>Montréal</h3>
+            <p>
+              Point d'ancrage principal pour les dossiers de récupération de données, SSD, RAID,
+              téléphones et forensique numérique.
+            </p>
+          </article>
+          <article class="page-card info-card">
+            <h3>Laval et Rive-Nord</h3>
+            <p>
+              Une zone proche de Montréal où les besoins concernent souvent des PME, des travailleurs
+              autonomes et des urgences sur supports externes.
+            </p>
+          </article>
+          <article class="page-card info-card">
+            <h3>Longueuil et Rive-Sud</h3>
+            <p>
+              Des demandes de proximité qui méritent d'être clairement mentionnées, sans prétendre à une
+              présence physique distincte si ce n'est pas le cas.
+            </p>
+          </article>
+        </div>
+
+        <ul class="pill-list" role="list" data-reveal>
+          <li>Montréal</li>
+          <li>Laval</li>
+          <li>Longueuil</li>
+          <li>Brossard</li>
+          <li>Terrebonne</li>
+          <li>Blainville</li>
+          <li>Repentigny</li>
+          <li>Québec</li>
+          <li>Sherbrooke</li>
+          <li>Gatineau</li>
+        </ul>
+
+        <div class="page-links" data-reveal>
+          <a class="button button-secondary" href="zones-desservies-montreal-quebec.html">Voir les zones desservies</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="trust-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Confiance et discrétion</p>
+          <h2 id="trust-title">Des environnements critiques nous confient leurs incidents sensibles</h2>
+        </div>
+
+        <ul class="pill-list" role="list" data-reveal>
+          <li>Institutions financières canadiennes</li>
+          <li>Entreprises Fortune 500 au Canada</li>
+          <li>Entreprises technologiques et industrielles</li>
+          <li>Laboratoires de recherche québécois</li>
+          <li>Agences gouvernementales sous NDA</li>
+          <li>Municipalités et services publics</li>
+          <li>Opérateurs télécoms nationaux</li>
+        </ul>
+
+        <p class="section-note" data-reveal>
+          Par respect de la confidentialité, les références clients détaillées ne sont partagées qu'au
+          besoin et avec autorisation.
+        </p>
+      </div>
+    </section>
+
+    <section id="certifications" class="section section-surface" aria-labelledby="certifications-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Conformité</p>
+          <h2 id="certifications-title">Cadres de sécurité et de qualité</h2>
+        </div>
+
+        <ul class="pill-list pill-list-accent" role="list" data-reveal>
+          <li>ISO/IEC 27001:2022</li>
+          <li>SOC 2 Type II</li>
+          <li>ISO 17025 (forensique)</li>
+          <li>ISO 5 salle blanche</li>
+          <li>Loi 25 (Québec)</li>
+        </ul>
+
+        <p class="section-note" data-reveal>
+          Selon le type de mandat, les exigences de sécurité, de confidentialité et de traçabilité
+          doivent être alignées avec le niveau réel d'intervention attendu.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="precautions-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Avant intervention</p>
+          <h2 id="precautions-title">Trois gestes à éviter avant d'apporter un support</h2>
+          <p class="section-intro">
+            Une grande partie du professionnalisme se joue avant même l'ouverture du dossier. Quelques
+            mauvaises actions répétées peuvent compliquer inutilement une récupération ou brouiller un
+            contexte sensible.
+          </p>
+        </div>
+
+        <div class="warning-grid" data-reveal>
+          <article class="page-card warning-card">
+            <h3>Ne pas reformater</h3>
+            <p>Si le système demande de formater, arrêtez-vous. Une écriture supplémentaire peut réduire les chances de récupération.</p>
+          </article>
+          <article class="page-card warning-card">
+            <h3>Ne pas multiplier les redémarrages</h3>
+            <p>Un support instable, un disque qui clique ou un SSD qui disparaît peut se dégrader à force de tentatives.</p>
+          </article>
+          <article class="page-card warning-card">
+            <h3>Ne pas improviser sur un RAID</h3>
+            <p>Une reconstruction ou une permutation hasardeuse peut modifier la structure logique et compliquer fortement le dossier.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="processus" class="section" aria-labelledby="process-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Méthode</p>
+          <h2 id="process-title">Comment se déroule une récupération de données à Montréal</h2>
+          <p class="section-intro">
+            Avant toute intervention, les clients veulent surtout comprendre ce qui se passe après
+            l'appel, quel type de support est accepté et comment se déroule l'évaluation initiale.
+          </p>
+        </div>
+
+        <div class="info-grid" data-reveal>
+          <article class="page-card info-card">
+            <h3>1. Triage initial</h3>
+            <p>
+              Échange rapide sur le contexte, le type d'appareil, les symptômes observés et le niveau
+              d'urgence afin d'orienter correctement le dossier.
+            </p>
+          </article>
+          <article class="page-card info-card">
+            <h3>2. Évaluation du support</h3>
+            <p>
+              Vérification technique du média, estimation du niveau d'intervention requis et validation
+              des prochaines étapes avant toute opération plus poussée.
+            </p>
+          </article>
+          <article class="page-card info-card">
+            <h3>3. Récupération et restitution</h3>
+            <p>
+              Exécution contrôlée de la récupération, documentation claire du dossier et remise des
+              données selon le périmètre convenu.
+            </p>
+          </article>
+        </div>
+
+        <p class="section-note" data-reveal>
+          Les demandes peuvent provenir de Montréal, Laval, Longueuil, de la grande région de Québec
+          et d'ailleurs au Canada selon la nature du support et de l'incident.
+        </p>
+
+        <div class="page-links" data-reveal>
+          <a class="button button-secondary" href="processus-recuperation-donnees-montreal.html">Voir le processus détaillé</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-lined" aria-labelledby="guides-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Guides mis à jour</p>
+          <h2 id="guides-title">Des explications utiles, tenues à jour</h2>
+          <p class="section-intro">
+            Les sujets importants doivent être expliqués clairement. Le but n'est pas d'empiler des
+            pages, mais de répondre aux questions qui reviennent réellement avant un dépôt ou une prise
+            en charge.
+          </p>
+        </div>
+
+        <div class="guide-grid" data-reveal>
+          <article class="page-card guide-card">
+            <p class="guide-meta">Mis à jour le 4 avril 2026</p>
+            <h3>Processus de récupération</h3>
+            <p>Étapes, triage, évaluation, devis, récupération et restitution des données.</p>
+            <a class="service-link" href="processus-recuperation-donnees-montreal.html">Lire le guide</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Mis à jour le 4 avril 2026</p>
+            <h3>Sauvegarde vs récupération</h3>
+            <p>Quand une restauration suffit, et quand un laboratoire devient nécessaire.</p>
+            <a class="service-link" href="sauvegarde-vs-recuperation-donnees-montreal.html">Lire le guide</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Mis à jour le 4 avril 2026</p>
+            <h3>Cas courants</h3>
+            <p>Fichiers supprimés, disque non reconnu, SSD inaccessible, téléphone endommagé.</p>
+            <a class="service-link" href="problemes-courants-recuperation-montreal.html">Lire le guide</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Mis à jour le 4 avril 2026</p>
+            <h3>Prévenir une nouvelle perte</h3>
+            <p>Copies utiles, vérification des sauvegardes, gestes à éviter et organisation plus solide.</p>
+            <a class="service-link" href="prevention-perte-donnees-montreal.html">Lire le guide</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Mis à jour le 4 avril 2026</p>
+            <h3>Résilience entreprise</h3>
+            <p>Validation des restaurations, segmentation, intégrité et préparation à long terme.</p>
+            <a class="service-link" href="resilience-donnees-entreprise-montreal.html">Lire le guide</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Mis à jour le 4 avril 2026</p>
+            <h3>Tarifs indicatifs</h3>
+            <p>Prix de départ pour les cas simples, et orientation claire vers une soumission pour les cas complexes.</p>
+            <a class="service-link" href="tarifs-recuperation-donnees-montreal.html">Voir les tarifs</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Portail client</p>
+            <h3>Suivi de dossier</h3>
+            <p>Consulter l'état d'une demande avec un numéro de dossier et un code d'accès transmis par NEXURA.</p>
+            <a class="service-link" href="suivi-dossier-client-montreal.html">Accéder au suivi</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section section-surface" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Questions fréquentes</p>
+          <h2 id="faq-title">Réponses utiles avant d'envoyer un disque, un SSD ou un téléphone</h2>
+        </div>
+
+        <div class="faq-list" data-reveal>
+          <details class="faq-item" open>
+            <summary>Combien de temps prend une récupération de données ?</summary>
+            <p>
+              Le délai varie selon l'état du support, le type de panne et le niveau d'urgence demandé.
+              Un triage initial permet généralement de clarifier le scénario et d'indiquer la suite.
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Quels supports peuvent être pris en charge ?</summary>
+            <p>
+              Les demandes concernent fréquemment les disques durs, SSD, RAID, serveurs, clés USB,
+              cartes mémoire et téléphones, selon la nature du dommage ou de la suppression.
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Que faire avant d'apporter un appareil défaillant ?</summary>
+            <p>
+              Il vaut mieux arrêter les tentatives répétées de redémarrage, d'écriture ou de logiciel
+              de réparation. Plus le support est manipulé, plus le risque d'aggraver la situation
+              augmente.
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Quelle différence entre sauvegarde, restauration et récupération de données ?</summary>
+            <p>
+              Une sauvegarde crée une copie à l'avance. Une restauration remet en place une copie saine.
+              La récupération devient nécessaire quand la copie n'existe pas, ne suffit plus, ou quand
+              le support d'origine reste la seule source utile.
+              <a class="service-link" href="sauvegarde-vs-recuperation-donnees-montreal.html">Voir le guide dédié</a>
+            </p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Proposez-vous aussi un accompagnement forensique ?</summary>
+            <p>
+              Oui, selon les besoins, le travail peut inclure la préservation du support, la
+              documentation, l'analyse et la remise d'éléments structurés pour un usage interne ou
+              juridique.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact-section" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="contact-shell" data-reveal>
+          <div class="contact-copy">
+            <p class="eyebrow">Contact</p>
+            <h2 id="contact-title">Parler à un laboratoire, pas à un centre d'appels</h2>
+            <p class="section-intro">
+              Décrivez le support, les symptômes observés et le niveau d'urgence. Vous serez orienté
+              vers la bonne voie, qu'il s'agisse d'une récupération directe, d'un cas technique ou
+              d'un dossier plus sensible.
+            </p>
+          </div>
+
+          <div class="contact-layout">
+            <form class="contact-form page-card" data-intake-form novalidate>
+              <div class="form-grid">
+                <label class="field">
+                  <span>Nom complet</span>
+                  <input type="text" name="nom" autocomplete="name" required>
+                </label>
+
+                <label class="field">
+                  <span>Courriel</span>
+                  <input type="email" name="courriel" autocomplete="email" required>
+                </label>
+
+                <label class="field">
+                  <span>Téléphone</span>
+                  <input type="tel" name="telephone" autocomplete="tel">
+                </label>
+
+                <label class="field">
+                  <span>Profil</span>
+                  <select name="profil" required>
+                    <option value="">Choisir</option>
+                    <option>Particulier</option>
+                    <option>Entreprise</option>
+                    <option>Cabinet juridique</option>
+                    <option>Assureur</option>
+                    <option>Autre</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Support concerné</span>
+                  <select name="support" required>
+                    <option value="">Choisir</option>
+                    <option>Disque dur</option>
+                    <option>SSD</option>
+                    <option>RAID / NAS / serveur</option>
+                    <option>Téléphone / mobile</option>
+                    <option>USB / carte mémoire</option>
+                    <option>Je ne sais pas</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Niveau d'urgence</span>
+                  <select name="urgence" required>
+                    <option value="">Choisir</option>
+                    <option>Standard</option>
+                    <option>Rapide</option>
+                    <option>Urgent</option>
+                    <option>Très sensible</option>
+                  </select>
+                </label>
+
+                <label class="field field-full">
+                  <span>Décrivez le problème</span>
+                  <textarea name="message" rows="7" required placeholder="Exemple : disque externe non reconnu, photos importantes, aucun logiciel tenté, besoin rapide."></textarea>
+                </label>
+
+                <label class="consent-check field-full">
+                  <input type="checkbox" name="consentement" required>
+                  <span>J'accepte que NEXURA utilise ces renseignements pour répondre à ma demande, conformément à la <a href="politique-confidentialite.html">politique de confidentialité</a> et aux <a href="engagements-conformite-quebec.html">engagements du site</a>.</span>
+                </label>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="button button-primary">Préparer ma demande</button>
+                <a href="tel:+18885550199" class="button button-secondary">Appel urgent 24/7</a>
+              </div>
+
+              <p class="form-note">Le formulaire prépare un message structuré vers <a href="mailto:contact@nexura.ca">contact@nexura.ca</a> sans passer par un service tiers. Aucune facturation n'est engagée à cette étape; les frais, dépôts et conditions applicables sont communiqués avant intervention. Évitez d'envoyer des fichiers sensibles ou un support sans coordination préalable; le cadre de <a href="reception-securisee-donnees-montreal.html">réception sécurisée</a> précise la marche à suivre.</p>
+              <p class="form-status" data-form-status aria-live="polite"></p>
+            </form>
+
+            <div class="contact-rail">
+              <article class="contact-card">
+                <h3>Urgence</h3>
+                <a href="tel:+18885550199">+1 (888) 555-0199</a>
+                <p>Disponible 24/7 pour triage initial et prise en charge.</p>
+              </article>
+
+              <article class="contact-card">
+                <h3>Engagements au contact</h3>
+                <ul class="contact-list">
+                  <li>Collecte limitée au nécessaire</li>
+                  <li>Communication claire en français</li>
+                  <li>Traitement confidentiel du dossier</li>
+                  <li>Réception coordonnée des supports et informations</li>
+                </ul>
+              </article>
+
+              <article class="contact-card">
+                <h3>Modalités de paiement</h3>
+                <p>Les frais, acomptes éventuels, modes de paiement acceptés et conditions d'exigibilité sont communiqués au devis, au mandat ou à la prise en charge, selon les modalités convenues et le cadre applicable.</p>
+                <a class="panel-link" href="tarifs-recuperation-donnees-montreal.html">Voir les tarifs indicatifs</a>
+              </article>
+
+              <article class="contact-card">
+                <h3>Après acceptation de la soumission</h3>
+                <ul class="contact-list">
+                  <li>Périmètre d'intervention confirmé</li>
+                  <li>Niveau d'urgence et étapes convenus</li>
+                  <li>Frais, dépôt et conditions clarifiés</li>
+                  <li>Cadre de confidentialité et restitution établi</li>
+                </ul>
+              </article>
+
+              <article class="contact-card">
+                <h3>Envoi du matériel</h3>
+                <p>Lorsque le dossier requiert l'expédition du support, l'envoi par Postes Canada peut être pris en charge selon les modalités prévues à la soumission acceptée.</p>
+                <a class="panel-link" href="reception-securisee-donnees-montreal.html">Voir le cadre de réception sécurisée</a>
+              </article>
+
+              <article class="contact-card">
+                <h3>Laboratoire</h3>
+                <address>
+                  2000, boulevard Robert-Bourassa, bureau 1450<br>
+                  Montréal (Québec) H3A 3A5
+                </address>
+                <p>Français et anglais.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="brand brand-footer" href="index.html" aria-label="NEXURA, retour à l'accueil">
+          <span class="brand-mark" aria-hidden="true">N</span>
+          <span class="brand-text">NEXURA</span>
+        </a>
+        <p class="footer-copy">La science de la certitude.</p>
+        <p class="footer-copy">Montréal · Québec · Canada</p>
+        <a href="tel:+15141234567">+1 (514) 123-4567</a>
+        <a href="mailto:contact@nexura.ca">contact@nexura.ca</a>
+      </div>
+
+      <div>
+        <h2 class="footer-title">Navigation</h2>
+        <a href="#expertise">Expertise</a>
+        <a href="#impact">Impact</a>
+        <a href="#zones">Zones desservies</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+
+      <div>
+        <h2 class="footer-title">Services</h2>
+        <a href="recuperation-donnees-montreal.html">Récupération de données</a>
+        <a href="recuperation-raid-ssd-montreal.html">RAID et SSD</a>
+        <a href="forensique-numerique-montreal.html">Forensique numérique</a>
+        <a href="recuperation-telephone-montreal.html">Téléphones et mobiles</a>
+        <a href="processus-recuperation-donnees-montreal.html">Processus de récupération</a>
+        <a href="tarifs-recuperation-donnees-montreal.html">Tarifs indicatifs</a>
+        <a href="suivi-dossier-client-montreal.html">Suivi de dossier</a>
+        <a href="sauvegarde-vs-recuperation-donnees-montreal.html">Sauvegarde vs récupération</a>
+        <a href="prevention-perte-donnees-montreal.html">Prévention</a>
+        <a href="resilience-donnees-entreprise-montreal.html">Résilience entreprise</a>
+        <a href="zones-desservies-montreal-quebec.html">Zones desservies</a>
+      </div>
+
+      <div>
+        <h2 class="footer-title">Légal</h2>
+        <a href="engagements-conformite-quebec.html">Engagements</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="politique-confidentialite.html">Politique de confidentialité</a>
+      </div>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© <span data-year></span> NEXURA. Tous droits réservés.</p>
+    </div>
+  </footer>
+</body>
+</html>
+

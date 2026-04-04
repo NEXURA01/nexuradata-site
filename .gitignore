@@ -1,0 +1,17 @@
+# OS / Explorer
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Local environment / secrets
+.env
+.env.*
+
+# Cloudflare / build artifacts
+.wrangler/
+release-cloudflare/
+*.zip

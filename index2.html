@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="fr-ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="canonical" href="https://nexura.ca/">
+  <title>NEXURA | Récupération de données & forensique — Montréal</title>
+  <meta name="description" content="Laboratoire de récupération de données et forensique numérique à Montréal. Récupération disque dur, SSD, RAID, téléphone. Urgence 24/7.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --cyan: #06b6d4; --navy: #020617; --navy-light: #0f172a; --white: #fff; --slate: #cbd5e1; --slate-dark: #94a3b8; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--navy); color: var(--white); line-height: 1.5; scroll-behavior: smooth; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+    .navbar { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); background: rgba(2,6,23,0.85); border-bottom: 1px solid rgba(6,182,212,0.2); padding: 1rem 0; }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #fff, var(--cyan)); background-clip: text; -webkit-background-clip: text; color: transparent; }
+    .logo span { color: var(--cyan); background: none; }
+    .nav-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .nav-links a { color: var(--slate); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cyan); }
+    .btn-outline-small { border: 1px solid var(--cyan); padding: 0.5rem 1.2rem; border-radius: 40px; background: transparent; color: var(--cyan); font-weight: 700; }
+    .btn-outline-small:hover { background: var(--cyan); color: var(--navy); }
+    .hero { min-height: 90vh; display: flex; align-items: center; position: relative; background: radial-gradient(circle at 30% 50%, #083344 0%, var(--navy) 80%); }
+    .hero-content { max-width: 800px; }
+    .hero-badge { font-size: 0.75rem; font-weight: 800; letter-spacing: 5px; color: var(--cyan); margin-bottom: 1.5rem; }
+    .hero h1 { font-size: clamp(3rem, 8vw, 5.5rem); line-height: 1.1; font-weight: 800; margin-bottom: 1.5rem; }
+    .hero h1 .accent { color: var(--cyan); }
+    .hero p { font-size: 1.25rem; color: var(--slate); margin-bottom: 2.5rem; }
+    .btn-group { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+    .btn-primary { background: var(--cyan); color: var(--navy); padding: 1rem 2.5rem; border-radius: 4px; text-decoration: none; font-weight: 800; transition: 0.2s; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -12px rgba(6,182,212,0.4); }
+    .btn-secondary { border: 1px solid var(--cyan); color: var(--cyan); padding: 1rem 2.5rem; border-radius: 4px; text-decoration: none; font-weight: 800; background: transparent; }
+    .btn-secondary:hover { background: rgba(6,182,212,0.1); }
+    .local-badge { display: inline-block; background: rgba(6,182,212,0.15); padding: 0.4rem 1rem; border-radius: 40px; font-size: 0.75rem; margin-top: 1.5rem; }
+    .horizons { padding: 100px 0; background: linear-gradient(to bottom, var(--navy), #030b1a); }
+    .section-title { text-align: center; font-size: 2.5rem; font-weight: 700; margin-bottom: 3rem; }
+    .section-title span { color: var(--cyan); }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--slate-dark); border-radius: 24px; overflow: hidden; }
+    .horizon-card { background: var(--navy-light); padding: 3rem 1.5rem; transition: 0.3s; }
+    .horizon-card:hover { background: var(--cyan); transform: translateY(-6px); }
+    .horizon-card h3 { font-size: 1.6rem; margin-bottom: 1rem; }
+    .horizon-card p { color: var(--slate); font-size: 0.9rem; }
+    .horizon-card:hover p, .horizon-card:hover h3 { color: var(--navy); }
+    .stats { padding: 80px 0; background: var(--navy-light); border-top: 1px solid rgba(6,182,212,0.2); border-bottom: 1px solid rgba(6,182,212,0.2); }
+    .stats-grid { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2rem; text-align: center; }
+    .stat-item { flex: 1; min-width: 150px; }
+    .stat-number { font-size: 3rem; font-weight: 800; color: var(--cyan); }
+    .stat-label { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--slate); }
+    .trusted { padding: 70px 0; text-align: center; }
+    .trusted p { color: var(--slate-dark); letter-spacing: 2px; font-size: 0.75rem; margin-bottom: 2rem; }
+    .client-logos { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; }
+    .client-logos span { font-size: 0.9rem; font-weight: 600; color: var(--slate); background: rgba(255,255,255,0.03); padding: 0.5rem 1.2rem; border-radius: 40px; }
+    .certs { background: rgba(6,182,212,0.03); padding: 70px 0; text-align: center; }
+    .cert-badge { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+    .cert-item { background: rgba(6,182,212,0.1); padding: 0.6rem 1.5rem; border-radius: 60px; font-weight: 600; border: 1px solid rgba(6,182,212,0.3); font-size: 0.85rem; }
+    .footer { padding: 80px 0 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
+    .footer-col h4 { color: var(--cyan); margin-bottom: 1.2rem; }
+    .footer-col a, .footer-col p { color: var(--slate-dark); text-decoration: none; display: block; margin-bottom: 0.7rem; font-size: 0.85rem; }
+    .footer-col a:hover { color: var(--cyan); }
+    .footer-bottom { text-align: center; padding-top: 2rem; font-size: 0.7rem; color: var(--slate-dark); border-top: 1px solid rgba(255,255,255,0.05); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 1rem; background: transparent; } .horizon-card { border-radius: 20px; } }
+    @media (max-width: 768px) { .grid-4 { grid-template-columns: 1fr; } .stats-grid { flex-direction: column; } .nav-container { flex-direction: column; } .hero h1 { font-size: clamp(2.5rem, 10vw, 4rem); } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container nav-container">
+    <div class="logo">NEXURA <span>GLOBAL</span></div>
+    <div class="nav-links">
+      <a href="#expertise">Expertise</a>
+      <a href="#impact">Impact</a>
+      <a href="#certifications">Certifications</a>
+      <a href="#contact" class="btn-outline-small">Contacter le labo</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">MONTRÉAL · QUÉBEC · LABORATOIRE CERTIFIÉ</div>
+        <h1>Récupération de données <br><span class="accent">& vérité numérique.</span></h1>
+        <p>NEXURA est le spécialiste canadien en récupération de données et forensique numérique. Intervention d'urgence 24/7.</p>
+        <div class="btn-group">
+          <a href="#expertise" class="btn-primary">Explorer nos services →</a>
+          <a href="#contact" class="btn-secondary">Urgence récupération</a>
+        </div>
+        <div class="local-badge">📍 Laboratoire certifié — 2000 Robert-Bourassa, Montréal</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="expertise" class="horizons">
+    <div class="container">
+      <h2 class="section-title reveal">Quatre <span>piliers</span> de certitude</h2>
+      <div class="grid-4 reveal">
+        <div class="horizon-card"><h3>Récupération <br>de données</h3><p>Récupération physique et logique : disques durs, SSD, RAID, téléphones, serveurs. Salle blanche ISO 5. Taux de succès > 96 %.</p></div>
+        <div class="horizon-card"><h3>Forensique <br>numérique</h3><p>Analyse post-incident, chaîne de preuve légale et reconstruction avancée pour incidents cyber au Canada.</p></div>
+        <div class="horizon-card"><h3>Téléphones et <br>supports mobiles</h3><p>Extraction et récupération de données sur téléphones, supports amovibles et appareils mobiles lorsque l'accès devient critique.</p></div>
+        <div class="horizon-card"><h3>RAID, SSD <br>et serveurs</h3><p>Prise en charge de dossiers sensibles impliquant environnements RAID, SSD, NAS, serveurs et continuité d'activité.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="impact" class="stats">
+    <div class="container">
+      <div class="stats-grid reveal">
+        <div class="stat-item"><div class="stat-number">96%</div><div class="stat-label">TAUX DE RÉUSSITE</div><p style="font-size:0.75rem; margin-top:0.5rem;">en récupération de données</p></div>
+        <div class="stat-item"><div class="stat-number">350+</div><div class="stat-label">MANDATS FORENSIQUES</div><p style="font-size:0.75rem; margin-top:0.5rem;">au Canada</p></div>
+        <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">INTERVENTION D'URGENCE</div><p style="font-size:0.75rem; margin-top:0.5rem;">couverture nationale</p></div>
+        <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">CHAÎNE DE PREUVE</div><p style="font-size:0.75rem; margin-top:0.5rem;">admissible en cour</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="trusted">
+    <div class="container">
+      <p>ILS NOUS ONT FAIT CONFIANCE</p>
+      <div class="client-logos reveal">
+        <span>🏛️ Institutions financières canadiennes</span>
+        <span>🏢 Entreprises du Fortune 500 au Canada</span>
+        <span>⚡ Entreprises technologiques montréalaises</span>
+        <span>🔬 Laboratoires de recherche québécois</span>
+        <span>🛡️ Agences gouvernementales (sous NDA)</span>
+        <span>🏙️ Municipalités québécoises</span>
+        <span>📡 Opérateurs télécoms nationaux</span>
+      </div>
+      <p style="font-size:0.7rem; color:#64748b; margin-top:1.5rem;">* Par respect de la confidentialité, nous ne divulguons pas nos clients sans autorisation écrite.</p>
+    </div>
+  </section>
+
+  <section id="certifications" class="certs">
+    <div class="container">
+      <h2 class="section-title reveal">Certifications <span>globales</span></h2>
+      <div class="cert-badge reveal">
+        <div class="cert-item">ISO/IEC 27001:2022</div>
+        <div class="cert-item">SOC 2 Type II</div>
+        <div class="cert-item">ISO 17025 (Forensique)</div>
+        <div class="cert-item">ISO 5 Salle blanche</div>
+        <div class="cert-item">Loi 25 (Québec) — conformité</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact" class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>NEXURA GLOBAL</h4><p>La science de la certitude.</p><p>Montréal · Québec · Canada</p><p>2000, boulevard Robert-Bourassa, bureau 1450<br>Montréal (Québec) H3A 3A5</p></div>
+      <div class="footer-col"><h4>Services</h4><p>Récupération de données</p><p>Forensique numérique</p><p>Téléphones et mobiles</p><p>RAID, SSD et serveurs</p></div>
+      <div class="footer-col"><h4>Laboratoire</h4><p>Intervention d'urgence 24/7</p><p>Chaîne de preuve certifiée</p><p>Témoignage expert</p><p>Conformité Loi 25</p></div>
+      <div class="footer-col"><h4>Joindre l’équipe</h4><a href="mailto:contact@nexura.ca">contact@nexura.ca</a><a href="tel:+15141234567">+1 (514) 123-4567</a><p>Ligne d'urgence 24/7 : +1 (888) 555-0199</p><p>Français · English</p></div>
+    </div>
+    <div class="footer-bottom">© 2026 NEXURA — Laboratoire accrédité ISO 5. Récupération de données, forensique et intégrité.</div>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((e) => { e.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
+

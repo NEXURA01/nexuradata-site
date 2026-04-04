@@ -102,7 +102,7 @@ Scope:
 - Mobile device and network evidence
 - Legal, insurance, and enterprise audience
 
-## Key opportunity for NEXURA
+## Key opportunity for NEXURADATA
 
 Inference from the competitor set:
 - There are several data recovery players in or around Montreal, but fewer competitors that clearly and cleanly combine:
@@ -111,11 +111,11 @@ Inference from the competitor set:
   - business-friendly communication
   - French-first local positioning
 
-That combined positioning is a strong opening for NEXURA.
+That combined positioning is a strong opening for NEXURADATA.
 
 Additional inference from Chronodisk:
 - Chronodisk's local strength is not only the lab itself. It also signals geographic coverage and partner breadth.
-- NEXURA should answer this by emphasizing:
+- NEXURADATA should answer this by emphasizing:
   - Montreal lab
   - clear service areas
   - city mentions that match real coverage
@@ -152,7 +152,7 @@ Additional inference from Chronodisk:
 
 ## Important caution
 
-Do not copy competitor claims unless they are verifiably true for NEXURA:
+Do not copy competitor claims unless they are verifiably true for NEXURADATA:
 - recovery rates
 - clean room level
 - certifications

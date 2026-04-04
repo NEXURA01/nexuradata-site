@@ -1,4 +1,4 @@
-﻿const yearTarget = document.querySelector("[data-year]");
+const yearTarget = document.querySelector("[data-year]");
 
 if (yearTarget) {
   yearTarget.textContent = new Date().getFullYear();
@@ -77,7 +77,7 @@ if (intakeForm) {
     }
 
     const formData = new FormData(intakeForm);
-    const subject = `Demande NEXURA - ${formData.get("support")} - ${formData.get("urgence")}`;
+    const subject = `Demande NEXURADATA - ${formData.get("support")} - ${formData.get("urgence")}`;
     const bodyLines = [
       `Nom: ${formData.get("nom") || ""}`,
       `Courriel: ${formData.get("courriel") || ""}`,
@@ -191,7 +191,7 @@ if (statusForm) {
 
       if (messageTarget) {
         messageTarget.dataset.state = "error";
-        messageTarget.textContent = "Aucun dossier n'a été trouvé avec cet accès. Vérifiez les identifiants transmis par NEXURA ou demandez une mise à jour.";
+        messageTarget.textContent = "Aucun dossier n'a été trouvé avec cet accès. Vérifiez les identifiants transmis par NEXURADATA ou demandez une mise à jour.";
       }
 
       return;

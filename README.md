@@ -1,4 +1,4 @@
-﻿# NEXURA
+# NEXURADATA
 
 Site vitrine statique pour un laboratoire de recuperation de donnees et forensique numerique.
 
@@ -15,7 +15,7 @@ Site vitrine statique pour un laboratoire de recuperation de donnees et forensiq
 1. Confirmer le nom legal exact de l'entreprise.
 2. Valider toutes les certifications, statistiques et claims marketing.
 3. Remplacer les coordonnees de demonstration si necessaire.
-4. Mettre a jour `sitemap.xml`, `robots.txt` et les URL canoniques si le domaine final differe de `https://nexura.ca/`.
+4. Mettre a jour `sitemap.xml`, `robots.txt` et les URL canoniques si le domaine final differe de `https://nexuradata.pages.dev/`.
 
 ## Mise en ligne
 
@@ -38,12 +38,13 @@ Le point d'entree a publier sur Cloudflare est `release-cloudflare/`.
 
 ## Cloudflare Pages avec GitHub
 
-1. Pousser ce depot sur GitHub.
-2. Connecter le repo a Cloudflare Pages.
-3. Choisir `main` comme branche de production.
-4. Utiliser `.` comme root directory.
-5. Utiliser `exit 0` comme build command si vous publiez directement la racine du depot.
-6. Ajouter ensuite le domaine personnalise.
+1. Connecter le repo GitHub a Cloudflare Pages.
+2. Choisir `main` comme branche de production.
+3. Utiliser `.` comme root directory.
+4. Utiliser `npm run build` comme build command.
+5. Utiliser `release-cloudflare` comme build output directory.
+6. Utiliser `staging` comme branche de preview si vous voulez un environnement de previsualisation dedie.
+7. Ajouter ensuite le domaine personnalise.
 
 ## Cloudflare Pages avec Wrangler
 

@@ -1,4 +1,4 @@
-﻿User-agent: *
+User-agent: *
 Allow: /
 
-Sitemap: https://nexura.ca/sitemap.xml
+Sitemap: https://nexuradata.pages.dev/sitemap.xml

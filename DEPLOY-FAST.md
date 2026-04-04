@@ -10,10 +10,11 @@ Le site est purement statique. La voie la plus stable est un repo GitHub prive c
 4. Selectionner le repo.
 5. Utiliser `main` comme branche de production.
 6. Laisser `.` comme root directory.
-7. Utiliser `exit 0` comme build command si vous publiez directement la racine du depot.
-8. Ajouter ensuite votre domaine personnalise.
+7. Utiliser `npm run build` comme build command.
+8. Utiliser `release-cloudflare` comme build output directory.
+9. Ajouter ensuite votre domaine personnalise.
 
-Les fichiers `_headers` et `_redirects` peuvent etre publies avec le site. Ils gerent les en-tetes de securite, le cache et les redirections simples comme `index2.html -> /`.
+Les fichiers `_headers` et `_redirects` sont publies avec le site. Ils gerent les en-tetes de securite, le cache et les redirections simples comme `index2.html -> /`.
 
 ## Option CLI: Pages avec Wrangler
 

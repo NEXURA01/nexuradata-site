@@ -7,15 +7,15 @@
     {
       "binding": "INTAKE_DB",
       "database_name": "nexuradata-launch",
-      // Replace these placeholder UUIDs with the real D1 IDs before deploying.
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "preview_database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "0b16daf7-2de8-490a-857e-23d34d718dcc",
+      "preview_database_id": "c246c5c8-c476-4afe-b393-349679d432f5",
       "migrations_dir": "./migrations"
     }
   ],
   "vars": {
     "PUBLIC_SITE_ORIGIN": "https://nexuradata.ca",
     "LAB_INBOX_EMAIL": "o.blanchet13@gmail.com",
+    "RESEND_FROM_EMAIL": "NEXURADATA <dossiers@nexuradata.ca>",
     "OPS_ACCESS_ALLOWED_DOMAIN": "nexuradata.ca"
   }
 }

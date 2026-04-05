@@ -7,6 +7,88 @@ if (yearTarget) {
 const revealElements = document.querySelectorAll("[data-reveal]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
+const initializeMobileNav = () => {
+  const navbars = document.querySelectorAll(".navbar");
+
+  if (navbars.length === 0) {
+    return;
+  }
+
+  const mobileNavQuery = window.matchMedia("(max-width: 720px)");
+
+  navbars.forEach((navbar, index) => {
+    const navLinks = navbar.querySelector(".nav-links");
+
+    if (!navLinks) {
+      return;
+    }
+
+    const navId = navLinks.id || `site-navigation-${index + 1}`;
+    navLinks.id = navId;
+    navbar.classList.add("nav-enhanced");
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "nav-toggle";
+    toggle.setAttribute("aria-controls", navId);
+
+    const setOpen = (open) => {
+      const isOpen = Boolean(open) && mobileNavQuery.matches;
+      navbar.classList.toggle("is-nav-open", isOpen);
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      toggle.setAttribute("aria-label", isOpen ? "Fermer la navigation" : "Ouvrir la navigation");
+      toggle.textContent = isOpen ? "Fermer" : "Menu";
+    };
+
+    setOpen(false);
+    navbar.insertBefore(toggle, navLinks);
+
+    toggle.addEventListener("click", () => {
+      setOpen(!navbar.classList.contains("is-nav-open"));
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        if (mobileNavQuery.matches) {
+          setOpen(false);
+        }
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!mobileNavQuery.matches || !navbar.classList.contains("is-nav-open")) {
+        return;
+      }
+
+      if (navbar.contains(event.target)) {
+        return;
+      }
+
+      setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    });
+
+    const syncNavState = (event) => {
+      if (!event.matches) {
+        setOpen(false);
+      }
+    };
+
+    if (typeof mobileNavQuery.addEventListener === "function") {
+      mobileNavQuery.addEventListener("change", syncNavState);
+    } else if (typeof mobileNavQuery.addListener === "function") {
+      mobileNavQuery.addListener(syncNavState);
+    }
+  });
+};
+
+initializeMobileNav();
+
 const showAllReveals = () => {
   revealElements.forEach((element) => element.classList.add("is-visible"));
 };
@@ -64,6 +146,33 @@ const setMessage = (target, state, text) => {
 
   target.dataset.state = state;
   target.textContent = text;
+};
+
+const setButtonBusy = (button, busy, busyLabel) => {
+  if (!button) {
+    return;
+  }
+
+  if (busy) {
+    if (!button.dataset.defaultLabel) {
+      button.dataset.defaultLabel = button.textContent || "";
+    }
+
+    if (busyLabel) {
+      button.textContent = busyLabel;
+    }
+
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
+    return;
+  }
+
+  if (button.dataset.defaultLabel) {
+    button.textContent = button.dataset.defaultLabel;
+  }
+
+  button.disabled = false;
+  button.removeAttribute("aria-busy");
 };
 
 const parseJsonResponse = async (response) => {
@@ -174,9 +283,7 @@ if (intakeForm) {
       sourcePath: window.location.pathname
     };
 
-    if (submitButton) {
-      submitButton.disabled = true;
-    }
+    setButtonBusy(submitButton, true, "Ouverture...");
 
     setMessage(statusTarget, "success", "Ouverture du dossier en cours...");
 
@@ -196,7 +303,9 @@ if (intakeForm) {
         setMessage(
           statusTarget,
           "success",
-          `Dossier ${data.caseId} ouvert. Le laboratoire peut maintenant qualifier le cas.`
+          data?.delivery?.client === "sent"
+            ? `Dossier ${data.caseId} ouvert. Le code d'accès a été envoyé au client.`
+            : `Dossier ${data.caseId} ouvert. Le laboratoire peut maintenant qualifier le cas.`
         );
         return;
       }
@@ -220,9 +329,7 @@ if (intakeForm) {
         "Le backend n'est pas joignable. Votre application courriel s'ouvre avec un message prérempli."
       );
     } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-      }
+      setButtonBusy(submitButton, false);
     }
   });
 }
@@ -233,6 +340,7 @@ if (statusForm) {
   const messageTarget = statusForm.querySelector("[data-status-form-message]");
   const statusPanel = document.querySelector("[data-status-panel]");
   const endpoint = statusForm.getAttribute("data-status-endpoint") || "/api/status";
+  const submitButton = statusForm.querySelector('button[type="submit"]');
   const isLocalPreview = window.location.protocol === "file:" || ["localhost", "127.0.0.1"].includes(window.location.hostname);
 
   const demoCases = {
@@ -301,6 +409,7 @@ if (statusForm) {
       return;
     }
 
+    setButtonBusy(submitButton, true, "Recherche...");
     setMessage(messageTarget, "success", "Recherche du dossier en cours...");
 
     try {
@@ -338,6 +447,8 @@ if (statusForm) {
       }
 
       setMessage(messageTarget, "error", "Le portail de suivi n'est pas joignable pour le moment.");
+    } finally {
+      setButtonBusy(submitButton, false);
     }
   });
 }
@@ -359,6 +470,9 @@ if (operationsRoot) {
   const metaEmail = operationsRoot.querySelector("[data-ops-meta-email]");
   const metaSupport = operationsRoot.querySelector("[data-ops-meta-support]");
   const metaUrgency = operationsRoot.querySelector("[data-ops-meta-urgency]");
+  const metaSource = operationsRoot.querySelector("[data-ops-meta-source]");
+  const metaAccessSent = operationsRoot.querySelector("[data-ops-meta-access-sent]");
+  const metaStatusSent = operationsRoot.querySelector("[data-ops-meta-status-sent]");
   const messageTarget = operationsRoot.querySelector("[data-ops-message]");
   const stepsTarget = operationsRoot.querySelector("[data-ops-steps]");
   const historyTarget = operationsRoot.querySelector("[data-ops-history]");
@@ -368,6 +482,8 @@ if (operationsRoot) {
   const sendAccessButton = operationsRoot.querySelector("[data-ops-send-access]");
   const regenerateButton = operationsRoot.querySelector("[data-ops-regenerate-access]");
   const currentCaseIdInput = operationsRoot.querySelector("[data-ops-current-case-id]");
+  const searchSubmitButton = searchForm?.querySelector('button[type="submit"]');
+  const caseSubmitButton = caseForm?.querySelector('button[type="submit"]');
 
   const createStepRow = (step = { title: "", note: "", state: "pending" }) => {
     const wrapper = document.createElement("div");
@@ -490,6 +606,9 @@ if (operationsRoot) {
     if (metaEmail) metaEmail.textContent = record.email;
     if (metaSupport) metaSupport.textContent = record.support;
     if (metaUrgency) metaUrgency.textContent = record.urgency;
+    if (metaSource) metaSource.textContent = record.sourcePath || "/";
+    if (metaAccessSent) metaAccessSent.textContent = record.accessCodeLastSentAt ? formatTimestamp(record.accessCodeLastSentAt) : "Pas encore";
+    if (metaStatusSent) metaStatusSent.textContent = record.statusEmailLastSentAt ? formatTimestamp(record.statusEmailLastSentAt) : "Pas encore";
     if (messageTarget) messageTarget.textContent = record.message;
     if (currentCaseIdInput) currentCaseIdInput.value = record.caseId;
 
@@ -564,7 +683,11 @@ if (operationsRoot) {
         const emailLabel = document.createElement("span");
         emailLabel.textContent = item.email;
 
-        button.append(caseLabel, clientLabel, supportLabel, emailLabel);
+        const updatedLabel = document.createElement("time");
+        updatedLabel.dateTime = item.updated_at || "";
+        updatedLabel.textContent = `Mis à jour ${formatTimestamp(item.updated_at)}`;
+
+        button.append(caseLabel, clientLabel, supportLabel, emailLabel, updatedLabel);
         button.addEventListener("click", () => {
           loadCaseDetail(item.case_id).catch((error) => {
             setMessage(searchStatus, "error", error.message);
@@ -580,6 +703,7 @@ if (operationsRoot) {
       event.preventDefault();
 
       const query = searchForm.querySelector('[name="query"]')?.value.trim() || "";
+      setButtonBusy(searchSubmitButton, true, "Recherche...");
       setMessage(searchStatus, "success", "Recherche en cours...");
 
       try {
@@ -598,6 +722,8 @@ if (operationsRoot) {
         setMessage(searchStatus, "success", `${(data.items || []).length} dossier(s) chargé(s).`);
       } catch (error) {
         setMessage(searchStatus, "error", error instanceof Error ? error.message : "Recherche impossible.");
+      } finally {
+        setButtonBusy(searchSubmitButton, false);
       }
     });
   }
@@ -622,6 +748,7 @@ if (operationsRoot) {
       }
 
       setMessage(caseStatus, "success", "Enregistrement en cours...");
+      setButtonBusy(caseSubmitButton, true, "Enregistrement...");
 
       try {
         const response = await fetch(searchEndpoint, {
@@ -650,6 +777,8 @@ if (operationsRoot) {
         setMessage(caseStatus, "success", data.delivery === "sent" ? "Dossier enregistré et client notifié." : "Dossier enregistré.");
       } catch (error) {
         setMessage(caseStatus, "error", error instanceof Error ? error.message : "La mise à jour a échoué.");
+      } finally {
+        setButtonBusy(caseSubmitButton, false);
       }
     });
   }
@@ -664,6 +793,7 @@ if (operationsRoot) {
       }
 
       setMessage(caseStatus, "success", "Envoi de la mise à jour client...");
+      setButtonBusy(sendUpdateButton, true, "Envoi...");
 
       try {
         const response = await fetch(searchEndpoint, {
@@ -687,6 +817,8 @@ if (operationsRoot) {
         setMessage(caseStatus, "success", data.delivery === "sent" ? "Mise à jour envoyée au client." : `Envoi non effectué: ${data.delivery}`);
       } catch (error) {
         setMessage(caseStatus, "error", error instanceof Error ? error.message : "L'envoi a échoué.");
+      } finally {
+        setButtonBusy(sendUpdateButton, false);
       }
     });
   }
@@ -704,6 +836,7 @@ if (operationsRoot) {
         accessResult.textContent = "Renvoi du code en cours...";
         accessResult.dataset.state = "success";
       }
+      setButtonBusy(sendAccessButton, true, "Renvoi...");
 
       try {
         const response = await fetch(searchEndpoint, {
@@ -734,6 +867,8 @@ if (operationsRoot) {
           accessResult.textContent = error instanceof Error ? error.message : "Le renvoi du code a échoué.";
           accessResult.dataset.state = "error";
         }
+      } finally {
+        setButtonBusy(sendAccessButton, false);
       }
     });
   }
@@ -751,6 +886,7 @@ if (operationsRoot) {
         accessResult.textContent = "Génération d'un nouveau code...";
         accessResult.dataset.state = "success";
       }
+      setButtonBusy(regenerateButton, true, "Génération...");
 
       try {
         const response = await fetch(searchEndpoint, {
@@ -784,6 +920,8 @@ if (operationsRoot) {
           accessResult.textContent = error instanceof Error ? error.message : "La régénération du code a échoué.";
           accessResult.dataset.state = "error";
         }
+      } finally {
+        setButtonBusy(regenerateButton, false);
       }
     });
   }

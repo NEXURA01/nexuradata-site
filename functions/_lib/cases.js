@@ -743,8 +743,7 @@ export const authorizeOpsRequest = (request, env) => {
 
   if (configuredEmails.length === 0 && !configuredDomain) {
     return {
-      ok: true,
-      actor: authenticatedEmail || "ops-unrestricted"
+      ok: false
     };
   }
 

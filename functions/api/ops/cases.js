@@ -1,5 +1,6 @@
 import {
   authorizeOpsRequest,
+  createCasePaymentRequest,
   getCaseDetail,
   getResendableAccessCode,
   listCases,
@@ -8,7 +9,7 @@ import {
   regenerateCaseAccessCode,
   updateCaseRecord
 } from "../../_lib/cases.js";
-import { sendClientAccessEmail, sendClientStatusEmail } from "../../_lib/email.js";
+import { sendClientAccessEmail, sendClientPaymentLinkEmail, sendClientStatusEmail } from "../../_lib/email.js";
 import { json, methodNotAllowed, onOptions, parsePayload } from "../../_lib/http.js";
 
 const authorizeOrReject = (request, env) => {
@@ -145,6 +146,22 @@ export const onRequestPost = async (context) => {
         ok: true,
         caseId: detail.caseId,
         accessCode: detail.accessCode,
+        delivery: delivery.sent ? "sent" : delivery.reason
+      });
+    }
+
+    if (action === "create-payment") {
+      const payment = await createCasePaymentRequest(context.env, payload, auth.actor, context.request.url);
+      let delivery = { sent: false, reason: "not-requested" };
+
+      if (payload.sendEmail === true || payload.sendEmail === "true") {
+        delivery = await sendClientPaymentLinkEmail(context.env, payment, context.request.url, auth.actor);
+      }
+
+      return json({
+        ok: true,
+        case: await getCaseDetail(context.env, payment.caseId),
+        payment,
         delivery: delivery.sent ? "sent" : delivery.reason
       });
     }

@@ -150,6 +150,52 @@
             <p class="form-status" data-ops-access-result aria-live="polite"></p>
           </section>
 
+          <section class="ops-payments-card">
+            <h3>Paiements</h3>
+            <p class="form-note">Créez un acompte, un solde ou une demande de paiement ponctuelle, puis envoyez le lien sécurisé au client.</p>
+
+            <form class="ops-payment-form" data-ops-payment-form>
+              <div class="form-grid">
+                <label class="field">
+                  <span>Type</span>
+                  <select name="paymentKind">
+                    <option value="deposit">Acompte</option>
+                    <option value="final">Solde final</option>
+                    <option value="custom">Paiement ponctuel</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Montant CAD</span>
+                  <input type="text" name="amount" inputmode="decimal" placeholder="250.00" required>
+                </label>
+
+                <label class="field field-full">
+                  <span>Libellé</span>
+                  <input type="text" name="label" placeholder="Acompte de traitement" required>
+                </label>
+
+                <label class="field field-full">
+                  <span>Description</span>
+                  <textarea name="description" rows="3" required placeholder="Exemple : acompte initial pour lancer le traitement autorisé du dossier."></textarea>
+                </label>
+
+                <label class="consent-check field-full">
+                  <input type="checkbox" name="sendEmail" checked>
+                  <span>Envoyer automatiquement le lien de paiement au client après création.</span>
+                </label>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="button button-primary">Créer une demande de paiement</button>
+              </div>
+
+              <p class="form-status" data-ops-payment-status aria-live="polite"></p>
+            </form>
+
+            <div class="ops-payment-list" data-ops-payments></div>
+          </section>
+
           <section class="ops-history-card">
             <h3>Historique</h3>
             <div class="ops-history" data-ops-history></div>

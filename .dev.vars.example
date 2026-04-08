@@ -3,5 +3,7 @@ RESEND_FROM_EMAIL=NEXURADATA <dossiers@nexuradata.ca>
 LAB_INBOX_EMAIL=o.blanchet13@gmail.com
 PUBLIC_SITE_ORIGIN=https://nexuradata.ca
 ACCESS_CODE_SECRET=replace-with-a-long-random-secret
+STRIPE_SECRET_KEY=sk_test_xxxxxxxxx
+STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxx
 OPS_ACCESS_ALLOWED_EMAILS=o.blanchet13@gmail.com
 OPS_ACCESS_ALLOWED_DOMAIN=nexuradata.ca

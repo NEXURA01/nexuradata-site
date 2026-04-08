@@ -1685,6 +1685,7 @@ select {
 
 .ops-message-card,
 .ops-access-card,
+.ops-payments-card,
 .ops-history-card {
   margin-top: 1rem;
 }
@@ -1759,6 +1760,84 @@ select {
 .ops-history-note {
   margin-top: 0.55rem;
   color: var(--color-text-soft);
+}
+
+.ops-payment-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.ops-payment-list {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.ops-payment-entry {
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  background: rgba(24, 27, 31, 0.72);
+}
+
+.ops-payment-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.ops-payment-title,
+.ops-payment-meta,
+.ops-payment-note {
+  margin: 0;
+}
+
+.ops-payment-title {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.ops-payment-meta {
+  margin-top: 0.35rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.ops-payment-note {
+  margin-top: 0.65rem;
+  color: var(--color-text-soft);
+}
+
+.ops-payment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+
+.ops-payment-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-text-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ops-payment-badge.is-paid {
+  border-color: rgba(183, 196, 211, 0.28);
+  color: var(--color-text);
+}
+
+.ops-payment-badge.is-expired,
+.ops-payment-badge.is-failed {
+  border-color: rgba(168, 92, 72, 0.28);
+  color: #e4b7aa;
 }
 
 @media (max-width: 1100px) {

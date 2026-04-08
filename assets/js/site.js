@@ -139,6 +139,22 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
+const paymentFeedback = document.querySelector("[data-payment-feedback]");
+
+if (paymentFeedback) {
+  const params = new URLSearchParams(window.location.search);
+  const caseTarget = paymentFeedback.querySelector("[data-payment-feedback-case]");
+  const requestTarget = paymentFeedback.querySelector("[data-payment-feedback-request]");
+
+  if (caseTarget) {
+    caseTarget.textContent = params.get("caseId") || "Non précisé";
+  }
+
+  if (requestTarget) {
+    requestTarget.textContent = params.get("paymentRequestId") || "Non précisée";
+  }
+}
+
 const setMessage = (target, state, text) => {
   if (!target) {
     return;
@@ -195,6 +211,12 @@ const formatTimestamp = (value) => {
     timeStyle: "short"
   }).format(date);
 };
+
+const formatCurrency = (amountCents, currency = "cad") =>
+  new Intl.NumberFormat("fr-CA", {
+    style: "currency",
+    currency: `${currency || "cad"}`.toUpperCase()
+  }).format((Number(amountCents) || 0) / 100);
 
 const buildIntakeMailto = (formData) => {
   const subject = `Demande NEXURADATA - ${formData.get("support")} - ${formData.get("urgence")}`;
@@ -477,6 +499,9 @@ if (operationsRoot) {
   const stepsTarget = operationsRoot.querySelector("[data-ops-steps]");
   const historyTarget = operationsRoot.querySelector("[data-ops-history]");
   const accessResult = operationsRoot.querySelector("[data-ops-access-result]");
+  const paymentForm = operationsRoot.querySelector("[data-ops-payment-form]");
+  const paymentStatus = operationsRoot.querySelector("[data-ops-payment-status]");
+  const paymentsTarget = operationsRoot.querySelector("[data-ops-payments]");
   const addStepButton = operationsRoot.querySelector("[data-ops-add-step]");
   const sendUpdateButton = operationsRoot.querySelector("[data-ops-send-update]");
   const sendAccessButton = operationsRoot.querySelector("[data-ops-send-access]");
@@ -484,6 +509,7 @@ if (operationsRoot) {
   const currentCaseIdInput = operationsRoot.querySelector("[data-ops-current-case-id]");
   const searchSubmitButton = searchForm?.querySelector('button[type="submit"]');
   const caseSubmitButton = caseForm?.querySelector('button[type="submit"]');
+  const paymentSubmitButton = paymentForm?.querySelector('button[type="submit"]');
 
   const createStepRow = (step = { title: "", note: "", state: "pending" }) => {
     const wrapper = document.createElement("div");
@@ -594,6 +620,77 @@ if (operationsRoot) {
     );
   };
 
+  const renderPayments = (payments) => {
+    if (!paymentsTarget) {
+      return;
+    }
+
+    if (!payments || payments.length === 0) {
+      paymentsTarget.innerHTML = "<p class=\"form-note\">Aucune demande de paiement pour ce dossier.</p>";
+      return;
+    }
+
+    paymentsTarget.replaceChildren(
+      ...payments.map((payment) => {
+        const article = document.createElement("article");
+        article.className = "ops-payment-entry";
+
+        const head = document.createElement("div");
+        head.className = "ops-payment-head";
+
+        const title = document.createElement("p");
+        title.className = "ops-payment-title";
+        title.textContent = payment.label;
+
+        const badge = document.createElement("span");
+        badge.className = `ops-payment-badge is-${payment.status || "open"}`;
+        badge.textContent =
+          payment.status === "paid"
+            ? "Payé"
+            : payment.status === "expired"
+              ? "Expiré"
+              : payment.status === "failed"
+                ? "Échec"
+                : "Ouvert";
+
+        head.append(title, badge);
+
+        const meta = document.createElement("p");
+        meta.className = "ops-payment-meta";
+        meta.textContent = `${payment.amountFormatted || formatCurrency(payment.amountCents, payment.currency)} · ${payment.paymentKind} · créé ${formatTimestamp(payment.createdAt)}`;
+
+        const note = document.createElement("p");
+        note.className = "ops-payment-note";
+        note.textContent = payment.description;
+
+        const actions = document.createElement("div");
+        actions.className = "ops-payment-actions";
+
+        if (payment.checkoutUrl) {
+          const link = document.createElement("a");
+          link.className = "button button-secondary button-small";
+          link.href = payment.checkoutUrl;
+          link.target = "_blank";
+          link.rel = "noreferrer";
+          link.textContent = "Ouvrir le lien Stripe";
+          actions.append(link);
+        }
+
+        const details = document.createElement("p");
+        details.className = "ops-payment-meta";
+        details.textContent =
+          payment.paidAt
+            ? `Confirmé ${formatTimestamp(payment.paidAt)}`
+            : payment.sentAt
+              ? `Lien envoyé ${formatTimestamp(payment.sentAt)}`
+              : `Lien non envoyé automatiquement`;
+
+        article.append(head, meta, note, actions, details);
+        return article;
+      })
+    );
+  };
+
   const fillCaseDetail = (record) => {
     if (casePanel) {
       casePanel.hidden = false;
@@ -628,9 +725,16 @@ if (operationsRoot) {
       stepsTarget.replaceChildren(...(record.steps || []).map(createStepRow));
     }
 
+    renderPayments(record.payments || []);
+
     if (accessResult) {
       accessResult.textContent = "";
       accessResult.dataset.state = "";
+    }
+
+    if (paymentStatus) {
+      paymentStatus.textContent = "";
+      paymentStatus.dataset.state = "";
     }
 
     renderHistory(record.history || []);
@@ -922,6 +1026,68 @@ if (operationsRoot) {
         }
       } finally {
         setButtonBusy(regenerateButton, false);
+      }
+    });
+  }
+
+  if (paymentForm) {
+    paymentForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const caseId = currentCaseIdInput?.value || "";
+
+      if (!caseId) {
+        setMessage(paymentStatus, "error", "Chargez d'abord un dossier.");
+        return;
+      }
+
+      if (!paymentForm.checkValidity()) {
+        paymentForm.reportValidity();
+        setMessage(paymentStatus, "error", "Complétez les champs de paiement.");
+        return;
+      }
+
+      setMessage(paymentStatus, "success", "Création du lien de paiement...");
+      setButtonBusy(paymentSubmitButton, true, "Création...");
+
+      try {
+        const response = await fetch(searchEndpoint, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json"
+          },
+          body: JSON.stringify({
+            action: "create-payment",
+            caseId,
+            paymentKind: paymentForm.querySelector('[name="paymentKind"]')?.value || "custom",
+            amount: paymentForm.querySelector('[name="amount"]')?.value.trim() || "",
+            label: paymentForm.querySelector('[name="label"]')?.value.trim() || "",
+            description: paymentForm.querySelector('[name="description"]')?.value.trim() || "",
+            sendEmail: Boolean(paymentForm.querySelector('[name="sendEmail"]')?.checked)
+          })
+        });
+        const data = await parseJsonResponse(response);
+
+        if (!response.ok || !data?.ok) {
+          throw new Error(data?.message || "Impossible de créer la demande de paiement.");
+        }
+
+        if (data.case) {
+          fillCaseDetail(data.case);
+        }
+
+        setMessage(
+          paymentStatus,
+          data.delivery === "sent" ? "success" : "error",
+          data.delivery === "sent"
+            ? "Demande de paiement créée et envoyée au client."
+            : `Demande créée. Envoi automatique non effectué: ${data.delivery}.`
+        );
+      } catch (error) {
+        setMessage(paymentStatus, "error", error instanceof Error ? error.message : "Impossible de créer la demande de paiement.");
+      } finally {
+        setButtonBusy(paymentSubmitButton, false);
       }
     });
   }

@@ -1,4 +1,176 @@
 const yearTarget = document.querySelector("[data-year]");
+const documentLanguage = document.documentElement.lang?.toLowerCase() || "fr-ca";
+const isEnglishDocument = documentLanguage.startsWith("en");
+
+const publicI18n = isEnglishDocument
+  ? {
+      locale: "en-CA",
+      navOpen: "Open navigation",
+      navClose: "Close navigation",
+      navMenu: "Menu",
+      navCloseLabel: "Close",
+      intakeSubjectPrefix: "NEXURADATA inquiry",
+      fieldName: "Name",
+      fieldEmail: "Email",
+      fieldPhone: "Phone",
+      fieldSupport: "Support",
+      fieldUrgency: "Urgency",
+      fieldDescription: "Issue description",
+      intakeRequired: "Complete the required fields before opening a case.",
+      intakeBusy: "Opening...",
+      intakeOpening: "Opening your case...",
+      intakeOpenedSent: (caseId) => `Case ${caseId} opened. The access code was sent to the client.`,
+      intakeOpenedQueued: (caseId) => `Case ${caseId} opened. The lab can now review the request.`,
+      intakeFallback: "The backend is unavailable. Your email application is opening with a prefilled message.",
+      intakeError: "The request could not be processed.",
+      intakeOffline: "The backend is unreachable. Your email application is opening with a prefilled message.",
+      statusRequired: "Enter a valid case number and access code.",
+      statusNotFound: "No case matched this access. Check the credentials provided by NEXURADATA or request an update.",
+      statusFound: "Case found.",
+      statusBusy: "Searching...",
+      statusSearching: "Searching for your case...",
+      statusOffline: "The status portal is currently unavailable.",
+      paymentKindDeposit: "Deposit",
+      paymentKindFinal: "Balance",
+      paymentKindCustom: "Payment",
+      paymentStatusPaid: "Paid",
+      paymentStatusExpired: "Expired",
+      paymentStatusFailed: "Retry needed",
+      paymentStatusOpen: "Open",
+      paymentConfirmedOn: (timestamp) => `Payment confirmed on ${timestamp}`,
+      paymentAvailableUntil: (timestamp) => `Link available until ${timestamp}`,
+      paymentSentOn: (timestamp) => `Link sent on ${timestamp}`,
+      paymentReference: (reference) => `Reference ${reference}`,
+      paymentAction: "Pay online",
+      demoCaseOne: {
+        status: "Assessment in progress",
+        updatedAt: "April 4, 2026 11:40 AM",
+        support: "USB external drive",
+        nextStep: "Initial assessment update",
+        summary: "The support was received and logged. Initial assessment is in progress before the quote or next steps are sent.",
+        steps: [
+          { title: "Case received", note: "Support received and logged.", state: "complete" },
+          { title: "Assessment in progress", note: "Initial review and case qualification.", state: "active" },
+          { title: "Quote", note: "To be issued after assessment.", state: "pending" },
+          { title: "Recovery work", note: "Starts after authorization.", state: "pending" }
+        ],
+        payments: []
+      },
+      demoCaseTwo: {
+        status: "Quote sent",
+        updatedAt: "April 4, 2026 10:15 AM",
+        support: "RAID / NAS",
+        nextStep: "Awaiting client authorization",
+        summary: "Initial assessment is complete. The quote and intervention framework were sent to the client for approval.",
+        steps: [
+          { title: "Case received", note: "Support received and logged.", state: "complete" },
+          { title: "Assessment complete", note: "Initial technical review completed.", state: "complete" },
+          { title: "Quote sent", note: "Awaiting acceptance.", state: "active" },
+          { title: "Recovery work", note: "Begins after authorization.", state: "pending" }
+        ],
+        payments: [
+          {
+            paymentRequestId: "PAY-20260404-A1B2C3",
+            paymentKind: "deposit",
+            status: "open",
+            label: "Intervention deposit",
+            description: "Opens the recovery work once the intervention is authorized.",
+            amountCents: 65000,
+            amountFormatted: "$650.00",
+            currency: "cad",
+            checkoutUrl: "https://checkout.stripe.com/pay/demo",
+            createdAt: "2026-04-04T14:10:00.000Z",
+            sentAt: "2026-04-04T14:11:00.000Z",
+            paidAt: "",
+            expiresAt: "2026-04-11T14:10:00.000Z"
+          }
+        ]
+      }
+    }
+  : {
+      locale: "fr-CA",
+      navOpen: "Ouvrir la navigation",
+      navClose: "Fermer la navigation",
+      navMenu: "Menu",
+      navCloseLabel: "Fermer",
+      intakeSubjectPrefix: "Demande NEXURADATA",
+      fieldName: "Nom",
+      fieldEmail: "Courriel",
+      fieldPhone: "Téléphone",
+      fieldSupport: "Support",
+      fieldUrgency: "Urgence",
+      fieldDescription: "Description du problème",
+      intakeRequired: "Complétez les champs requis avant d'ouvrir un dossier.",
+      intakeBusy: "Ouverture...",
+      intakeOpening: "Ouverture du dossier en cours...",
+      intakeOpenedSent: (caseId) => `Dossier ${caseId} ouvert. Le code d'accès a été envoyé au client.`,
+      intakeOpenedQueued: (caseId) => `Dossier ${caseId} ouvert. Le laboratoire peut maintenant qualifier le cas.`,
+      intakeFallback: "Le backend n'est pas disponible. Votre application courriel s'ouvre avec un message prérempli.",
+      intakeError: "La demande n'a pas pu être traitée.",
+      intakeOffline: "Le backend n'est pas joignable. Votre application courriel s'ouvre avec un message prérempli.",
+      statusRequired: "Entrez un numéro de dossier et un code d'accès valides.",
+      statusNotFound: "Aucun dossier n'a été trouvé avec cet accès. Vérifiez les identifiants transmis par NEXURADATA ou demandez une mise à jour.",
+      statusFound: "Dossier trouvé.",
+      statusBusy: "Recherche...",
+      statusSearching: "Recherche du dossier en cours...",
+      statusOffline: "Le portail de suivi n'est pas joignable pour le moment.",
+      paymentKindDeposit: "Acompte",
+      paymentKindFinal: "Solde",
+      paymentKindCustom: "Paiement",
+      paymentStatusPaid: "Payé",
+      paymentStatusExpired: "Expiré",
+      paymentStatusFailed: "À reprendre",
+      paymentStatusOpen: "Ouvert",
+      paymentConfirmedOn: (timestamp) => `Paiement confirmé le ${timestamp}`,
+      paymentAvailableUntil: (timestamp) => `Lien disponible jusqu'au ${timestamp}`,
+      paymentSentOn: (timestamp) => `Lien transmis le ${timestamp}`,
+      paymentReference: (reference) => `Référence ${reference}`,
+      paymentAction: "Régler en ligne",
+      demoCaseOne: {
+        status: "Évaluation en cours",
+        updatedAt: "4 avril 2026 à 11 h 40",
+        support: "Disque externe USB",
+        nextStep: "Communication de l'évaluation initiale",
+        summary: "Le support a été reçu et enregistré. L'évaluation initiale est en cours avant l'envoi de la soumission ou des prochaines étapes.",
+        steps: [
+          { title: "Dossier reçu", note: "Support reçu et pris en charge.", state: "complete" },
+          { title: "Évaluation en cours", note: "Lecture initiale et qualification du cas.", state: "active" },
+          { title: "Soumission", note: "À transmettre après évaluation.", state: "pending" },
+          { title: "Traitement", note: "Commence après autorisation.", state: "pending" }
+        ],
+        payments: []
+      },
+      demoCaseTwo: {
+        status: "Soumission envoyée",
+        updatedAt: "4 avril 2026 à 10 h 15",
+        support: "RAID / NAS",
+        nextStep: "Attente de l'autorisation client",
+        summary: "L'évaluation initiale a été complétée. La soumission et le cadre d'intervention ont été transmis au client pour acceptation.",
+        steps: [
+          { title: "Dossier reçu", note: "Support reçu et enregistré.", state: "complete" },
+          { title: "Évaluation", note: "Analyse initiale terminée.", state: "complete" },
+          { title: "Soumission envoyée", note: "En attente d'acceptation.", state: "active" },
+          { title: "Traitement", note: "Débute après autorisation.", state: "pending" }
+        ],
+        payments: [
+          {
+            paymentRequestId: "PAY-20260404-A1B2C3",
+            paymentKind: "deposit",
+            status: "open",
+            label: "Acompte d'intervention",
+            description: "Ouverture du traitement après autorisation et prise en charge du dossier.",
+            amountCents: 65000,
+            amountFormatted: "650,00 $",
+            currency: "cad",
+            checkoutUrl: "https://checkout.stripe.com/pay/demo",
+            createdAt: "2026-04-04T14:10:00.000Z",
+            sentAt: "2026-04-04T14:11:00.000Z",
+            paidAt: "",
+            expiresAt: "2026-04-11T14:10:00.000Z"
+          }
+        ]
+      }
+    };
 
 if (yearTarget) {
   yearTarget.textContent = new Date().getFullYear();
@@ -36,8 +208,8 @@ const initializeMobileNav = () => {
       const isOpen = Boolean(open) && mobileNavQuery.matches;
       navbar.classList.toggle("is-nav-open", isOpen);
       toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      toggle.setAttribute("aria-label", isOpen ? "Fermer la navigation" : "Ouvrir la navigation");
-      toggle.textContent = isOpen ? "Fermer" : "Menu";
+      toggle.setAttribute("aria-label", isOpen ? publicI18n.navClose : publicI18n.navOpen);
+      toggle.textContent = isOpen ? publicI18n.navCloseLabel : publicI18n.navMenu;
     };
 
     setOpen(false);
@@ -139,6 +311,44 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
+const paymentFeedback = document.querySelector("[data-payment-feedback]");
+
+if (paymentFeedback) {
+  const params = new URLSearchParams(window.location.search);
+  const caseId = params.get("caseId") || "";
+  const paymentRequestId = params.get("paymentRequestId") || "";
+  const caseTarget = paymentFeedback.querySelector("[data-payment-feedback-case]");
+  const requestTarget = paymentFeedback.querySelector("[data-payment-feedback-request]");
+  const followLink = paymentFeedback.querySelector("[data-payment-feedback-follow]");
+  const mailLink = paymentFeedback.querySelector("[data-payment-feedback-mail]");
+
+  if (caseTarget) {
+    caseTarget.textContent = caseId || "Non précisé";
+  }
+
+  if (requestTarget) {
+    requestTarget.textContent = paymentRequestId || "Non précisée";
+  }
+
+  if (followLink && caseId) {
+    followLink.href = `suivi-dossier-client-montreal.html?caseId=${encodeURIComponent(caseId)}`;
+  }
+
+  if (mailLink) {
+    const subject = caseId
+      ? `Dossier ${caseId} - suivi paiement`
+      : "Suivi paiement NEXURADATA";
+    const body = [
+      caseId ? `Numéro de dossier: ${caseId}` : "",
+      paymentRequestId ? `Référence de paiement: ${paymentRequestId}` : "",
+      "",
+      "Message:"
+    ].filter(Boolean).join("\n");
+
+    mailLink.href = `mailto:contact@nexuradata.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+}
+
 const setMessage = (target, state, text) => {
   if (!target) {
     return;
@@ -190,22 +400,28 @@ const formatTimestamp = (value) => {
     return value;
   }
 
-  return new Intl.DateTimeFormat("fr-CA", {
+  return new Intl.DateTimeFormat(publicI18n.locale, {
     dateStyle: "long",
     timeStyle: "short"
   }).format(date);
 };
 
+const formatCurrency = (amountCents, currency = "cad") =>
+  new Intl.NumberFormat("fr-CA", {
+    style: "currency",
+    currency: `${currency || "cad"}`.toUpperCase()
+  }).format((Number(amountCents) || 0) / 100);
+
 const buildIntakeMailto = (formData) => {
-  const subject = `Demande NEXURADATA - ${formData.get("support")} - ${formData.get("urgence")}`;
+  const subject = `${publicI18n.intakeSubjectPrefix} - ${formData.get("support")} - ${formData.get("urgence")}`;
   const bodyLines = [
-    `Nom: ${formData.get("nom") || ""}`,
-    `Courriel: ${formData.get("courriel") || ""}`,
-    `Téléphone: ${formData.get("telephone") || ""}`,
-    `Support: ${formData.get("support") || ""}`,
-    `Urgence: ${formData.get("urgence") || ""}`,
+    `${publicI18n.fieldName}: ${formData.get("nom") || ""}`,
+    `${publicI18n.fieldEmail}: ${formData.get("courriel") || ""}`,
+    `${publicI18n.fieldPhone}: ${formData.get("telephone") || ""}`,
+    `${publicI18n.fieldSupport}: ${formData.get("support") || ""}`,
+    `${publicI18n.fieldUrgency}: ${formData.get("urgence") || ""}`,
     "",
-    "Description du problème:",
+    `${publicI18n.fieldDescription}:`,
     `${formData.get("message") || ""}`
   ];
 
@@ -228,6 +444,91 @@ const createStatusStep = (step) => {
   return article;
 };
 
+const formatPaymentKindLabel = (paymentKind) => {
+  if (paymentKind === "deposit") {
+    return publicI18n.paymentKindDeposit;
+  }
+
+  if (paymentKind === "final") {
+    return publicI18n.paymentKindFinal;
+  }
+
+  return publicI18n.paymentKindCustom;
+};
+
+const formatPaymentStatusLabel = (status) => {
+  if (status === "paid") {
+    return publicI18n.paymentStatusPaid;
+  }
+
+  if (status === "expired") {
+    return publicI18n.paymentStatusExpired;
+  }
+
+  if (status === "failed") {
+    return publicI18n.paymentStatusFailed;
+  }
+
+  return publicI18n.paymentStatusOpen;
+};
+
+const createStatusPayment = (payment) => {
+  const article = document.createElement("article");
+  article.className = "status-payment";
+
+  const head = document.createElement("div");
+  head.className = "status-payment-head";
+
+  const title = document.createElement("p");
+  title.className = "status-payment-title";
+  title.textContent = payment.label;
+
+  const badge = document.createElement("span");
+  badge.className = `status-payment-badge is-${payment.status || "open"}`;
+  badge.textContent = formatPaymentStatusLabel(payment.status);
+
+  head.append(title, badge);
+
+  const meta = document.createElement("p");
+  meta.className = "status-payment-meta";
+  meta.textContent = `${payment.amountFormatted || formatCurrency(payment.amountCents, payment.currency)} · ${formatPaymentKindLabel(payment.paymentKind)}`;
+
+  const note = document.createElement("p");
+  note.className = "status-payment-note";
+  note.textContent = payment.description;
+
+  const details = document.createElement("p");
+  details.className = "status-payment-meta";
+  details.textContent =
+    payment.status === "paid" && payment.paidAt
+      ? publicI18n.paymentConfirmedOn(formatTimestamp(payment.paidAt))
+      : payment.status === "open" && payment.expiresAt
+        ? publicI18n.paymentAvailableUntil(formatTimestamp(payment.expiresAt))
+        : payment.sentAt
+          ? publicI18n.paymentSentOn(formatTimestamp(payment.sentAt))
+          : publicI18n.paymentReference(payment.paymentRequestId);
+
+  article.append(head, meta, note);
+
+  if (payment.checkoutUrl) {
+    const actions = document.createElement("div");
+    actions.className = "status-payment-actions";
+
+    const link = document.createElement("a");
+    link.className = "button button-primary button-small";
+    link.href = payment.checkoutUrl;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = publicI18n.paymentAction;
+
+    actions.append(link);
+    article.append(actions);
+  }
+
+  article.append(details);
+  return article;
+};
+
 const renderStatusRecord = (record, statusPanel) => {
   if (!statusPanel) {
     return;
@@ -241,6 +542,8 @@ const renderStatusRecord = (record, statusPanel) => {
   const nextTarget = statusPanel.querySelector("[data-status-next]");
   const summaryTarget = statusPanel.querySelector("[data-status-summary]");
   const timelineTarget = statusPanel.querySelector("[data-status-timeline]");
+  const paymentsSection = statusPanel.querySelector("[data-status-payments-section]");
+  const paymentsTarget = statusPanel.querySelector("[data-status-payments]");
 
   if (caseTarget) caseTarget.textContent = record.caseId;
   if (badgeTarget) badgeTarget.textContent = record.status;
@@ -248,6 +551,18 @@ const renderStatusRecord = (record, statusPanel) => {
   if (supportTarget) supportTarget.textContent = record.support;
   if (nextTarget) nextTarget.textContent = record.nextStep;
   if (summaryTarget) summaryTarget.textContent = record.summary;
+
+  if (paymentsSection && paymentsTarget) {
+    const payments = Array.isArray(record.payments) ? record.payments : [];
+
+    paymentsSection.hidden = payments.length === 0;
+
+    if (payments.length > 0) {
+      paymentsTarget.replaceChildren(...payments.map(createStatusPayment));
+    } else {
+      paymentsTarget.replaceChildren();
+    }
+  }
 
   if (timelineTarget) {
     timelineTarget.replaceChildren(...(record.steps || []).map(createStatusStep));
@@ -266,7 +581,7 @@ if (intakeForm) {
 
     if (!intakeForm.checkValidity()) {
       intakeForm.reportValidity();
-      setMessage(statusTarget, "error", "Complétez les champs requis avant d'ouvrir un dossier.");
+      setMessage(statusTarget, "error", publicI18n.intakeRequired);
       return;
     }
 
@@ -283,9 +598,9 @@ if (intakeForm) {
       sourcePath: window.location.pathname
     };
 
-    setButtonBusy(submitButton, true, "Ouverture...");
+    setButtonBusy(submitButton, true, publicI18n.intakeBusy);
 
-    setMessage(statusTarget, "success", "Ouverture du dossier en cours...");
+    setMessage(statusTarget, "success", publicI18n.intakeOpening);
 
     try {
       const response = await fetch(endpoint, {
@@ -304,8 +619,8 @@ if (intakeForm) {
           statusTarget,
           "success",
           data?.delivery?.client === "sent"
-            ? `Dossier ${data.caseId} ouvert. Le code d'accès a été envoyé au client.`
-            : `Dossier ${data.caseId} ouvert. Le laboratoire peut maintenant qualifier le cas.`
+            ? publicI18n.intakeOpenedSent(data.caseId)
+            : publicI18n.intakeOpenedQueued(data.caseId)
         );
         return;
       }
@@ -315,18 +630,18 @@ if (intakeForm) {
         setMessage(
           statusTarget,
           "success",
-          "Le backend n'est pas disponible. Votre application courriel s'ouvre avec un message prérempli."
+          publicI18n.intakeFallback
         );
         return;
       }
 
-      setMessage(statusTarget, "error", data?.message || "La demande n'a pas pu être traitée.");
+      setMessage(statusTarget, "error", data?.message || publicI18n.intakeError);
     } catch {
       window.location.href = buildIntakeMailto(formData);
       setMessage(
         statusTarget,
         "success",
-        "Le backend n'est pas joignable. Votre application courriel s'ouvre avec un message prérempli."
+        publicI18n.intakeOffline
       );
     } finally {
       setButtonBusy(submitButton, false);
@@ -346,40 +661,33 @@ if (statusForm) {
   const demoCases = {
     "NX-2026-0412|MONTREAL24": {
       caseId: "NX-2026-0412",
-      status: "Évaluation en cours",
-      updatedAt: "4 avril 2026 à 11 h 40",
-      support: "Disque externe USB",
-      nextStep: "Communication de l'évaluation initiale",
-      summary: "Le support a été reçu et enregistré. L'évaluation initiale est en cours avant l'envoi de la soumission ou des prochaines étapes.",
-      steps: [
-        { title: "Dossier reçu", note: "Support reçu et pris en charge.", state: "complete" },
-        { title: "Évaluation en cours", note: "Lecture initiale et qualification du cas.", state: "active" },
-        { title: "Soumission", note: "À transmettre après évaluation.", state: "pending" },
-        { title: "Traitement", note: "Commence après autorisation.", state: "pending" }
-      ]
+      ...publicI18n.demoCaseOne
     },
     "NX-2026-0419|RAIDSECURE": {
       caseId: "NX-2026-0419",
-      status: "Soumission envoyée",
-      updatedAt: "4 avril 2026 à 10 h 15",
-      support: "RAID / NAS",
-      nextStep: "Attente de l'autorisation client",
-      summary: "L'évaluation initiale a été complétée. La soumission et le cadre d'intervention ont été transmis au client pour acceptation.",
-      steps: [
-        { title: "Dossier reçu", note: "Support reçu et enregistré.", state: "complete" },
-        { title: "Évaluation", note: "Analyse initiale terminée.", state: "complete" },
-        { title: "Soumission envoyée", note: "En attente d'acceptation.", state: "active" },
-        { title: "Traitement", note: "Débute après autorisation.", state: "pending" }
-      ]
+      ...publicI18n.demoCaseTwo
     }
   };
+
+  const caseIdField = statusForm.querySelector('[name="dossier"]');
+  const accessCodeField = statusForm.querySelector('[name="code"]');
+  const params = new URLSearchParams(window.location.search);
+  const presetCaseId = `${params.get("caseId") || ""}`.trim().toUpperCase();
+
+  if (caseIdField && presetCaseId) {
+    caseIdField.value = presetCaseId;
+  }
+
+  if (accessCodeField && presetCaseId && !accessCodeField.value) {
+    accessCodeField.focus();
+  }
 
   statusForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (!statusForm.checkValidity()) {
       statusForm.reportValidity();
-      setMessage(messageTarget, "error", "Entrez un numéro de dossier et un code d'accès valides.");
+      setMessage(messageTarget, "error", publicI18n.statusRequired);
       return;
     }
 
@@ -399,18 +707,18 @@ if (statusForm) {
         setMessage(
           messageTarget,
           "error",
-          "Aucun dossier n'a été trouvé avec cet accès. Vérifiez les identifiants transmis par NEXURADATA ou demandez une mise à jour."
+          publicI18n.statusNotFound
         );
         return;
       }
 
       renderStatusRecord(record, statusPanel);
-      setMessage(messageTarget, "success", "Dossier trouvé.");
+      setMessage(messageTarget, "success", publicI18n.statusFound);
       return;
     }
 
-    setButtonBusy(submitButton, true, "Recherche...");
-    setMessage(messageTarget, "success", "Recherche du dossier en cours...");
+    setButtonBusy(submitButton, true, publicI18n.statusBusy);
+    setMessage(messageTarget, "success", publicI18n.statusSearching);
 
     try {
       const response = await fetch(endpoint, {
@@ -428,7 +736,7 @@ if (statusForm) {
 
       if (response.ok && data?.ok) {
         renderStatusRecord(data, statusPanel);
-        setMessage(messageTarget, "success", "Dossier trouvé.");
+        setMessage(messageTarget, "success", publicI18n.statusFound);
         return;
       }
 
@@ -439,14 +747,14 @@ if (statusForm) {
       setMessage(
         messageTarget,
         "error",
-        data?.message || "Aucun dossier n'a été trouvé avec cet accès. Vérifiez les identifiants transmis par NEXURADATA ou demandez une mise à jour."
+        data?.message || publicI18n.statusNotFound
       );
     } catch {
       if (statusPanel) {
         statusPanel.hidden = true;
       }
 
-      setMessage(messageTarget, "error", "Le portail de suivi n'est pas joignable pour le moment.");
+      setMessage(messageTarget, "error", publicI18n.statusOffline);
     } finally {
       setButtonBusy(submitButton, false);
     }
@@ -477,6 +785,9 @@ if (operationsRoot) {
   const stepsTarget = operationsRoot.querySelector("[data-ops-steps]");
   const historyTarget = operationsRoot.querySelector("[data-ops-history]");
   const accessResult = operationsRoot.querySelector("[data-ops-access-result]");
+  const paymentForm = operationsRoot.querySelector("[data-ops-payment-form]");
+  const paymentStatus = operationsRoot.querySelector("[data-ops-payment-status]");
+  const paymentsTarget = operationsRoot.querySelector("[data-ops-payments]");
   const addStepButton = operationsRoot.querySelector("[data-ops-add-step]");
   const sendUpdateButton = operationsRoot.querySelector("[data-ops-send-update]");
   const sendAccessButton = operationsRoot.querySelector("[data-ops-send-access]");
@@ -484,6 +795,7 @@ if (operationsRoot) {
   const currentCaseIdInput = operationsRoot.querySelector("[data-ops-current-case-id]");
   const searchSubmitButton = searchForm?.querySelector('button[type="submit"]');
   const caseSubmitButton = caseForm?.querySelector('button[type="submit"]');
+  const paymentSubmitButton = paymentForm?.querySelector('button[type="submit"]');
 
   const createStepRow = (step = { title: "", note: "", state: "pending" }) => {
     const wrapper = document.createElement("div");
@@ -594,6 +906,77 @@ if (operationsRoot) {
     );
   };
 
+  const renderPayments = (payments) => {
+    if (!paymentsTarget) {
+      return;
+    }
+
+    if (!payments || payments.length === 0) {
+      paymentsTarget.innerHTML = "<p class=\"form-note\">Aucune demande de paiement pour ce dossier.</p>";
+      return;
+    }
+
+    paymentsTarget.replaceChildren(
+      ...payments.map((payment) => {
+        const article = document.createElement("article");
+        article.className = "ops-payment-entry";
+
+        const head = document.createElement("div");
+        head.className = "ops-payment-head";
+
+        const title = document.createElement("p");
+        title.className = "ops-payment-title";
+        title.textContent = payment.label;
+
+        const badge = document.createElement("span");
+        badge.className = `ops-payment-badge is-${payment.status || "open"}`;
+        badge.textContent =
+          payment.status === "paid"
+            ? "Payé"
+            : payment.status === "expired"
+              ? "Expiré"
+              : payment.status === "failed"
+                ? "Échec"
+                : "Ouvert";
+
+        head.append(title, badge);
+
+        const meta = document.createElement("p");
+        meta.className = "ops-payment-meta";
+        meta.textContent = `${payment.amountFormatted || formatCurrency(payment.amountCents, payment.currency)} · ${payment.paymentKind} · créé ${formatTimestamp(payment.createdAt)}`;
+
+        const note = document.createElement("p");
+        note.className = "ops-payment-note";
+        note.textContent = payment.description;
+
+        const actions = document.createElement("div");
+        actions.className = "ops-payment-actions";
+
+        if (payment.checkoutUrl) {
+          const link = document.createElement("a");
+          link.className = "button button-secondary button-small";
+          link.href = payment.checkoutUrl;
+          link.target = "_blank";
+          link.rel = "noreferrer";
+          link.textContent = "Ouvrir le lien Stripe";
+          actions.append(link);
+        }
+
+        const details = document.createElement("p");
+        details.className = "ops-payment-meta";
+        details.textContent =
+          payment.paidAt
+            ? `Confirmé ${formatTimestamp(payment.paidAt)}`
+            : payment.sentAt
+              ? `Lien envoyé ${formatTimestamp(payment.sentAt)}`
+              : `Lien non envoyé automatiquement`;
+
+        article.append(head, meta, note, actions, details);
+        return article;
+      })
+    );
+  };
+
   const fillCaseDetail = (record) => {
     if (casePanel) {
       casePanel.hidden = false;
@@ -628,9 +1011,16 @@ if (operationsRoot) {
       stepsTarget.replaceChildren(...(record.steps || []).map(createStepRow));
     }
 
+    renderPayments(record.payments || []);
+
     if (accessResult) {
       accessResult.textContent = "";
       accessResult.dataset.state = "";
+    }
+
+    if (paymentStatus) {
+      paymentStatus.textContent = "";
+      paymentStatus.dataset.state = "";
     }
 
     renderHistory(record.history || []);
@@ -922,6 +1312,68 @@ if (operationsRoot) {
         }
       } finally {
         setButtonBusy(regenerateButton, false);
+      }
+    });
+  }
+
+  if (paymentForm) {
+    paymentForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const caseId = currentCaseIdInput?.value || "";
+
+      if (!caseId) {
+        setMessage(paymentStatus, "error", "Chargez d'abord un dossier.");
+        return;
+      }
+
+      if (!paymentForm.checkValidity()) {
+        paymentForm.reportValidity();
+        setMessage(paymentStatus, "error", "Complétez les champs de paiement.");
+        return;
+      }
+
+      setMessage(paymentStatus, "success", "Création du lien de paiement...");
+      setButtonBusy(paymentSubmitButton, true, "Création...");
+
+      try {
+        const response = await fetch(searchEndpoint, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json"
+          },
+          body: JSON.stringify({
+            action: "create-payment",
+            caseId,
+            paymentKind: paymentForm.querySelector('[name="paymentKind"]')?.value || "custom",
+            amount: paymentForm.querySelector('[name="amount"]')?.value.trim() || "",
+            label: paymentForm.querySelector('[name="label"]')?.value.trim() || "",
+            description: paymentForm.querySelector('[name="description"]')?.value.trim() || "",
+            sendEmail: Boolean(paymentForm.querySelector('[name="sendEmail"]')?.checked)
+          })
+        });
+        const data = await parseJsonResponse(response);
+
+        if (!response.ok || !data?.ok) {
+          throw new Error(data?.message || "Impossible de créer la demande de paiement.");
+        }
+
+        if (data.case) {
+          fillCaseDetail(data.case);
+        }
+
+        setMessage(
+          paymentStatus,
+          data.delivery === "sent" ? "success" : "error",
+          data.delivery === "sent"
+            ? "Demande de paiement créée et envoyée au client."
+            : `Demande créée. Envoi automatique non effectué: ${data.delivery}.`
+        );
+      } catch (error) {
+        setMessage(paymentStatus, "error", error instanceof Error ? error.message : "Impossible de créer la demande de paiement.");
+      } finally {
+        setButtonBusy(paymentSubmitButton, false);
       }
     });
   }

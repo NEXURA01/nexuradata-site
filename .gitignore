@@ -6,6 +6,7 @@ Desktop.ini
 # Editor
 .vscode/
 .idea/
+.codex/
 
 # Node.js
 node_modules/

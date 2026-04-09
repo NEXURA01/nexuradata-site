@@ -1,3 +1,5 @@
+import { createHostedCheckoutSession } from "./stripe.js";
+
 const allowedSupports = new Set([
   "Disque dur",
   "SSD",
@@ -15,6 +17,7 @@ const allowedUrgencies = new Set([
 ]);
 
 const allowedStepStates = new Set(["pending", "active", "complete"]);
+const allowedPaymentKinds = new Set(["deposit", "final", "custom"]);
 const accessCodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 const encoder = new TextEncoder();
@@ -237,6 +240,73 @@ export const validateTimelineSteps = (steps) => {
   }
 
   return steps.map(normalizeStep);
+};
+
+const parseAmountToCents = (value) => {
+  const normalized = normalizeText(`${value ?? ""}`, 32).replace(",", ".");
+
+  if (!/^\d+(\.\d{1,2})?$/.test(normalized)) {
+    throw new Error("Montant invalide.");
+  }
+
+  const amount = Math.round(Number(normalized) * 100);
+
+  if (!Number.isFinite(amount) || amount < 100 || amount > 10000000) {
+    throw new Error("Montant hors limites.");
+  }
+
+  return amount;
+};
+
+const formatCurrency = (amountCents, currency = "cad") =>
+  new Intl.NumberFormat("fr-CA", {
+    style: "currency",
+    currency: `${currency || "cad"}`.toUpperCase()
+  }).format((Number(amountCents) || 0) / 100);
+
+const generatePaymentRequestId = () => {
+  const now = new Date();
+  const date = now.toISOString().slice(0, 10).replace(/-/g, "");
+  const token = crypto.randomUUID().slice(0, 6).toUpperCase();
+  return `PAY-${date}-${token}`;
+};
+
+const normalizePaymentKind = (value) => normalizeText(value, 20).toLowerCase();
+
+export const validatePaymentRequestInput = (payload) => {
+  const caseId = normalizeCaseId(payload.caseId);
+  const paymentKind = normalizePaymentKind(payload.paymentKind || payload.kind || "custom");
+  const label = normalizeText(payload.label, 120);
+  const description = normalizeMultilineText(payload.description, 300);
+  const currency = normalizeText(payload.currency || "cad", 12).toLowerCase() || "cad";
+  const amountCents = parseAmountToCents(payload.amount);
+  const sendEmail = payload.sendEmail === true || payload.sendEmail === "true" || payload.sendEmail === "on";
+
+  if (!caseId) {
+    throw new Error("Numéro de dossier invalide.");
+  }
+
+  if (!allowedPaymentKinds.has(paymentKind)) {
+    throw new Error("Type de paiement invalide.");
+  }
+
+  if (!label) {
+    throw new Error("Ajoutez un libellé de paiement.");
+  }
+
+  if (!description) {
+    throw new Error("Ajoutez une description de paiement.");
+  }
+
+  return {
+    caseId,
+    paymentKind,
+    label,
+    description,
+    currency,
+    amountCents,
+    sendEmail
+  };
 };
 
 const ensureDb = (env) => {
@@ -467,6 +537,92 @@ const getCaseRow = async (env, caseId) => {
     .first();
 };
 
+const mapPaymentRow = (row) => ({
+  paymentRequestId: row.payment_request_id,
+  caseId: row.case_id,
+  paymentKind: row.payment_kind,
+  status: row.status,
+  label: row.label,
+  description: row.description,
+  amountCents: row.amount_cents,
+  amountFormatted: formatCurrency(row.amount_cents, row.currency),
+  currency: row.currency,
+  checkoutUrl: row.checkout_url,
+  stripeCheckoutSessionId: row.stripe_checkout_session_id,
+  stripePaymentIntentId: row.stripe_payment_intent_id,
+  stripeSessionStatus: row.stripe_session_status,
+  stripePaymentStatus: row.stripe_payment_status,
+  customerEmail: row.stripe_customer_email,
+  createdAt: row.created_at,
+  updatedAt: row.updated_at,
+  sentAt: row.sent_at,
+  paidAt: row.paid_at,
+  expiresAt: row.expires_at,
+  createdBy: row.created_by
+});
+
+const mapPublicPayment = (payment) => {
+  const status = normalizeText(payment.status, 24).toLowerCase() || "open";
+  const isPayable = status === "open" && normalizeText(payment.checkoutUrl, 2000);
+
+  return {
+    paymentRequestId: payment.paymentRequestId,
+    paymentKind: payment.paymentKind,
+    status,
+    label: payment.label,
+    description: payment.description,
+    amountCents: payment.amountCents,
+    amountFormatted: payment.amountFormatted,
+    currency: payment.currency,
+    checkoutUrl: isPayable ? payment.checkoutUrl : "",
+    createdAt: payment.createdAt,
+    sentAt: payment.sentAt,
+    paidAt: payment.paidAt,
+    expiresAt: payment.expiresAt
+  };
+};
+
+export const listCasePayments = async (env, caseId) => {
+  const db = ensureDb(env);
+  const normalizedCaseId = normalizeCaseId(caseId);
+
+  if (!normalizedCaseId) {
+    return [];
+  }
+
+  const { results } = await db
+    .prepare(
+      `SELECT
+        payment_request_id,
+        case_id,
+        payment_kind,
+        status,
+        label,
+        description,
+        amount_cents,
+        currency,
+        checkout_url,
+        stripe_checkout_session_id,
+        stripe_payment_intent_id,
+        stripe_session_status,
+        stripe_payment_status,
+        stripe_customer_email,
+        created_at,
+        updated_at,
+        sent_at,
+        paid_at,
+        expires_at,
+        created_by
+      FROM case_payments
+      WHERE case_id = ?
+      ORDER BY created_at DESC, id DESC`
+    )
+    .bind(normalizedCaseId)
+    .all();
+
+  return (results || []).map(mapPaymentRow);
+};
+
 export const getPublicCaseByCredentials = async (env, caseId, accessCode) => {
   const row = await getCaseRow(env, caseId);
 
@@ -480,6 +636,8 @@ export const getPublicCaseByCredentials = async (env, caseId, accessCode) => {
     return null;
   }
 
+  const payments = await listCasePayments(env, row.case_id);
+
   return {
     caseId: row.case_id,
     updatedAt: row.updated_at,
@@ -487,7 +645,8 @@ export const getPublicCaseByCredentials = async (env, caseId, accessCode) => {
     status: row.status,
     nextStep: row.next_step,
     summary: row.client_summary,
-    steps: await getVisibleTimeline(env, row.case_id)
+    steps: await getVisibleTimeline(env, row.case_id),
+    payments: payments.map(mapPublicPayment)
   };
 };
 
@@ -549,6 +708,7 @@ export const getCaseDetail = async (env, caseId) => {
   }
 
   const currentSteps = await getVisibleTimeline(env, normalizedCaseId);
+  const payments = await listCasePayments(env, normalizedCaseId);
   const { results: history } = await db
     .prepare(
       `SELECT
@@ -584,6 +744,7 @@ export const getCaseDetail = async (env, caseId) => {
     accessCodeLastSentAt: row.access_code_last_sent_at,
     statusEmailLastSentAt: row.status_email_last_sent_at,
     steps: currentSteps,
+    payments,
     history: (history || []).map((entry) => ({
       kind: entry.kind,
       title: entry.title,
@@ -719,6 +880,234 @@ export const getResendableAccessCode = async (env, caseId) => {
     nextStep: row.next_step,
     clientSummary: row.client_summary
   };
+};
+
+const getPaymentRequestRow = async (env, paymentRequestId) => {
+  const db = ensureDb(env);
+
+  return db
+    .prepare(
+      `SELECT
+        payment_request_id,
+        case_id,
+        payment_kind,
+        status,
+        label,
+        description,
+        amount_cents,
+        currency,
+        checkout_url,
+        stripe_checkout_session_id,
+        stripe_payment_intent_id,
+        stripe_session_status,
+        stripe_payment_status,
+        stripe_customer_email,
+        created_at,
+        updated_at,
+        sent_at,
+        paid_at,
+        expires_at,
+        created_by
+      FROM case_payments
+      WHERE payment_request_id = ?`
+    )
+    .bind(normalizeText(paymentRequestId, 60))
+    .first();
+};
+
+export const markPaymentRequestSent = async (env, paymentRequestId) => {
+  const db = ensureDb(env);
+  const normalizedRequestId = normalizeText(paymentRequestId, 60);
+  const timestamp = nowIso();
+
+  await db
+    .prepare(
+      `UPDATE case_payments
+       SET updated_at = ?, sent_at = ?
+       WHERE payment_request_id = ?`
+    )
+    .bind(timestamp, timestamp, normalizedRequestId)
+    .run();
+
+  return getPaymentRequestRow(env, normalizedRequestId);
+};
+
+export const createCasePaymentRequest = async (env, payload, actor, requestUrl) => {
+  const db = ensureDb(env);
+  const input = validatePaymentRequestInput(payload);
+  const row = await getCaseRow(env, input.caseId);
+
+  if (!row) {
+    throw new Error("Dossier introuvable.");
+  }
+
+  const paymentRequestId = generatePaymentRequestId();
+  const createdAt = nowIso();
+  const successUrl = `${getPublicOrigin(env, requestUrl)}/paiement-reussi.html?caseId=${encodeURIComponent(input.caseId)}&paymentRequestId=${encodeURIComponent(paymentRequestId)}`;
+  const cancelUrl = `${getPublicOrigin(env, requestUrl)}/paiement-annule.html?caseId=${encodeURIComponent(input.caseId)}&paymentRequestId=${encodeURIComponent(paymentRequestId)}`;
+  const session = await createHostedCheckoutSession(env, {
+    caseId: input.caseId,
+    paymentRequestId,
+    paymentKind: input.paymentKind,
+    label: input.label,
+    description: input.description,
+    amountCents: input.amountCents,
+    currency: input.currency,
+    customerEmail: row.email,
+    successUrl,
+    cancelUrl
+  });
+  const localStatus = `${session?.payment_status || ""}`.toLowerCase() === "paid" ? "paid" : "open";
+  const expiresAt = Number.isFinite(Number(session?.expires_at))
+    ? new Date(Number(session.expires_at) * 1000).toISOString()
+    : "";
+
+  await db
+    .prepare(
+      `INSERT INTO case_payments (
+        payment_request_id,
+        case_id,
+        payment_kind,
+        status,
+        label,
+        description,
+        amount_cents,
+        currency,
+        checkout_url,
+        stripe_checkout_session_id,
+        stripe_payment_intent_id,
+        stripe_session_status,
+        stripe_payment_status,
+        stripe_customer_email,
+        created_at,
+        updated_at,
+        sent_at,
+        paid_at,
+        expires_at,
+        created_by
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .bind(
+      paymentRequestId,
+      input.caseId,
+      input.paymentKind,
+      localStatus,
+      input.label,
+      input.description,
+      input.amountCents,
+      input.currency,
+      normalizeText(session?.url, 2000),
+      normalizeText(session?.id, 120),
+      normalizeText(`${session?.payment_intent || ""}`, 120),
+      normalizeText(`${session?.status || ""}`, 40).toLowerCase(),
+      normalizeText(`${session?.payment_status || ""}`, 40).toLowerCase(),
+      row.email,
+      createdAt,
+      createdAt,
+      "",
+      localStatus === "paid" ? createdAt : "",
+      expiresAt,
+      normalizeText(actor, 120) || "ops"
+    )
+    .run();
+
+  await recordCaseEvent(
+    env,
+    input.caseId,
+    actor,
+    "Demande de paiement créée",
+    `${input.label} · ${formatCurrency(input.amountCents, input.currency)}.`
+  );
+
+  const saved = await getPaymentRequestRow(env, paymentRequestId);
+  return saved ? mapPaymentRow(saved) : null;
+};
+
+export const syncPaymentRequestFromStripe = async (env, event) => {
+  const db = ensureDb(env);
+  const session = event?.data?.object;
+
+  if (!session || session.object !== "checkout.session") {
+    return null;
+  }
+
+  const paymentRequestId = normalizeText(session?.metadata?.payment_request_id || session?.client_reference_id, 60);
+
+  if (!paymentRequestId) {
+    return null;
+  }
+
+  const existing = await getPaymentRequestRow(env, paymentRequestId);
+
+  if (!existing) {
+    return null;
+  }
+
+  const eventType = normalizeText(event?.type, 80);
+  let localStatus = existing.status || "open";
+
+  if (eventType === "checkout.session.completed" || eventType === "checkout.session.async_payment_succeeded") {
+    localStatus = "paid";
+  } else if (eventType === "checkout.session.expired") {
+    localStatus = "expired";
+  } else if (eventType === "checkout.session.async_payment_failed") {
+    localStatus = "failed";
+  }
+
+  const timestamp = nowIso();
+  const paidAt = localStatus === "paid" ? existing.paid_at || timestamp : existing.paid_at || "";
+  const expiresAt = Number.isFinite(Number(session?.expires_at))
+    ? new Date(Number(session.expires_at) * 1000).toISOString()
+    : existing.expires_at || "";
+
+  await db
+    .prepare(
+      `UPDATE case_payments
+       SET
+         updated_at = ?,
+         status = ?,
+         checkout_url = ?,
+         stripe_checkout_session_id = ?,
+         stripe_payment_intent_id = ?,
+         stripe_session_status = ?,
+         stripe_payment_status = ?,
+         paid_at = ?,
+         expires_at = ?
+       WHERE payment_request_id = ?`
+    )
+    .bind(
+      timestamp,
+      localStatus,
+      normalizeText(session?.url || existing.checkout_url, 2000),
+      normalizeText(session?.id || existing.stripe_checkout_session_id, 120),
+      normalizeText(`${session?.payment_intent || existing.stripe_payment_intent_id || ""}`, 120),
+      normalizeText(`${session?.status || existing.stripe_session_status || ""}`, 40).toLowerCase(),
+      normalizeText(`${session?.payment_status || existing.stripe_payment_status || ""}`, 40).toLowerCase(),
+      paidAt,
+      expiresAt,
+      paymentRequestId
+    )
+    .run();
+
+  if (localStatus !== existing.status) {
+    const title =
+      localStatus === "paid"
+        ? "Paiement reçu"
+        : localStatus === "expired"
+          ? "Lien de paiement expiré"
+          : "Paiement non complété";
+    const note =
+      localStatus === "paid"
+        ? `${existing.label} réglé pour ${formatCurrency(existing.amount_cents, existing.currency)}.`
+        : localStatus === "expired"
+          ? `Le lien de paiement ${paymentRequestId} a expiré.`
+          : `Le paiement ${paymentRequestId} n'a pas abouti.`;
+
+    await recordCaseEvent(env, existing.case_id, "stripe-webhook", title, note);
+  }
+
+  const updated = await getPaymentRequestRow(env, paymentRequestId);
+  return updated ? mapPaymentRow(updated) : null;
 };
 
 export const authorizeOpsRequest = (request, env) => {

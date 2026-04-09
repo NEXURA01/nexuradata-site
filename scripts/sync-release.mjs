@@ -22,6 +22,10 @@ const shouldCopyRootEntry = (entry) => {
     return true;
   }
 
+  if (entry === "en") {
+    return true;
+  }
+
   if (entry === "operations") {
     return true;
   }

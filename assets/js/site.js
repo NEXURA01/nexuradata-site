@@ -30,6 +30,18 @@ const publicI18n = isEnglishDocument
       statusBusy: "Searching...",
       statusSearching: "Searching for your case...",
       statusOffline: "The status portal is currently unavailable.",
+      paymentKindDeposit: "Deposit",
+      paymentKindFinal: "Balance",
+      paymentKindCustom: "Payment",
+      paymentStatusPaid: "Paid",
+      paymentStatusExpired: "Expired",
+      paymentStatusFailed: "Retry needed",
+      paymentStatusOpen: "Open",
+      paymentConfirmedOn: (timestamp) => `Payment confirmed on ${timestamp}`,
+      paymentAvailableUntil: (timestamp) => `Link available until ${timestamp}`,
+      paymentSentOn: (timestamp) => `Link sent on ${timestamp}`,
+      paymentReference: (reference) => `Reference ${reference}`,
+      paymentAction: "Pay online",
       demoCaseOne: {
         status: "Assessment in progress",
         updatedAt: "April 4, 2026 11:40 AM",
@@ -41,7 +53,8 @@ const publicI18n = isEnglishDocument
           { title: "Assessment in progress", note: "Initial review and case qualification.", state: "active" },
           { title: "Quote", note: "To be issued after assessment.", state: "pending" },
           { title: "Recovery work", note: "Starts after authorization.", state: "pending" }
-        ]
+        ],
+        payments: []
       },
       demoCaseTwo: {
         status: "Quote sent",
@@ -54,6 +67,23 @@ const publicI18n = isEnglishDocument
           { title: "Assessment complete", note: "Initial technical review completed.", state: "complete" },
           { title: "Quote sent", note: "Awaiting acceptance.", state: "active" },
           { title: "Recovery work", note: "Begins after authorization.", state: "pending" }
+        ],
+        payments: [
+          {
+            paymentRequestId: "PAY-20260404-A1B2C3",
+            paymentKind: "deposit",
+            status: "open",
+            label: "Intervention deposit",
+            description: "Opens the recovery work once the intervention is authorized.",
+            amountCents: 65000,
+            amountFormatted: "$650.00",
+            currency: "cad",
+            checkoutUrl: "https://checkout.stripe.com/pay/demo",
+            createdAt: "2026-04-04T14:10:00.000Z",
+            sentAt: "2026-04-04T14:11:00.000Z",
+            paidAt: "",
+            expiresAt: "2026-04-11T14:10:00.000Z"
+          }
         ]
       }
     }
@@ -84,6 +114,18 @@ const publicI18n = isEnglishDocument
       statusBusy: "Recherche...",
       statusSearching: "Recherche du dossier en cours...",
       statusOffline: "Le portail de suivi n'est pas joignable pour le moment.",
+      paymentKindDeposit: "Acompte",
+      paymentKindFinal: "Solde",
+      paymentKindCustom: "Paiement",
+      paymentStatusPaid: "Payé",
+      paymentStatusExpired: "Expiré",
+      paymentStatusFailed: "À reprendre",
+      paymentStatusOpen: "Ouvert",
+      paymentConfirmedOn: (timestamp) => `Paiement confirmé le ${timestamp}`,
+      paymentAvailableUntil: (timestamp) => `Lien disponible jusqu'au ${timestamp}`,
+      paymentSentOn: (timestamp) => `Lien transmis le ${timestamp}`,
+      paymentReference: (reference) => `Référence ${reference}`,
+      paymentAction: "Régler en ligne",
       demoCaseOne: {
         status: "Évaluation en cours",
         updatedAt: "4 avril 2026 à 11 h 40",
@@ -95,7 +137,8 @@ const publicI18n = isEnglishDocument
           { title: "Évaluation en cours", note: "Lecture initiale et qualification du cas.", state: "active" },
           { title: "Soumission", note: "À transmettre après évaluation.", state: "pending" },
           { title: "Traitement", note: "Commence après autorisation.", state: "pending" }
-        ]
+        ],
+        payments: []
       },
       demoCaseTwo: {
         status: "Soumission envoyée",
@@ -108,6 +151,23 @@ const publicI18n = isEnglishDocument
           { title: "Évaluation", note: "Analyse initiale terminée.", state: "complete" },
           { title: "Soumission envoyée", note: "En attente d'acceptation.", state: "active" },
           { title: "Traitement", note: "Débute après autorisation.", state: "pending" }
+        ],
+        payments: [
+          {
+            paymentRequestId: "PAY-20260404-A1B2C3",
+            paymentKind: "deposit",
+            status: "open",
+            label: "Acompte d'intervention",
+            description: "Ouverture du traitement après autorisation et prise en charge du dossier.",
+            amountCents: 65000,
+            amountFormatted: "650,00 $",
+            currency: "cad",
+            checkoutUrl: "https://checkout.stripe.com/pay/demo",
+            createdAt: "2026-04-04T14:10:00.000Z",
+            sentAt: "2026-04-04T14:11:00.000Z",
+            paidAt: "",
+            expiresAt: "2026-04-11T14:10:00.000Z"
+          }
         ]
       }
     };
@@ -251,6 +311,44 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
+const paymentFeedback = document.querySelector("[data-payment-feedback]");
+
+if (paymentFeedback) {
+  const params = new URLSearchParams(window.location.search);
+  const caseId = params.get("caseId") || "";
+  const paymentRequestId = params.get("paymentRequestId") || "";
+  const caseTarget = paymentFeedback.querySelector("[data-payment-feedback-case]");
+  const requestTarget = paymentFeedback.querySelector("[data-payment-feedback-request]");
+  const followLink = paymentFeedback.querySelector("[data-payment-feedback-follow]");
+  const mailLink = paymentFeedback.querySelector("[data-payment-feedback-mail]");
+
+  if (caseTarget) {
+    caseTarget.textContent = caseId || "Non précisé";
+  }
+
+  if (requestTarget) {
+    requestTarget.textContent = paymentRequestId || "Non précisée";
+  }
+
+  if (followLink && caseId) {
+    followLink.href = `suivi-dossier-client-montreal.html?caseId=${encodeURIComponent(caseId)}`;
+  }
+
+  if (mailLink) {
+    const subject = caseId
+      ? `Dossier ${caseId} - suivi paiement`
+      : "Suivi paiement NEXURADATA";
+    const body = [
+      caseId ? `Numéro de dossier: ${caseId}` : "",
+      paymentRequestId ? `Référence de paiement: ${paymentRequestId}` : "",
+      "",
+      "Message:"
+    ].filter(Boolean).join("\n");
+
+    mailLink.href = `mailto:contact@nexuradata.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+}
+
 const setMessage = (target, state, text) => {
   if (!target) {
     return;
@@ -308,6 +406,12 @@ const formatTimestamp = (value) => {
   }).format(date);
 };
 
+const formatCurrency = (amountCents, currency = "cad") =>
+  new Intl.NumberFormat("fr-CA", {
+    style: "currency",
+    currency: `${currency || "cad"}`.toUpperCase()
+  }).format((Number(amountCents) || 0) / 100);
+
 const buildIntakeMailto = (formData) => {
   const subject = `${publicI18n.intakeSubjectPrefix} - ${formData.get("support")} - ${formData.get("urgence")}`;
   const bodyLines = [
@@ -340,6 +444,91 @@ const createStatusStep = (step) => {
   return article;
 };
 
+const formatPaymentKindLabel = (paymentKind) => {
+  if (paymentKind === "deposit") {
+    return publicI18n.paymentKindDeposit;
+  }
+
+  if (paymentKind === "final") {
+    return publicI18n.paymentKindFinal;
+  }
+
+  return publicI18n.paymentKindCustom;
+};
+
+const formatPaymentStatusLabel = (status) => {
+  if (status === "paid") {
+    return publicI18n.paymentStatusPaid;
+  }
+
+  if (status === "expired") {
+    return publicI18n.paymentStatusExpired;
+  }
+
+  if (status === "failed") {
+    return publicI18n.paymentStatusFailed;
+  }
+
+  return publicI18n.paymentStatusOpen;
+};
+
+const createStatusPayment = (payment) => {
+  const article = document.createElement("article");
+  article.className = "status-payment";
+
+  const head = document.createElement("div");
+  head.className = "status-payment-head";
+
+  const title = document.createElement("p");
+  title.className = "status-payment-title";
+  title.textContent = payment.label;
+
+  const badge = document.createElement("span");
+  badge.className = `status-payment-badge is-${payment.status || "open"}`;
+  badge.textContent = formatPaymentStatusLabel(payment.status);
+
+  head.append(title, badge);
+
+  const meta = document.createElement("p");
+  meta.className = "status-payment-meta";
+  meta.textContent = `${payment.amountFormatted || formatCurrency(payment.amountCents, payment.currency)} · ${formatPaymentKindLabel(payment.paymentKind)}`;
+
+  const note = document.createElement("p");
+  note.className = "status-payment-note";
+  note.textContent = payment.description;
+
+  const details = document.createElement("p");
+  details.className = "status-payment-meta";
+  details.textContent =
+    payment.status === "paid" && payment.paidAt
+      ? publicI18n.paymentConfirmedOn(formatTimestamp(payment.paidAt))
+      : payment.status === "open" && payment.expiresAt
+        ? publicI18n.paymentAvailableUntil(formatTimestamp(payment.expiresAt))
+        : payment.sentAt
+          ? publicI18n.paymentSentOn(formatTimestamp(payment.sentAt))
+          : publicI18n.paymentReference(payment.paymentRequestId);
+
+  article.append(head, meta, note);
+
+  if (payment.checkoutUrl) {
+    const actions = document.createElement("div");
+    actions.className = "status-payment-actions";
+
+    const link = document.createElement("a");
+    link.className = "button button-primary button-small";
+    link.href = payment.checkoutUrl;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = publicI18n.paymentAction;
+
+    actions.append(link);
+    article.append(actions);
+  }
+
+  article.append(details);
+  return article;
+};
+
 const renderStatusRecord = (record, statusPanel) => {
   if (!statusPanel) {
     return;
@@ -353,6 +542,8 @@ const renderStatusRecord = (record, statusPanel) => {
   const nextTarget = statusPanel.querySelector("[data-status-next]");
   const summaryTarget = statusPanel.querySelector("[data-status-summary]");
   const timelineTarget = statusPanel.querySelector("[data-status-timeline]");
+  const paymentsSection = statusPanel.querySelector("[data-status-payments-section]");
+  const paymentsTarget = statusPanel.querySelector("[data-status-payments]");
 
   if (caseTarget) caseTarget.textContent = record.caseId;
   if (badgeTarget) badgeTarget.textContent = record.status;
@@ -360,6 +551,18 @@ const renderStatusRecord = (record, statusPanel) => {
   if (supportTarget) supportTarget.textContent = record.support;
   if (nextTarget) nextTarget.textContent = record.nextStep;
   if (summaryTarget) summaryTarget.textContent = record.summary;
+
+  if (paymentsSection && paymentsTarget) {
+    const payments = Array.isArray(record.payments) ? record.payments : [];
+
+    paymentsSection.hidden = payments.length === 0;
+
+    if (payments.length > 0) {
+      paymentsTarget.replaceChildren(...payments.map(createStatusPayment));
+    } else {
+      paymentsTarget.replaceChildren();
+    }
+  }
 
   if (timelineTarget) {
     timelineTarget.replaceChildren(...(record.steps || []).map(createStatusStep));
@@ -466,6 +669,19 @@ if (statusForm) {
     }
   };
 
+  const caseIdField = statusForm.querySelector('[name="dossier"]');
+  const accessCodeField = statusForm.querySelector('[name="code"]');
+  const params = new URLSearchParams(window.location.search);
+  const presetCaseId = `${params.get("caseId") || ""}`.trim().toUpperCase();
+
+  if (caseIdField && presetCaseId) {
+    caseIdField.value = presetCaseId;
+  }
+
+  if (accessCodeField && presetCaseId && !accessCodeField.value) {
+    accessCodeField.focus();
+  }
+
   statusForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -569,6 +785,9 @@ if (operationsRoot) {
   const stepsTarget = operationsRoot.querySelector("[data-ops-steps]");
   const historyTarget = operationsRoot.querySelector("[data-ops-history]");
   const accessResult = operationsRoot.querySelector("[data-ops-access-result]");
+  const paymentForm = operationsRoot.querySelector("[data-ops-payment-form]");
+  const paymentStatus = operationsRoot.querySelector("[data-ops-payment-status]");
+  const paymentsTarget = operationsRoot.querySelector("[data-ops-payments]");
   const addStepButton = operationsRoot.querySelector("[data-ops-add-step]");
   const sendUpdateButton = operationsRoot.querySelector("[data-ops-send-update]");
   const sendAccessButton = operationsRoot.querySelector("[data-ops-send-access]");
@@ -576,6 +795,7 @@ if (operationsRoot) {
   const currentCaseIdInput = operationsRoot.querySelector("[data-ops-current-case-id]");
   const searchSubmitButton = searchForm?.querySelector('button[type="submit"]');
   const caseSubmitButton = caseForm?.querySelector('button[type="submit"]');
+  const paymentSubmitButton = paymentForm?.querySelector('button[type="submit"]');
 
   const createStepRow = (step = { title: "", note: "", state: "pending" }) => {
     const wrapper = document.createElement("div");
@@ -686,6 +906,77 @@ if (operationsRoot) {
     );
   };
 
+  const renderPayments = (payments) => {
+    if (!paymentsTarget) {
+      return;
+    }
+
+    if (!payments || payments.length === 0) {
+      paymentsTarget.innerHTML = "<p class=\"form-note\">Aucune demande de paiement pour ce dossier.</p>";
+      return;
+    }
+
+    paymentsTarget.replaceChildren(
+      ...payments.map((payment) => {
+        const article = document.createElement("article");
+        article.className = "ops-payment-entry";
+
+        const head = document.createElement("div");
+        head.className = "ops-payment-head";
+
+        const title = document.createElement("p");
+        title.className = "ops-payment-title";
+        title.textContent = payment.label;
+
+        const badge = document.createElement("span");
+        badge.className = `ops-payment-badge is-${payment.status || "open"}`;
+        badge.textContent =
+          payment.status === "paid"
+            ? "Payé"
+            : payment.status === "expired"
+              ? "Expiré"
+              : payment.status === "failed"
+                ? "Échec"
+                : "Ouvert";
+
+        head.append(title, badge);
+
+        const meta = document.createElement("p");
+        meta.className = "ops-payment-meta";
+        meta.textContent = `${payment.amountFormatted || formatCurrency(payment.amountCents, payment.currency)} · ${payment.paymentKind} · créé ${formatTimestamp(payment.createdAt)}`;
+
+        const note = document.createElement("p");
+        note.className = "ops-payment-note";
+        note.textContent = payment.description;
+
+        const actions = document.createElement("div");
+        actions.className = "ops-payment-actions";
+
+        if (payment.checkoutUrl) {
+          const link = document.createElement("a");
+          link.className = "button button-secondary button-small";
+          link.href = payment.checkoutUrl;
+          link.target = "_blank";
+          link.rel = "noreferrer";
+          link.textContent = "Ouvrir le lien Stripe";
+          actions.append(link);
+        }
+
+        const details = document.createElement("p");
+        details.className = "ops-payment-meta";
+        details.textContent =
+          payment.paidAt
+            ? `Confirmé ${formatTimestamp(payment.paidAt)}`
+            : payment.sentAt
+              ? `Lien envoyé ${formatTimestamp(payment.sentAt)}`
+              : `Lien non envoyé automatiquement`;
+
+        article.append(head, meta, note, actions, details);
+        return article;
+      })
+    );
+  };
+
   const fillCaseDetail = (record) => {
     if (casePanel) {
       casePanel.hidden = false;
@@ -720,9 +1011,16 @@ if (operationsRoot) {
       stepsTarget.replaceChildren(...(record.steps || []).map(createStepRow));
     }
 
+    renderPayments(record.payments || []);
+
     if (accessResult) {
       accessResult.textContent = "";
       accessResult.dataset.state = "";
+    }
+
+    if (paymentStatus) {
+      paymentStatus.textContent = "";
+      paymentStatus.dataset.state = "";
     }
 
     renderHistory(record.history || []);
@@ -1014,6 +1312,68 @@ if (operationsRoot) {
         }
       } finally {
         setButtonBusy(regenerateButton, false);
+      }
+    });
+  }
+
+  if (paymentForm) {
+    paymentForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const caseId = currentCaseIdInput?.value || "";
+
+      if (!caseId) {
+        setMessage(paymentStatus, "error", "Chargez d'abord un dossier.");
+        return;
+      }
+
+      if (!paymentForm.checkValidity()) {
+        paymentForm.reportValidity();
+        setMessage(paymentStatus, "error", "Complétez les champs de paiement.");
+        return;
+      }
+
+      setMessage(paymentStatus, "success", "Création du lien de paiement...");
+      setButtonBusy(paymentSubmitButton, true, "Création...");
+
+      try {
+        const response = await fetch(searchEndpoint, {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json"
+          },
+          body: JSON.stringify({
+            action: "create-payment",
+            caseId,
+            paymentKind: paymentForm.querySelector('[name="paymentKind"]')?.value || "custom",
+            amount: paymentForm.querySelector('[name="amount"]')?.value.trim() || "",
+            label: paymentForm.querySelector('[name="label"]')?.value.trim() || "",
+            description: paymentForm.querySelector('[name="description"]')?.value.trim() || "",
+            sendEmail: Boolean(paymentForm.querySelector('[name="sendEmail"]')?.checked)
+          })
+        });
+        const data = await parseJsonResponse(response);
+
+        if (!response.ok || !data?.ok) {
+          throw new Error(data?.message || "Impossible de créer la demande de paiement.");
+        }
+
+        if (data.case) {
+          fillCaseDetail(data.case);
+        }
+
+        setMessage(
+          paymentStatus,
+          data.delivery === "sent" ? "success" : "error",
+          data.delivery === "sent"
+            ? "Demande de paiement créée et envoyée au client."
+            : `Demande créée. Envoi automatique non effectué: ${data.delivery}.`
+        );
+      } catch (error) {
+        setMessage(paymentStatus, "error", error instanceof Error ? error.message : "Impossible de créer la demande de paiement.");
+      } finally {
+        setButtonBusy(paymentSubmitButton, false);
       }
     });
   }

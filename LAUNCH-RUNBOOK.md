@@ -31,6 +31,35 @@ Creer ces adresses et les faire suivre vers une seule inbox verifiee au lancemen
    - `LAB_INBOX_EMAIL` comme variable cible de l'equipe
    - `ACCESS_CODE_SECRET` comme secret
 
+## 2.1 Paiements Stripe
+
+### Variables et secrets Stripe
+
+Declarer dans Cloudflare Pages:
+
+- `STRIPE_SECRET_KEY` comme secret
+- `STRIPE_WEBHOOK_SECRET` comme secret
+
+### Webhook Stripe
+
+Configurer un endpoint Stripe vers:
+
+- `https://nexuradata.ca/api/stripe-webhook`
+
+Evenements minimum:
+
+- `checkout.session.completed`
+- `checkout.session.async_payment_succeeded`
+- `checkout.session.async_payment_failed`
+- `checkout.session.expired`
+
+### Mode operatoire v1
+
+- les paiements sont crees depuis `/operations/`
+- types prevus: acompte, solde final, paiement ponctuel
+- chaque lien de paiement Stripe est rattache a un `caseId`
+- le webhook met a jour le statut du paiement dans D1 et l'historique du dossier
+
 ## 3. Protection de la console interne
 
 Configurer Cloudflare Access sur:
@@ -98,3 +127,5 @@ Secrets:
 
 - `RESEND_API_KEY`
 - `ACCESS_CODE_SECRET`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`

@@ -29,7 +29,8 @@ export const onRequestPost = async (context) => {
       support: detail.support,
       nextStep: detail.nextStep,
       summary: detail.summary,
-      steps: detail.steps
+      steps: detail.steps,
+      payments: detail.payments
     });
   } catch (error) {
     const message = error instanceof Error && error.message.includes("numéro de dossier")

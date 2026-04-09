@@ -105,7 +105,7 @@
           <article class="contact-card">
             <h3>Besoin urgent</h3>
             <a href="mailto:contact@nexuradata.ca?subject=Urgence%20sur%20un%20dossier%20NEXURADATA">contact@nexuradata.ca</a>
-            <p>Ligne téléphonique en cours d'activation. Utilisez le courriel si le niveau d'urgence a changé depuis l'ouverture du dossier.</p>
+            <p>Utilisez le courriel si le niveau d'urgence a changé depuis l'ouverture du dossier ou si une autorisation doit être confirmée.</p>
           </article>
         </aside>
       </div>
@@ -127,6 +127,18 @@
 
         <p class="status-summary" data-status-summary></p>
 
+        <section class="status-section" data-status-payments-section hidden>
+          <div class="status-section-head">
+            <div>
+              <p class="guide-meta">Paiement</p>
+              <h3>Soumission et règlement</h3>
+            </div>
+            <p class="status-section-note">Lorsqu'un acompte ou un solde est ouvert pour ce dossier, il apparaît ici avec son statut.</p>
+          </div>
+
+          <div class="status-payment-list" data-status-payments></div>
+        </section>
+
         <div class="status-timeline" data-status-timeline></div>
       </section>
 
@@ -137,6 +149,7 @@
             <li>L'état courant du dossier.</li>
             <li>La dernière mise à jour disponible.</li>
             <li>La prochaine étape concrète.</li>
+            <li>Une demande de paiement active, si un acompte ou un solde a été émis.</li>
             <li>Un canal clair pour joindre le laboratoire si quelque chose change.</li>
           </ul>
         </section>

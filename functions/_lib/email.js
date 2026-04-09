@@ -2,6 +2,7 @@ import {
   getCaseDetail,
   getPublicOrigin,
   markAccessEmailSent,
+  markPaymentRequestSent,
   markStatusEmailSent,
   normalizeText,
   recordCaseEvent
@@ -16,6 +17,12 @@ const escapeHtml = (value) =>
     .replace(/'/g, "&#39;");
 
 const formatTextLines = (lines) => lines.filter(Boolean).join("\n");
+
+const formatCurrency = (amountCents, currency = "cad") =>
+  new Intl.NumberFormat("fr-CA", {
+    style: "currency",
+    currency: `${currency || "cad"}`.toUpperCase()
+  }).format((Number(amountCents) || 0) / 100);
 
 const sendResendEmail = async (env, payload, idempotencyKey) => {
   const apiKey = normalizeText(env?.RESEND_API_KEY, 256);
@@ -233,4 +240,62 @@ export const sendClientStatusEmail = async (env, caseId, requestUrl, actor = "op
     detail,
     delivery
   };
+};
+
+export const sendClientPaymentLinkEmail = async (env, payment, requestUrl, actor = "ops") => {
+  if (!payment?.customerEmail || !payment?.checkoutUrl) {
+    throw new Error("Demande de paiement incomplète.");
+  }
+
+  const statusUrl = `${getPublicOrigin(env, requestUrl)}/suivi-dossier-client-montreal.html`;
+  const amount = formatCurrency(payment.amountCents, payment.currency);
+  const subject = `${payment.label} - ${amount} - ${payment.caseId}`;
+  const text = formatTextLines([
+    "Bonjour,",
+    "",
+    `Un lien de paiement a été préparé pour le dossier ${payment.caseId}.`,
+    `Libellé: ${payment.label}`,
+    `Montant: ${amount}`,
+    "",
+    payment.description,
+    "",
+    `Paiement sécurisé: ${payment.checkoutUrl}`,
+    `Suivi du dossier: ${statusUrl}`,
+    "",
+    "NEXURADATA"
+  ]);
+  const html = `
+    <p>Bonjour,</p>
+    <p>Un lien de paiement a été préparé pour le dossier <strong>${escapeHtml(payment.caseId)}</strong>.</p>
+    <p><strong>Libellé:</strong> ${escapeHtml(payment.label)}</p>
+    <p><strong>Montant:</strong> ${escapeHtml(amount)}</p>
+    <p>${escapeHtml(payment.description).replace(/\n/g, "<br>")}</p>
+    <p><a href="${escapeHtml(payment.checkoutUrl)}">Ouvrir le paiement sécurisé</a></p>
+    <p><a href="${escapeHtml(statusUrl)}">Accéder au suivi du dossier</a></p>
+    <p>NEXURADATA</p>
+  `;
+
+  const delivery = await sendResendEmail(
+    env,
+    {
+      to: [payment.customerEmail],
+      subject,
+      text,
+      html
+    },
+    `payment-link-${payment.paymentRequestId}`
+  );
+
+  if (delivery.sent) {
+    await markPaymentRequestSent(env, payment.paymentRequestId);
+    await recordCaseEvent(
+      env,
+      payment.caseId,
+      actor,
+      "Lien de paiement envoyé",
+      `${payment.label} transmis à ${payment.customerEmail}.`
+    );
+  }
+
+  return delivery;
 };

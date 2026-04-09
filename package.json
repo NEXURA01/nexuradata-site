@@ -22,5 +22,8 @@
   },
   "devDependencies": {
     "wrangler": "^4.80.0"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "release-cloudflare",
+  "outputDirectory": "public",
   "headers": [
     {
       "source": "/(.*)",

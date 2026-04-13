@@ -26,9 +26,21 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Check Datadog secrets
+      id: datadog-secrets
+      shell: bash
+      run: |
+        if [[ -n "${{ secrets.DD_API_KEY }}" && -n "${{ secrets.DD_APP_KEY }}" ]]; then
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "ready=false" >> "$GITHUB_OUTPUT"
+          echo "Datadog secrets are not configured; skipping synthetic tests."
+        fi
+
     # Run Synthetic tests within your GitHub workflow.
     # For additional configuration options visit the action within the marketplace: https://github.com/marketplace/actions/datadog-synthetics-ci
     - name: Run Datadog Synthetic tests
+      if: ${{ steps.datadog-secrets.outputs.ready == 'true' }}
       uses: DataDog/synthetics-ci-github-action@87b505388a22005bb8013481e3f73a367b9a53eb # v1.4.0
       with:
         api_key: ${{secrets.DD_API_KEY}}

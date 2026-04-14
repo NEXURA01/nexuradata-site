@@ -1,0 +1,40 @@
+name: Auto PR for Copilot agent branches
+
+on:
+  push:
+    branches:
+      - 'copilot/**'
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Open pull request if one does not exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          BASE="main"
+
+          # Check whether a PR already exists for this branch
+          EXISTING=$(gh pr list --head "$BRANCH" --base "$BASE" --json number --jq '.[0].number')
+
+          if [ -n "$EXISTING" ]; then
+            echo "PR #$EXISTING already exists for $BRANCH — nothing to do."
+          else
+            # Derive a readable title from the branch name
+            # e.g. copilot/add-stripe-support -> Add stripe support
+            TITLE=$(echo "$BRANCH" | sed 's|copilot/||' | tr '-' ' ' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2); print}')
+
+            gh pr create \
+              --base "$BASE" \
+              --head "$BRANCH" \
+              --title "$TITLE" \
+              --body "Automated pull request opened by the Copilot cloud agent from branch \`$BRANCH\`." \
+              --label "copilot" || true
+          fi

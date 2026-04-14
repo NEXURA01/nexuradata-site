@@ -14,11 +14,11 @@ export const onRequestPost = async (context) => {
       received: true,
       paymentRequestId: payment?.paymentRequestId || null
     });
-  } catch (error) {
+  } catch {
     return json(
       {
         ok: false,
-        message: error instanceof Error ? error.message : "Webhook Stripe invalide."
+        message: "Événement non traité."
       },
       { status: 400 }
     );

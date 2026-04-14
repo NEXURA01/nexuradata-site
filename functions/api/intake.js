@@ -17,6 +17,16 @@ export const onRequestPost = async (context) => {
       );
     }
 
+    if (!context.env?.ACCESS_CODE_SECRET) {
+      return json(
+        {
+          ok: false,
+          message: "Configuration incomplète. Contactez l'administrateur."
+        },
+        { status: 503 }
+      );
+    }
+
     const payload = await parsePayload(context.request);
     const submission = validateSubmission(payload);
     const intakeRecord = await createCase(context.env, submission);

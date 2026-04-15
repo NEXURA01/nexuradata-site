@@ -18,6 +18,8 @@ const allowedUrgencies = new Set([
 
 const allowedStepStates = new Set(["pending", "active", "complete"]);
 const allowedPaymentKinds = new Set(["deposit", "final", "custom"]);
+const allowedQuoteStatuses = new Set(["none", "draft", "sent", "approved", "expired", "declined"]);
+const allowedReminderTypes = new Set(["quote_follow_up", "payment_follow_up", "missing_information", "general_follow_up"]);
 const accessCodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 const encoder = new TextEncoder();
@@ -529,7 +531,18 @@ const getCaseRow = async (env, caseId) => {
         access_code_hash,
         access_code_ciphertext,
         access_code_last_sent_at,
-        status_email_last_sent_at
+        status_email_last_sent_at,
+        qualification_summary,
+        internal_notes,
+        handling_flags,
+        quote_status,
+        quote_amount_cents,
+        quote_sent_at,
+        quote_approved_at,
+        preapproval_confirmed,
+        acquisition_source,
+        last_reminder_sent_at,
+        last_client_contact_at
       FROM cases
       WHERE case_id = ?`
     )
@@ -650,51 +663,56 @@ export const getPublicCaseByCredentials = async (env, caseId, accessCode) => {
   };
 };
 
-export const listCases = async (env, rawQuery = "") => {
+export const listCases = async (env, rawQuery = "", filters = {}) => {
   const db = ensureDb(env);
   const query = normalizeText(rawQuery, 160);
+  const conditions = [];
+  const params = [];
 
   if (query) {
     const like = `%${query}%`;
-    const { results } = await db
-      .prepare(
-        `SELECT
-          case_id,
-          created_at,
-          updated_at,
-          name,
-          email,
-          support,
-          urgency,
-          status
-        FROM cases
-        WHERE case_id LIKE ? OR name LIKE ? OR email LIKE ? OR support LIKE ?
-        ORDER BY updated_at DESC
-        LIMIT 25`
-      )
-      .bind(like, like, like, like)
-      .all();
-
-    return results || [];
+    conditions.push("(case_id LIKE ? OR name LIKE ? OR email LIKE ? OR support LIKE ?)");
+    params.push(like, like, like, like);
   }
 
-  const { results } = await db
-    .prepare(
-      `SELECT
-        case_id,
-        created_at,
-        updated_at,
-        name,
-        email,
-        support,
-        urgency,
-        status
-      FROM cases
-      ORDER BY updated_at DESC
-      LIMIT 25`
-    )
-    .all();
+  const filterStatus = normalizeText(filters.status || "", 80);
+  const filterQuoteStatus = normalizeText(filters.quoteStatus || "", 40);
+  const filterUrgency = normalizeText(filters.urgency || "", 40);
 
+  if (filterStatus) {
+    conditions.push("status = ?");
+    params.push(filterStatus);
+  }
+
+  if (filterQuoteStatus) {
+    conditions.push("quote_status = ?");
+    params.push(filterQuoteStatus);
+  }
+
+  if (filterUrgency) {
+    conditions.push("urgency = ?");
+    params.push(filterUrgency);
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+  const sql = `SELECT
+      case_id,
+      created_at,
+      updated_at,
+      name,
+      email,
+      support,
+      urgency,
+      status,
+      next_step,
+      quote_status
+    FROM cases
+    ${whereClause}
+    ORDER BY updated_at DESC
+    LIMIT 25`;
+
+  const stmt = db.prepare(sql);
+  const { results } = params.length > 0 ? await stmt.bind(...params).all() : await stmt.all();
   return results || [];
 };
 
@@ -743,6 +761,17 @@ export const getCaseDetail = async (env, caseId) => {
     clientSummary: row.client_summary,
     accessCodeLastSentAt: row.access_code_last_sent_at,
     statusEmailLastSentAt: row.status_email_last_sent_at,
+    qualificationSummary: row.qualification_summary,
+    internalNotes: row.internal_notes,
+    handlingFlags: row.handling_flags,
+    quoteStatus: row.quote_status,
+    quoteAmountCents: row.quote_amount_cents,
+    quoteSentAt: row.quote_sent_at,
+    quoteApprovedAt: row.quote_approved_at,
+    preapprovalConfirmed: Boolean(row.preapproval_confirmed),
+    acquisitionSource: row.acquisition_source,
+    lastReminderSentAt: row.last_reminder_sent_at,
+    lastClientContactAt: row.last_client_contact_at,
     steps: currentSteps,
     payments,
     history: (history || []).map((entry) => ({
@@ -763,6 +792,14 @@ export const updateCaseRecord = async (env, payload, actor) => {
   const status = normalizeText(payload.status, 80);
   const nextStep = normalizeText(payload.nextStep, 180);
   const clientSummary = normalizeMultilineText(payload.clientSummary, 800);
+  const qualificationSummary = normalizeMultilineText(payload.qualificationSummary ?? "", 1200);
+  const internalNotes = normalizeMultilineText(payload.internalNotes ?? "", 3000);
+  const handlingFlags = normalizeText(payload.handlingFlags ?? "", 400);
+  const acquisitionSource = normalizeText(payload.acquisitionSource ?? "", 120);
+  const quoteAmountCents = payload.quoteAmount !== undefined && payload.quoteAmount !== null && payload.quoteAmount !== ""
+    ? parseAmountToCents(payload.quoteAmount)
+    : null;
+  const preapprovalConfirmed = payload.preapprovalConfirmed === true || payload.preapprovalConfirmed === "true" ? 1 : 0;
   const steps = validateTimelineSteps(payload.steps);
 
   if (!caseId || !status || !nextStep || !clientSummary) {
@@ -780,10 +817,31 @@ export const updateCaseRecord = async (env, payload, actor) => {
   await db
     .prepare(
       `UPDATE cases
-       SET updated_at = ?, status = ?, next_step = ?, client_summary = ?
+       SET updated_at = ?,
+           status = ?,
+           next_step = ?,
+           client_summary = ?,
+           qualification_summary = ?,
+           internal_notes = ?,
+           handling_flags = ?,
+           acquisition_source = ?,
+           quote_amount_cents = ?,
+           preapproval_confirmed = ?
        WHERE case_id = ?`
     )
-    .bind(timestamp, status, nextStep, clientSummary, caseId)
+    .bind(
+      timestamp,
+      status,
+      nextStep,
+      clientSummary,
+      qualificationSummary,
+      internalNotes,
+      handlingFlags,
+      acquisitionSource,
+      quoteAmountCents,
+      preapprovalConfirmed,
+      caseId
+    )
     .run();
 
   if (steps) {
@@ -1023,6 +1081,105 @@ export const createCasePaymentRequest = async (env, payload, actor, requestUrl) 
   return saved ? mapPaymentRow(saved) : null;
 };
 
+export const updateQuoteStatus = async (env, payload, actor) => {
+  const db = ensureDb(env);
+  const caseId = normalizeCaseId(payload.caseId);
+  const targetStatus = normalizeText(payload.quoteStatus, 20).toLowerCase();
+
+  if (!caseId) {
+    throw new Error("Numéro de dossier invalide.");
+  }
+
+  if (!allowedQuoteStatuses.has(targetStatus) || targetStatus === "none") {
+    throw new Error("Statut de soumission invalide.");
+  }
+
+  const row = await getCaseRow(env, caseId);
+
+  if (!row) {
+    throw new Error("Dossier introuvable.");
+  }
+
+  const timestamp = nowIso();
+  const updates = [`updated_at = ?`, `quote_status = ?`];
+  const params = [timestamp, targetStatus];
+
+  if (targetStatus === "sent") {
+    updates.push(`quote_sent_at = ?`);
+    params.push(timestamp);
+
+    if (payload.quoteAmount !== undefined && payload.quoteAmount !== null && payload.quoteAmount !== "") {
+      updates.push(`quote_amount_cents = ?`);
+      params.push(parseAmountToCents(payload.quoteAmount));
+    }
+  }
+
+  if (targetStatus === "approved") {
+    updates.push(`quote_approved_at = ?`);
+    params.push(timestamp);
+  }
+
+  params.push(caseId);
+
+  await db
+    .prepare(`UPDATE cases SET ${updates.join(", ")} WHERE case_id = ?`)
+    .bind(...params)
+    .run();
+
+  const titleMap = {
+    sent: "Soumission envoyée",
+    approved: "Soumission approuvée",
+    expired: "Soumission expirée",
+    declined: "Soumission refusée",
+    draft: "Soumission en brouillon"
+  };
+
+  await recordCaseEvent(env, caseId, actor, titleMap[targetStatus] || "Soumission mise à jour", `Statut de la soumission défini sur "${targetStatus}".`);
+
+  return getCaseDetail(env, caseId);
+};
+
+export const logReminder = async (env, payload, actor) => {
+  const db = ensureDb(env);
+  const caseId = normalizeCaseId(payload.caseId);
+  const reminderType = normalizeText(payload.reminderType, 40).toLowerCase();
+  const message = normalizeMultilineText(payload.message || "", 500);
+
+  if (!caseId) {
+    throw new Error("Numéro de dossier invalide.");
+  }
+
+  if (!allowedReminderTypes.has(reminderType)) {
+    throw new Error("Type de relance invalide.");
+  }
+
+  const row = await getCaseRow(env, caseId);
+
+  if (!row) {
+    throw new Error("Dossier introuvable.");
+  }
+
+  const timestamp = nowIso();
+
+  await db
+    .prepare(
+      `UPDATE cases SET updated_at = ?, last_reminder_sent_at = ?, last_client_contact_at = ? WHERE case_id = ?`
+    )
+    .bind(timestamp, timestamp, timestamp, caseId)
+    .run();
+
+  const typeLabels = {
+    quote_follow_up: "Relance soumission",
+    payment_follow_up: "Relance paiement",
+    missing_information: "Demande d'information",
+    general_follow_up: "Relance générale"
+  };
+
+  await recordCaseEvent(env, caseId, actor, typeLabels[reminderType] || "Relance envoyée", message || `Type: ${reminderType}`);
+
+  return getCaseDetail(env, caseId);
+};
+
 export const syncPaymentRequestFromStripe = async (env, event) => {
   const db = ensureDb(env);
   const session = event?.data?.object;
@@ -1159,4 +1316,227 @@ export const authorizeOpsRequest = (request, env) => {
   return {
     ok: false
   };
+};
+
+export const listQuotes = async (env, filters = {}) => {
+  const db = ensureDb(env);
+  const conditions = [];
+  const params = [];
+
+  conditions.push("quote_status != 'none'");
+
+  const filterQuoteStatus = normalizeText(filters.quoteStatus || "", 40);
+  const filterQuery = normalizeText(filters.query || "", 160);
+
+  if (filterQuoteStatus) {
+    conditions.push("quote_status = ?");
+    params.push(filterQuoteStatus);
+  }
+
+  if (filterQuery) {
+    const like = `%${filterQuery}%`;
+    conditions.push("(case_id LIKE ? OR name LIKE ? OR email LIKE ?)");
+    params.push(like, like, like);
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+  const sql = `SELECT
+      case_id,
+      name,
+      email,
+      status,
+      next_step,
+      quote_status,
+      quote_amount_cents,
+      quote_sent_at,
+      quote_approved_at,
+      preapproval_confirmed,
+      last_reminder_sent_at,
+      updated_at
+    FROM cases
+    ${whereClause}
+    ORDER BY
+      CASE quote_status WHEN 'sent' THEN 0 WHEN 'draft' THEN 1 WHEN 'approved' THEN 2 WHEN 'expired' THEN 3 WHEN 'declined' THEN 4 ELSE 5 END,
+      updated_at DESC
+    LIMIT 50`;
+
+  const stmt = db.prepare(sql);
+  const { results } = params.length > 0 ? await stmt.bind(...params).all() : await stmt.all();
+
+  return (results || []).map((row) => {
+    let reminderDue = "";
+
+    if (row.quote_status === "sent" && row.quote_sent_at) {
+      const sentDate = new Date(row.quote_sent_at);
+      const daysSinceSent = Math.floor((Date.now() - sentDate.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (daysSinceSent >= 7) {
+        reminderDue = "urgente";
+      } else if (daysSinceSent >= 3) {
+        reminderDue = "suggérée";
+      }
+    }
+
+    return {
+      caseId: row.case_id,
+      clientName: row.name,
+      clientEmail: row.email,
+      caseStatus: row.status,
+      nextStep: row.next_step,
+      quoteStatus: row.quote_status,
+      quoteAmountCents: row.quote_amount_cents,
+      quoteAmountFormatted: row.quote_amount_cents ? formatCurrency(row.quote_amount_cents) : "",
+      quoteSentAt: row.quote_sent_at,
+      quoteApprovedAt: row.quote_approved_at,
+      preapprovalConfirmed: Boolean(row.preapproval_confirmed),
+      lastReminderSentAt: row.last_reminder_sent_at,
+      reminderDue,
+      updatedAt: row.updated_at
+    };
+  });
+};
+
+export const listAllPayments = async (env, filters = {}) => {
+  const db = ensureDb(env);
+  const conditions = [];
+  const params = [];
+
+  const filterStatus = normalizeText(filters.status || "", 40);
+  const filterKind = normalizeText(filters.kind || "", 40);
+  const filterQuery = normalizeText(filters.query || "", 160);
+
+  if (filterStatus) {
+    conditions.push("cp.status = ?");
+    params.push(filterStatus);
+  }
+
+  if (filterKind) {
+    conditions.push("cp.payment_kind = ?");
+    params.push(filterKind);
+  }
+
+  if (filterQuery) {
+    const like = `%${filterQuery}%`;
+    conditions.push("(cp.case_id LIKE ? OR c.name LIKE ? OR c.email LIKE ? OR cp.payment_request_id LIKE ?)");
+    params.push(like, like, like, like);
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+  const sql = `SELECT
+      cp.payment_request_id,
+      cp.case_id,
+      c.name,
+      c.email,
+      cp.payment_kind,
+      cp.status,
+      cp.label,
+      cp.amount_cents,
+      cp.currency,
+      cp.created_at,
+      cp.sent_at,
+      cp.paid_at,
+      cp.expires_at
+    FROM case_payments cp
+    LEFT JOIN cases c ON cp.case_id = c.case_id
+    ${whereClause}
+    ORDER BY
+      CASE cp.status WHEN 'open' THEN 0 WHEN 'paid' THEN 1 WHEN 'expired' THEN 2 WHEN 'failed' THEN 3 ELSE 4 END,
+      cp.created_at DESC
+    LIMIT 50`;
+
+  const stmt = db.prepare(sql);
+  const { results } = params.length > 0 ? await stmt.bind(...params).all() : await stmt.all();
+
+  return (results || []).map((row) => ({
+    paymentRequestId: row.payment_request_id,
+    caseId: row.case_id,
+    clientName: row.name,
+    clientEmail: row.email,
+    paymentKind: row.payment_kind,
+    status: row.status,
+    label: row.label,
+    amountCents: row.amount_cents,
+    amountFormatted: formatCurrency(row.amount_cents, row.currency),
+    currency: row.currency,
+    createdAt: row.created_at,
+    sentAt: row.sent_at,
+    paidAt: row.paid_at,
+    expiresAt: row.expires_at
+  }));
+};
+
+export const listFollowUps = async (env, filters = {}) => {
+  const db = ensureDb(env);
+  const conditions = [];
+  const params = [];
+
+  conditions.push("status NOT IN ('completed', 'closed')");
+
+  const filterReason = normalizeText(filters.reason || "", 60);
+  const filterQuery = normalizeText(filters.query || "", 160);
+  const daysSince = Number(filters.daysSinceLastContact) || 0;
+
+  if (filterReason === "quote_pending") {
+    conditions.push("quote_status = 'sent'");
+  } else if (filterReason === "payment_open") {
+    conditions.push("case_id IN (SELECT case_id FROM case_payments WHERE status = 'open')");
+  } else if (filterReason === "awaiting_authorization") {
+    conditions.push("quote_status = 'approved'");
+    conditions.push("preapproval_confirmed = 0");
+  } else if (filterReason === "missing_information") {
+    conditions.push("status IN ('awaiting_client', 'En attente du client')");
+    conditions.push("quote_status IN ('none', 'draft')");
+  } else if (filterReason === "dormant") {
+    conditions.push("status IN ('awaiting_client', 'paused', 'En attente du client', 'En pause')");
+    conditions.push("updated_at < datetime('now', '-7 days')");
+  } else if (filterReason === "new_unqualified") {
+    conditions.push("status IN ('new', 'Dossier reçu')");
+  }
+
+  if (daysSince > 0) {
+    conditions.push("(last_client_contact_at = '' OR last_client_contact_at < datetime('now', '-' || ? || ' days'))");
+    params.push(String(daysSince));
+  }
+
+  if (filterQuery) {
+    const like = `%${filterQuery}%`;
+    conditions.push("(case_id LIKE ? OR name LIKE ? OR email LIKE ?)");
+    params.push(like, like, like);
+  }
+
+  const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+  const sql = `SELECT
+      case_id,
+      name,
+      email,
+      status,
+      next_step,
+      quote_status,
+      last_reminder_sent_at,
+      last_client_contact_at,
+      updated_at,
+      (SELECT cp.status FROM case_payments cp WHERE cp.case_id = cases.case_id ORDER BY cp.created_at DESC LIMIT 1) AS latest_payment_status
+    FROM cases
+    ${whereClause}
+    ORDER BY
+      CASE WHEN last_client_contact_at = '' THEN 0 ELSE 1 END,
+      last_client_contact_at ASC,
+      updated_at ASC
+    LIMIT 50`;
+
+  const stmt = db.prepare(sql);
+  const { results } = params.length > 0 ? await stmt.bind(...params).all() : await stmt.all();
+
+  return (results || []).map((row) => ({
+    caseId: row.case_id,
+    clientName: row.name,
+    clientEmail: row.email,
+    status: row.status,
+    nextStep: row.next_step,
+    quoteStatus: row.quote_status,
+    latestPaymentStatus: row.latest_payment_status || "none",
+    lastReminderSentAt: row.last_reminder_sent_at,
+    lastClientContactAt: row.last_client_contact_at,
+    updatedAt: row.updated_at
+  }));
 };

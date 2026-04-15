@@ -4,10 +4,12 @@ import {
   getCaseDetail,
   getResendableAccessCode,
   listCases,
+  logReminder,
   normalizeCaseId,
   recordCaseEvent,
   regenerateCaseAccessCode,
-  updateCaseRecord
+  updateCaseRecord,
+  updateQuoteStatus
 } from "../../_lib/cases.js";
 import { sendClientAccessEmail, sendClientPaymentLinkEmail, sendClientStatusEmail } from "../../_lib/email.js";
 import { json, methodNotAllowed, onOptions, parsePayload } from "../../_lib/http.js";
@@ -60,7 +62,11 @@ export const onRequestGet = async (context) => {
       });
     }
 
-    const items = await listCases(context.env, url.searchParams.get("query") || "");
+    const items = await listCases(context.env, url.searchParams.get("query") || "", {
+      status: url.searchParams.get("status") || "",
+      quoteStatus: url.searchParams.get("quoteStatus") || "",
+      urgency: url.searchParams.get("urgency") || ""
+    });
     return json({
       ok: true,
       items
@@ -163,6 +169,35 @@ export const onRequestPost = async (context) => {
         case: await getCaseDetail(context.env, payment.caseId),
         payment,
         delivery: delivery.sent ? "sent" : delivery.reason
+      });
+    }
+
+    if (action === "quote-send" || action === "quote-approve" || action === "quote-expire" || action === "quote-decline") {
+      const quoteStatusMap = {
+        "quote-send": "sent",
+        "quote-approve": "approved",
+        "quote-expire": "expired",
+        "quote-decline": "declined"
+      };
+
+      const detail = await updateQuoteStatus(context.env, {
+        caseId: payload.caseId,
+        quoteStatus: quoteStatusMap[action],
+        quoteAmount: payload.quoteAmount
+      }, auth.actor);
+
+      return json({
+        ok: true,
+        case: detail
+      });
+    }
+
+    if (action === "log-reminder") {
+      const detail = await logReminder(context.env, payload, auth.actor);
+
+      return json({
+        ok: true,
+        case: detail
       });
     }
 

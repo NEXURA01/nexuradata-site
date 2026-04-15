@@ -796,6 +796,21 @@ if (operationsRoot) {
   const searchSubmitButton = searchForm?.querySelector('button[type="submit"]');
   const caseSubmitButton = caseForm?.querySelector('button[type="submit"]');
   const paymentSubmitButton = paymentForm?.querySelector('button[type="submit"]');
+  const metaAcquisition = operationsRoot.querySelector("[data-ops-meta-acquisition]");
+  const quoteStatusDisplay = operationsRoot.querySelector("[data-ops-quote-status]");
+  const quoteAmountDisplay = operationsRoot.querySelector("[data-ops-quote-amount]");
+  const quotePreapprovalDisplay = operationsRoot.querySelector("[data-ops-quote-preapproval]");
+  const quoteSentAtDisplay = operationsRoot.querySelector("[data-ops-quote-sent-at]");
+  const quoteApprovedAtDisplay = operationsRoot.querySelector("[data-ops-quote-approved-at]");
+  const quoteResult = operationsRoot.querySelector("[data-ops-quote-result]");
+  const quoteSendButton = operationsRoot.querySelector("[data-ops-quote-send]");
+  const quoteApproveButton = operationsRoot.querySelector("[data-ops-quote-approve]");
+  const quoteExpireButton = operationsRoot.querySelector("[data-ops-quote-expire]");
+  const quoteDeclineButton = operationsRoot.querySelector("[data-ops-quote-decline]");
+  const reminderTypeSelect = operationsRoot.querySelector("[data-ops-reminder-type]");
+  const reminderMessageInput = operationsRoot.querySelector("[data-ops-reminder-message]");
+  const logReminderButton = operationsRoot.querySelector("[data-ops-log-reminder]");
+  const reminderResult = operationsRoot.querySelector("[data-ops-reminder-result]");
 
   const createStepRow = (step = { title: "", note: "", state: "pending" }) => {
     const wrapper = document.createElement("div");
@@ -872,6 +887,15 @@ if (operationsRoot) {
       state: row.querySelector("[data-ops-step-state]")?.value || "pending",
       note: row.querySelector("[data-ops-step-note]")?.value.trim() || ""
     }));
+
+  const quoteStatusLabels = {
+    none: "Aucune",
+    draft: "Brouillon",
+    sent: "Envoyée",
+    approved: "Approuvée",
+    expired: "Expirée",
+    declined: "Refusée"
+  };
 
   const renderHistory = (history) => {
     if (!historyTarget) {
@@ -990,6 +1014,7 @@ if (operationsRoot) {
     if (metaSupport) metaSupport.textContent = record.support;
     if (metaUrgency) metaUrgency.textContent = record.urgency;
     if (metaSource) metaSource.textContent = record.sourcePath || "/";
+    if (metaAcquisition) metaAcquisition.textContent = record.acquisitionSource || "—";
     if (metaAccessSent) metaAccessSent.textContent = record.accessCodeLastSentAt ? formatTimestamp(record.accessCodeLastSentAt) : "Pas encore";
     if (metaStatusSent) metaStatusSent.textContent = record.statusEmailLastSentAt ? formatTimestamp(record.statusEmailLastSentAt) : "Pas encore";
     if (messageTarget) messageTarget.textContent = record.message;
@@ -1000,12 +1025,30 @@ if (operationsRoot) {
       const nextStepInput = caseForm.querySelector('[name="nextStep"]');
       const summaryInput = caseForm.querySelector('[name="clientSummary"]');
       const notifyInput = caseForm.querySelector('[name="notifyClient"]');
+      const qualInput = caseForm.querySelector('[name="qualificationSummary"]');
+      const notesInput = caseForm.querySelector('[name="internalNotes"]');
+      const flagsInput = caseForm.querySelector('[name="handlingFlags"]');
+      const acqInput = caseForm.querySelector('[name="acquisitionSource"]');
+      const quoteAmtInput = caseForm.querySelector('[name="quoteAmount"]');
+      const preapprovalInput = caseForm.querySelector('[name="preapprovalConfirmed"]');
 
       if (statusInput) statusInput.value = record.status;
       if (nextStepInput) nextStepInput.value = record.nextStep;
       if (summaryInput) summaryInput.value = record.clientSummary;
       if (notifyInput) notifyInput.checked = false;
+      if (qualInput) qualInput.value = record.qualificationSummary || "";
+      if (notesInput) notesInput.value = record.internalNotes || "";
+      if (flagsInput) flagsInput.value = record.handlingFlags || "";
+      if (acqInput) acqInput.value = record.acquisitionSource || "";
+      if (quoteAmtInput) quoteAmtInput.value = record.quoteAmountCents ? (record.quoteAmountCents / 100).toFixed(2) : "";
+      if (preapprovalInput) preapprovalInput.checked = Boolean(record.preapprovalConfirmed);
     }
+
+    if (quoteStatusDisplay) quoteStatusDisplay.textContent = quoteStatusLabels[record.quoteStatus] || record.quoteStatus || "Aucune";
+    if (quoteAmountDisplay) quoteAmountDisplay.textContent = record.quoteAmountCents ? formatCurrency(record.quoteAmountCents, "cad") : "—";
+    if (quotePreapprovalDisplay) quotePreapprovalDisplay.textContent = record.preapprovalConfirmed ? "Oui" : "Non";
+    if (quoteSentAtDisplay) quoteSentAtDisplay.textContent = record.quoteSentAt ? formatTimestamp(record.quoteSentAt) : "—";
+    if (quoteApprovedAtDisplay) quoteApprovedAtDisplay.textContent = record.quoteApprovedAt ? formatTimestamp(record.quoteApprovedAt) : "—";
 
     if (stepsTarget) {
       stepsTarget.replaceChildren(...(record.steps || []).map(createStepRow));
@@ -1021,6 +1064,16 @@ if (operationsRoot) {
     if (paymentStatus) {
       paymentStatus.textContent = "";
       paymentStatus.dataset.state = "";
+    }
+
+    if (quoteResult) {
+      quoteResult.textContent = "";
+      quoteResult.dataset.state = "";
+    }
+
+    if (reminderResult) {
+      reminderResult.textContent = "";
+      reminderResult.dataset.state = "";
     }
 
     renderHistory(record.history || []);
@@ -1068,7 +1121,11 @@ if (operationsRoot) {
         clientLabel.textContent = item.name;
 
         const supportLabel = document.createElement("span");
-        supportLabel.textContent = `${item.support} · ${item.status}`;
+        supportLabel.textContent = `${item.support} · ${item.status}${item.quote_status && item.quote_status !== "none" ? ` · Soum: ${quoteStatusLabels[item.quote_status] || item.quote_status}` : ""}`;
+
+        const nextLabel = document.createElement("span");
+        nextLabel.className = "ops-result-next";
+        nextLabel.textContent = item.next_step || "";
 
         const emailLabel = document.createElement("span");
         emailLabel.textContent = item.email;
@@ -1077,7 +1134,7 @@ if (operationsRoot) {
         updatedLabel.dateTime = item.updated_at || "";
         updatedLabel.textContent = `Mis à jour ${formatTimestamp(item.updated_at)}`;
 
-        button.append(caseLabel, clientLabel, supportLabel, emailLabel, updatedLabel);
+        button.append(caseLabel, clientLabel, supportLabel, nextLabel, emailLabel, updatedLabel);
         button.addEventListener("click", () => {
           loadCaseDetail(item.case_id).catch((error) => {
             setMessage(searchStatus, "error", error.message);
@@ -1093,11 +1150,20 @@ if (operationsRoot) {
       event.preventDefault();
 
       const query = searchForm.querySelector('[name="query"]')?.value.trim() || "";
+      const filterStatus = searchForm.querySelector('[name="filterStatus"]')?.value || "";
+      const filterQuoteStatus = searchForm.querySelector('[name="filterQuoteStatus"]')?.value || "";
+      const filterUrgency = searchForm.querySelector('[name="filterUrgency"]')?.value || "";
       setButtonBusy(searchSubmitButton, true, "Recherche...");
       setMessage(searchStatus, "success", "Recherche en cours...");
 
       try {
-        const response = await fetch(`${searchEndpoint}?query=${encodeURIComponent(query)}`, {
+        const params = new URLSearchParams();
+        if (query) params.set("query", query);
+        if (filterStatus) params.set("status", filterStatus);
+        if (filterQuoteStatus) params.set("quoteStatus", filterQuoteStatus);
+        if (filterUrgency) params.set("urgency", filterUrgency);
+
+        const response = await fetch(`${searchEndpoint}?${params.toString()}`, {
           headers: {
             accept: "application/json"
           }
@@ -1153,6 +1219,12 @@ if (operationsRoot) {
             status: caseForm.querySelector('[name="status"]')?.value.trim() || "",
             nextStep: caseForm.querySelector('[name="nextStep"]')?.value.trim() || "",
             clientSummary: caseForm.querySelector('[name="clientSummary"]')?.value.trim() || "",
+            qualificationSummary: caseForm.querySelector('[name="qualificationSummary"]')?.value.trim() || "",
+            internalNotes: caseForm.querySelector('[name="internalNotes"]')?.value.trim() || "",
+            handlingFlags: caseForm.querySelector('[name="handlingFlags"]')?.value.trim() || "",
+            acquisitionSource: caseForm.querySelector('[name="acquisitionSource"]')?.value.trim() || "",
+            quoteAmount: caseForm.querySelector('[name="quoteAmount"]')?.value.trim() || "",
+            preapprovalConfirmed: Boolean(caseForm.querySelector('[name="preapprovalConfirmed"]')?.checked),
             notifyClient: Boolean(caseForm.querySelector('[name="notifyClient"]')?.checked),
             steps: collectSteps()
           })
@@ -1316,6 +1388,88 @@ if (operationsRoot) {
     });
   }
 
+  const quoteActionHandler = (button, action, label) => {
+    if (!button) return;
+    button.addEventListener("click", async () => {
+      const caseId = currentCaseIdInput?.value || "";
+      if (!caseId) {
+        setMessage(quoteResult, "error", "Chargez d'abord un dossier.");
+        return;
+      }
+
+      setMessage(quoteResult, "success", `${label}...`);
+      setButtonBusy(button, true, label + "...");
+
+      try {
+        const body = { action, caseId };
+        if (action === "quote-send") {
+          const amt = caseForm?.querySelector('[name="quoteAmount"]')?.value.trim() || "";
+          if (amt) body.quoteAmount = amt;
+        }
+
+        const response = await fetch(searchEndpoint, {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify(body)
+        });
+        const data = await parseJsonResponse(response);
+
+        if (!response.ok || !data?.ok) {
+          throw new Error(data?.message || "L'action a échoué.");
+        }
+
+        fillCaseDetail(data.case);
+        setMessage(quoteResult, "success", `${label} effectuée.`);
+      } catch (error) {
+        setMessage(quoteResult, "error", error instanceof Error ? error.message : "L'action a échoué.");
+      } finally {
+        setButtonBusy(button, false);
+      }
+    });
+  };
+
+  quoteActionHandler(quoteSendButton, "quote-send", "Envoi de la soumission");
+  quoteActionHandler(quoteApproveButton, "quote-approve", "Approbation");
+  quoteActionHandler(quoteExpireButton, "quote-expire", "Expiration");
+  quoteActionHandler(quoteDeclineButton, "quote-decline", "Refus");
+
+  if (logReminderButton) {
+    logReminderButton.addEventListener("click", async () => {
+      const caseId = currentCaseIdInput?.value || "";
+      if (!caseId) {
+        setMessage(reminderResult, "error", "Chargez d'abord un dossier.");
+        return;
+      }
+
+      const reminderType = reminderTypeSelect?.value || "general_follow_up";
+      const message = reminderMessageInput?.value.trim() || "";
+
+      setMessage(reminderResult, "success", "Enregistrement de la relance...");
+      setButtonBusy(logReminderButton, true, "Enregistrement...");
+
+      try {
+        const response = await fetch(searchEndpoint, {
+          method: "POST",
+          headers: { "content-type": "application/json", accept: "application/json" },
+          body: JSON.stringify({ action: "log-reminder", caseId, reminderType, message })
+        });
+        const data = await parseJsonResponse(response);
+
+        if (!response.ok || !data?.ok) {
+          throw new Error(data?.message || "Relance non enregistrée.");
+        }
+
+        fillCaseDetail(data.case);
+        if (reminderMessageInput) reminderMessageInput.value = "";
+        setMessage(reminderResult, "success", "Relance enregistrée.");
+      } catch (error) {
+        setMessage(reminderResult, "error", error instanceof Error ? error.message : "Relance non enregistrée.");
+      } finally {
+        setButtonBusy(logReminderButton, false);
+      }
+    });
+  }
+
   if (paymentForm) {
     paymentForm.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1380,5 +1534,189 @@ if (operationsRoot) {
 
   if (searchForm) {
     searchForm.requestSubmit();
+  }
+}
+
+/* ── Ops filtered view pages (quotes, payments, follow-up) ── */
+
+const opsViewRoot = document.querySelector("[data-ops-view]");
+
+if (opsViewRoot) {
+  const viewName = opsViewRoot.getAttribute("data-ops-view");
+  const viewEndpoint = opsViewRoot.getAttribute("data-ops-endpoint") || "/api/ops/cases";
+  const viewFilters = document.querySelector("[data-ops-view-filters]");
+  const viewStatus = document.querySelector("[data-ops-view-status]");
+  const viewTbody = document.querySelector("[data-ops-view-tbody]");
+  const viewSubmitButton = viewFilters?.querySelector('button[type="submit"]');
+
+  const quoteStatusLabelsView = {
+    none: "Aucune",
+    draft: "Brouillon",
+    sent: "Envoyée",
+    approved: "Approuvée",
+    expired: "Expirée",
+    declined: "Refusée"
+  };
+
+  const paymentStatusLabelsView = {
+    open: "Ouvert",
+    paid: "Payé",
+    expired: "Expiré",
+    failed: "Échoué",
+    cancelled: "Annulé"
+  };
+
+  const paymentKindLabelsView = {
+    deposit: "Acompte",
+    final: "Solde final",
+    custom: "Ponctuel"
+  };
+
+  const caseLink = (caseId) => `index.html`;
+
+  const renderQuotesTable = (items) => {
+    if (!viewTbody) return;
+
+    if (!items || items.length === 0) {
+      viewTbody.innerHTML = '<tr><td colspan="8" class="ops-view-empty">Aucune soumission correspondante.</td></tr>';
+      return;
+    }
+
+    viewTbody.replaceChildren(
+      ...items.map((item) => {
+        const tr = document.createElement("tr");
+        tr.className = "ops-view-row";
+        const reminderLabel = item.reminderDue === "urgente"
+          ? '<span class="ops-view-badge is-reminder-urgent">Urgente</span>'
+          : item.reminderDue === "suggérée"
+            ? '<span class="ops-view-badge is-reminder-suggested">Suggérée</span>'
+            : '—';
+        tr.innerHTML = `
+          <td><a href="${caseLink(item.caseId)}" class="ops-view-link">${escapeHtml(item.caseId)}</a></td>
+          <td>${escapeHtml(item.clientName)}</td>
+          <td>${item.quoteAmountFormatted || "—"}</td>
+          <td><span class="ops-view-badge is-quote-${item.quoteStatus}">${quoteStatusLabelsView[item.quoteStatus] || item.quoteStatus}</span></td>
+          <td>${escapeHtml(item.caseStatus)}</td>
+          <td class="ops-view-muted">${item.quoteSentAt ? formatTimestamp(item.quoteSentAt) : "—"}</td>
+          <td>${reminderLabel}</td>
+          <td class="ops-view-muted">${escapeHtml(item.nextStep || "")}</td>
+        `;
+        return tr;
+      })
+    );
+  };
+
+  const renderPaymentsTable = (items) => {
+    if (!viewTbody) return;
+
+    if (!items || items.length === 0) {
+      viewTbody.innerHTML = '<tr><td colspan="9" class="ops-view-empty">Aucun paiement correspondant.</td></tr>';
+      return;
+    }
+
+    viewTbody.replaceChildren(
+      ...items.map((item) => {
+        const tr = document.createElement("tr");
+        tr.className = "ops-view-row";
+        tr.innerHTML = `
+          <td><a href="${caseLink(item.caseId)}" class="ops-view-link">${escapeHtml(item.caseId)}</a></td>
+          <td>${escapeHtml(item.clientName || "")}</td>
+          <td class="ops-view-mono">${escapeHtml(item.paymentRequestId)}</td>
+          <td>${paymentKindLabelsView[item.paymentKind] || item.paymentKind}</td>
+          <td>${item.amountFormatted || "—"}</td>
+          <td><span class="ops-view-badge is-payment-${item.status}">${paymentStatusLabelsView[item.status] || item.status}</span></td>
+          <td class="ops-view-muted">${formatTimestamp(item.createdAt)}</td>
+          <td class="ops-view-muted">${item.expiresAt ? formatTimestamp(item.expiresAt) : "—"}</td>
+          <td class="ops-view-muted">${item.paidAt ? formatTimestamp(item.paidAt) : "—"}</td>
+        `;
+        return tr;
+      })
+    );
+  };
+
+  const renderFollowUpTable = (items) => {
+    if (!viewTbody) return;
+
+    if (!items || items.length === 0) {
+      viewTbody.innerHTML = '<tr><td colspan="9" class="ops-view-empty">Aucun dossier à relancer.</td></tr>';
+      return;
+    }
+
+    viewTbody.replaceChildren(
+      ...items.map((item) => {
+        const tr = document.createElement("tr");
+        tr.className = "ops-view-row";
+        const paymentLabel = item.latestPaymentStatus && item.latestPaymentStatus !== "none"
+          ? `<span class="ops-view-badge is-payment-${item.latestPaymentStatus}">${paymentStatusLabelsView[item.latestPaymentStatus] || item.latestPaymentStatus}</span>`
+          : "—";
+        tr.innerHTML = `
+          <td><a href="${caseLink(item.caseId)}" class="ops-view-link">${escapeHtml(item.caseId)}</a></td>
+          <td>${escapeHtml(item.clientName)}</td>
+          <td>${escapeHtml(item.status)}</td>
+          <td><span class="ops-view-badge is-quote-${item.quoteStatus}">${quoteStatusLabelsView[item.quoteStatus] || item.quoteStatus || "—"}</span></td>
+          <td>${paymentLabel}</td>
+          <td class="ops-view-muted">${item.lastClientContactAt ? formatTimestamp(item.lastClientContactAt) : "Aucun"}</td>
+          <td class="ops-view-muted">${item.lastReminderSentAt ? formatTimestamp(item.lastReminderSentAt) : "—"}</td>
+          <td class="ops-view-muted">${escapeHtml(item.nextStep || "")}</td>
+        `;
+        return tr;
+      })
+    );
+  };
+
+  const viewRenderers = {
+    quotes: renderQuotesTable,
+    payments: renderPaymentsTable,
+    "follow-up": renderFollowUpTable
+  };
+
+  const escapeHtml = (text) => {
+    const div = document.createElement("div");
+    div.textContent = text || "";
+    return div.innerHTML;
+  };
+
+  const loadView = async () => {
+    if (!viewFilters) return;
+
+    const params = new URLSearchParams();
+    const formData = new FormData(viewFilters);
+
+    for (const [key, value] of formData.entries()) {
+      const trimmed = `${value}`.trim();
+      if (trimmed) params.set(key, trimmed);
+    }
+
+    setMessage(viewStatus, "success", "Chargement...");
+    if (viewSubmitButton) setButtonBusy(viewSubmitButton, true, "Chargement...");
+
+    try {
+      const response = await fetch(`${viewEndpoint}?${params.toString()}`, {
+        headers: { accept: "application/json" }
+      });
+      const data = await parseJsonResponse(response);
+
+      if (!response.ok || !data?.ok) {
+        throw new Error(data?.message || "Impossible de charger les données.");
+      }
+
+      const renderer = viewRenderers[viewName];
+      if (renderer) renderer(data.items || []);
+
+      setMessage(viewStatus, "success", `${(data.items || []).length} résultat(s).`);
+    } catch (error) {
+      setMessage(viewStatus, "error", error instanceof Error ? error.message : "Erreur de chargement.");
+    } finally {
+      if (viewSubmitButton) setButtonBusy(viewSubmitButton, false);
+    }
+  };
+
+  if (viewFilters) {
+    viewFilters.addEventListener("submit", (event) => {
+      event.preventDefault();
+      loadView();
+    });
+
+    loadView();
   }
 }

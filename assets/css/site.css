@@ -15,6 +15,9 @@
   --color-accent-strong: #8fa2b7;
   --color-accent-ink: #101417;
   --color-highlight: #d9e1e8;
+  --color-error: #8f3f2f;
+  --color-warning: #e4b7aa;
+  --color-info: #7dd3fc;
   --shadow-soft: 0 14px 32px -28px rgba(0, 0, 0, 0.48);
   --shadow-strong: 0 24px 56px -40px rgba(0, 0, 0, 0.62);
   --radius-sm: 1rem;
@@ -39,7 +42,7 @@ body {
   min-width: 320px;
   font-family: "IBM Plex Sans", sans-serif;
   color: var(--color-text);
-  background: #141618;
+  background: var(--color-bg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -417,7 +420,7 @@ select {
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-md);
-  background: #1a1d21;
+  background: var(--color-bg-soft);
   box-shadow: none;
   overflow: hidden;
 }
@@ -438,7 +441,7 @@ select {
 
 .hero-panel .panel-card,
 .contact-card {
-  background: #1a1d21;
+  background: var(--color-bg-soft);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
@@ -952,7 +955,7 @@ select {
   padding: 1.75rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
-  background: #191c20;
+  background: var(--color-bg-soft);
   box-shadow: none;
 }
 
@@ -1061,7 +1064,7 @@ select {
 }
 
 .form-status[data-state="error"] {
-  color: #8f3f2f;
+  color: var(--color-error);
 }
 
 .form-status[data-state="success"] {
@@ -1101,7 +1104,7 @@ select {
 .site-footer {
   padding: 0 0 2rem;
   color: rgba(241, 243, 245, 0.92);
-  background: #131518;
+  background: var(--color-bg);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -1132,7 +1135,7 @@ select {
 }
 
 .site-footer a:hover {
-  color: #ffffff;
+  color: var(--color-highlight);
 }
 
 .footer-bottom {
@@ -1636,7 +1639,7 @@ select {
 .status-payment-badge.is-expired,
 .status-payment-badge.is-failed {
   border-color: rgba(168, 92, 72, 0.28);
-  color: #e4b7aa;
+  color: var(--color-warning);
 }
 
 .status-timeline {
@@ -1931,7 +1934,171 @@ select {
 .ops-payment-badge.is-expired,
 .ops-payment-badge.is-failed {
   border-color: rgba(168, 92, 72, 0.28);
-  color: #e4b7aa;
+  color: var(--color-warning);
+}
+
+.ops-filter-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.ops-quote-card,
+.ops-reminder-card {
+  margin-top: 1rem;
+}
+
+.ops-quote-card h3,
+.ops-reminder-card h3,
+.ops-payments-card h3 {
+  margin: 0;
+}
+
+.ops-quote-meta {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0.75rem 0;
+}
+
+.ops-quote-meta p {
+  margin: 0;
+  color: var(--color-text-soft);
+  font-size: 0.92rem;
+}
+
+.ops-result-next {
+  color: var(--color-text-muted);
+  font-size: 0.84rem;
+  font-style: italic;
+}
+
+/* ── Ops filtered view pages (quotes, payments, follow-up) ── */
+
+.ops-view-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 1.25rem;
+}
+
+.ops-view-filters .field {
+  flex: 1 1 10rem;
+  min-width: 0;
+}
+
+.ops-view-filters .form-actions {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.ops-view-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ops-view-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.ops-view-table th {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ops-view-table td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
+  vertical-align: top;
+}
+
+.ops-view-row:hover td {
+  background: rgba(125, 211, 252, 0.04);
+}
+
+.ops-view-link {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ops-view-link:hover {
+  text-decoration: underline;
+}
+
+.ops-view-mono {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.84rem;
+}
+
+.ops-view-muted {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.ops-view-empty {
+  padding: 2rem 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.ops-view-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ops-view-badge.is-quote-sent,
+.ops-view-badge.is-payment-open {
+  border-color: rgba(125, 211, 252, 0.28);
+  color: var(--color-info);
+}
+
+.ops-view-badge.is-quote-approved,
+.ops-view-badge.is-payment-paid {
+  border-color: rgba(183, 196, 211, 0.28);
+  color: var(--color-text);
+}
+
+.ops-view-badge.is-quote-expired,
+.ops-view-badge.is-quote-declined,
+.ops-view-badge.is-payment-expired,
+.ops-view-badge.is-payment-failed {
+  border-color: rgba(168, 92, 72, 0.28);
+  color: var(--color-warning);
+}
+
+.ops-view-badge.is-quote-draft {
+  color: var(--color-text-soft);
+}
+
+.ops-view-badge.is-quote-none {
+  color: var(--color-text-muted);
+}
+
+.ops-view-badge.is-reminder-urgent {
+  border-color: rgba(168, 92, 72, 0.28);
+  color: var(--color-warning);
+}
+
+.ops-view-badge.is-reminder-suggested {
+  border-color: rgba(125, 211, 252, 0.22);
+  color: var(--color-text-soft);
 }
 
 @media (max-width: 1100px) {
@@ -1952,6 +2119,24 @@ select {
   .ops-steps-head {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .ops-filter-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .ops-view-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ops-view-table {
+    font-size: 0.84rem;
+  }
+
+  .ops-view-table th,
+  .ops-view-table td {
+    padding: 0.5rem;
   }
 }
 

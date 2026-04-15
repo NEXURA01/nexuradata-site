@@ -1,20 +1,31 @@
-﻿:root {
-  --color-bg: #141618;
-  --color-bg-soft: #1a1d20;
-  --color-surface: rgba(24, 27, 31, 0.94);
-  --color-surface-strong: #1d2126;
-  --color-surface-elevated: rgba(28, 31, 36, 0.98);
-  --color-panel: #171b20;
-  --color-panel-soft: #1d2228;
-  --color-line: rgba(255, 255, 255, 0.08);
-  --color-line-strong: rgba(150, 166, 184, 0.22);
-  --color-text: #f1f3f5;
-  --color-text-soft: #c0c6ce;
-  --color-text-muted: #8f98a3;
-  --color-accent: #b7c4d3;
-  --color-accent-strong: #8fa2b7;
-  --color-accent-ink: #101417;
-  --color-highlight: #d9e1e8;
+﻿/* ── Locked branding tokens ─────────────────────────────────── */
+:root {
+  --noir: #0d0d0b;
+  --os: #e8e4dc;
+  --os-dim: rgba(232, 228, 220, 0.22);
+  --os-ghost: rgba(232, 228, 220, 0.08);
+  --rule: 0.5px solid rgba(232, 228, 220, 0.1);
+  --serif: 'Georgia', 'Times New Roman', serif;
+  --tracking-wide: 0.35em;
+  --tracking-xwide: 0.55em;
+
+  /* ── Layout & functional tokens (not locked) ─────────────── */
+  --color-bg: #0d0d0b;
+  --color-bg-soft: #151513;
+  --color-surface: rgba(20, 20, 18, 0.94);
+  --color-surface-strong: #1a1a17;
+  --color-surface-elevated: rgba(22, 22, 19, 0.98);
+  --color-panel: #131311;
+  --color-panel-soft: #1a1a17;
+  --color-line: rgba(232, 228, 220, 0.08);
+  --color-line-strong: rgba(232, 228, 220, 0.22);
+  --color-text: #e8e4dc;
+  --color-text-soft: rgba(232, 228, 220, 0.65);
+  --color-text-muted: rgba(232, 228, 220, 0.38);
+  --color-accent: #e8e4dc;
+  --color-accent-strong: rgba(232, 228, 220, 0.82);
+  --color-accent-ink: #0d0d0b;
+  --color-highlight: #e8e4dc;
   --color-error: #8f3f2f;
   --color-warning: #e4b7aa;
   --color-info: #7dd3fc;
@@ -40,9 +51,9 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  font-family: "IBM Plex Sans", sans-serif;
-  color: var(--color-text);
-  background: var(--color-bg);
+  font-family: var(--serif);
+  color: var(--os);
+  background: var(--noir);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -92,28 +103,65 @@ select {
   top: 1rem;
 }
 
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(16px);
-  background: rgba(20, 22, 24, 0.94);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+/* ── Locked branding: header/nav ─────────────────────────────── */
+.brand-logo,
+.footer-logo {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
 }
 
+.site-header {
+  border-bottom: var(--rule);
+  background: var(--noir);
+}
+
+.site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 0;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.nav-links a,
+.footer-legal a,
+.footer-block a {
+  color: var(--os);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: var(--tracking-xwide);
+  opacity: 0.38;
+  transition: opacity 0.2s ease;
+}
+
+.nav-links a:hover,
+.footer-legal a:hover,
+.footer-block a:hover {
+  opacity: 1;
+}
+
+/* Legacy .navbar support for operations pages */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
   min-height: 5.5rem;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  min-width: 0;
-  text-decoration: none;
 }
 
 .brand img {
@@ -124,30 +172,6 @@ select {
 
 .brand-footer img {
   height: 18px;
-}
-
-.nav-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
-.nav-links a {
-  color: var(--color-text-soft);
-  text-decoration: none;
-  font-size: 0.92rem;
-  font-weight: 600;
-  transition: color 160ms ease, transform 160ms ease;
-}
-
-.nav-links a:hover {
-  color: var(--color-accent);
-}
-
-.nav-links .button {
-  width: auto;
 }
 
 .nav-toggle {
@@ -1101,18 +1125,58 @@ select {
   margin-top: 0.5rem;
 }
 
+/* ── Locked branding: footer ─────────────────────────────────── */
 .site-footer {
-  padding: 0 0 2rem;
-  color: rgba(241, 243, 245, 0.92);
-  background: var(--color-bg);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: var(--rule);
+  background: var(--noir);
+}
+
+.footer-top {
+  padding: 56px 0 32px;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.4fr repeat(2, minmax(0, 1fr));
-  gap: 1.25rem;
-  padding: 2rem 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
+  padding: 32px 0;
+  border-top: var(--rule);
+}
+
+.footer-block small {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 0.7rem;
+  letter-spacing: var(--tracking-xwide);
+  text-transform: uppercase;
+  opacity: 0.35;
+}
+
+.footer-block p {
+  max-width: none;
+  font-size: 0.95rem;
+  line-height: 1.85;
+  opacity: 0.65;
+}
+
+.footer-legal {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 24px 0;
+  border-top: var(--rule);
+}
+
+.footer-note {
+  padding: 24px 0 64px;
+  border-top: var(--rule);
+}
+
+.footer-note p {
+  max-width: 72ch;
+  font-size: 0.95rem;
+  line-height: 1.85;
+  opacity: 0.5;
 }
 
 .brand-footer {
@@ -1121,9 +1185,9 @@ select {
 
 .footer-title {
   margin: 0 0 1rem;
-  color: rgba(234, 244, 255, 0.96);
+  color: var(--os);
   font-size: 0.96rem;
-  font-family: "IBM Plex Sans", sans-serif;
+  font-family: var(--serif);
 }
 
 .site-footer a,
@@ -1131,21 +1195,21 @@ select {
   display: block;
   margin: 0 0 0.65rem;
   text-decoration: none;
-  color: rgba(192, 198, 206, 0.78);
+  color: rgba(232, 228, 220, 0.65);
 }
 
 .site-footer a:hover {
-  color: var(--color-highlight);
+  color: var(--os);
 }
 
 .footer-bottom {
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: var(--rule);
 }
 
 .footer-bottom p {
   margin: 0;
-  color: rgba(152, 174, 194, 0.7);
+  color: rgba(232, 228, 220, 0.5);
   font-size: 0.9rem;
 }
 
@@ -2492,8 +2556,38 @@ select {
   }
 
   .footer-grid {
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
     padding: 1.9rem 0;
+  }
+
+  .footer-legal {
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+/* ── Locked branding: responsive overrides ──────────────────── */
+@media (max-width: 980px) {
+  .site-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    gap: 16px 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .brand-logo,
+  .footer-logo {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
   }
 }
 

@@ -6,7 +6,7 @@
   <title>Tarifs indicatifs | Récupération de données à Montréal | NEXURADATA</title>
   <meta name="description" content="Tarifs indicatifs NEXURADATA pour les cas simples de récupération de données à Montréal. Les cas RAID, serveur, panne mécanique ou forensique sont traités sur soumission.">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#141618">
+  <meta name="theme-color" content="#0d0d0b">
   <meta name="author" content="NEXURADATA">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_CA">
@@ -27,10 +27,7 @@
   <link rel="alternate" hreflang="en-CA" href="https://nexuradata.ca/en/tarifs-recuperation-donnees-montreal.html">
   <link rel="alternate" hreflang="x-default" href="https://nexuradata.ca/en/tarifs-recuperation-donnees-montreal.html">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/assets/nexuradata-icon.png">
   <link rel="stylesheet" href="assets/css/site.css">
   <script src="assets/js/site.js" defer></script>
 </head>
@@ -38,16 +35,20 @@
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <header class="site-header">
-    <nav class="navbar container" aria-label="Navigation principale">
-      <a class="brand" href="index.html" aria-label="NEXURADATA, retour à l'accueil">
-        <img src="assets/icons/logo-petit.svg" alt="NEXURADATA" width="200" height="24">
-      </a>
-      <div class="nav-links">
-        <a href="index.html#contact">Contact</a>
-        <a href="index.html" class="button button-outline button-small">Retour au site</a>
-        <a href="en/tarifs-recuperation-donnees-montreal.html" class="button button-outline button-small" lang="en-CA">English</a>
-      </div>
-    </nav>
+    <div class="container">
+      <nav class="site-nav" aria-label="Navigation principale">
+        <a class="brand" href="/" aria-label="Accueil NEXURA DATA">
+          <img src="/assets/nexuradata-master.svg" alt="NEXURA DATA" class="brand-logo">
+        </a>
+        <div class="nav-links">
+          <a href="/services.html">Services</a>
+          <a href="/tarifs-recuperation-donnees-montreal.html">Tarifs</a>
+          <a href="/politique-confidentialite.html">Confidentialité</a>
+          <a href="/conditions-intervention-paiement.html">Conditions</a>
+          <a href="/#contact">Contact</a>
+        </div>
+      </nav>
+    </div>
   </header>
 
   <main id="contenu" class="page-shell">
@@ -150,8 +151,47 @@
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-bottom">
-      <p>© <span data-year></span> NEXURADATA. Tous droits réservés.</p>
+    <div class="container">
+      <section class="footer-top" aria-label="Identité et informations">
+        <img src="/assets/nexuradata-master.svg" alt="NEXURA DATA" class="footer-logo">
+      </section>
+
+      <section class="footer-grid" aria-label="Informations du site">
+        <div class="footer-block">
+          <small>ACTIVITÉ</small>
+          <p>Récupération de données, RAID, NAS, serveurs et forensique numérique.</p>
+        </div>
+
+        <div class="footer-block">
+          <small>LOCALISATION</small>
+          <p>Montréal, Québec, Canada</p>
+        </div>
+
+        <div class="footer-block">
+          <small>COURRIEL</small>
+          <p><a href="mailto:contact@nexuradata.ca">contact@nexuradata.ca</a></p>
+        </div>
+
+        <div class="footer-block">
+          <small>CONFIDENTIALITÉ</small>
+          <p><a href="mailto:privacy@nexuradata.ca">privacy@nexuradata.ca</a></p>
+        </div>
+      </section>
+
+      <section class="footer-legal" aria-label="Liens légaux">
+        <a href="/mentions-legales.html">Mentions légales</a>
+        <a href="/politique-confidentialite.html">Politique de confidentialité</a>
+        <a href="/engagements-conformite-quebec.html">Engagements Québec</a>
+        <a href="/conditions-intervention-paiement.html">Conditions d'intervention</a>
+      </section>
+
+      <section class="footer-note" aria-label="Note d'exploitation">
+        <p>
+          NEXURA DATA opère au Canada en récupération de données et en analyse spécialisée.
+          Les interventions sont réalisées à la suite d'une évaluation préalable et après
+          validation des conditions applicables.
+        </p>
+      </section>
     </div>
   </footer>
 </body>

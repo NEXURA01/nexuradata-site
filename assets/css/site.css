@@ -1178,7 +1178,6 @@ select {
   opacity: 0.65;
 }
 
-.nav-links a,
 .footer-legal a,
 .footer-block a {
   color: var(--os);
@@ -1189,7 +1188,6 @@ select {
   transition: opacity 0.2s ease;
 }
 
-.nav-links a:hover,
 .footer-legal a:hover,
 .footer-block a:hover {
   opacity: 1;
@@ -1227,11 +1225,9 @@ select {
   font-family: "IBM Plex Sans", sans-serif;
 }
 
-.site-footer a,
 .site-footer p {
   display: block;
   margin: 0 0 0.5rem;
-  text-decoration: none;
   color: inherit;
 }
 

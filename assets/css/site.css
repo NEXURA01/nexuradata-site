@@ -36,6 +36,16 @@
   --radius-lg: 2rem;
   --width-content: min(1160px, calc(100% - 3rem));
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Brand identity tokens — LOCKED */
+  --noir: #0d0d0b;
+  --os: #e8e4dc;
+  --os-dim: rgba(232, 228, 220, 0.22);
+  --os-ghost: rgba(232, 228, 220, 0.08);
+  --rule: 0.5px solid rgba(232, 228, 220, 0.1);
+  --serif: 'Georgia', 'Times New Roman', serif;
+  --tracking-wide: 0.35em;
+  --tracking-xwide: 0.55em;
 }
 
 *,
@@ -113,10 +123,23 @@ select {
 }
 
 .site-header {
-  border-bottom: var(--rule);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(16px);
   background: var(--noir);
+  border-bottom: var(--rule);
 }
 
+.site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 0;
+}
+
+/* Brand-locked nav — LOCKED */
 .site-nav {
   display: flex;
   justify-content: space-between;
@@ -1190,7 +1213,6 @@ select {
   font-family: var(--serif);
 }
 
-.site-footer a,
 .site-footer p {
   display: block;
   margin: 0 0 0.65rem;
@@ -2279,12 +2301,15 @@ select {
 
 @media (max-width: 1080px) {
   .hero-grid,
-  .footer-grid,
   .tactical-grid,
   .authority-grid,
   .contact-layout,
   .status-layout {
     grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
   .lane-grid,
@@ -2559,6 +2584,12 @@ select {
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     padding: 1.9rem 0;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-legal {
+    flex-direction: column;
+    gap: 14px;
   }
 
   .footer-legal {

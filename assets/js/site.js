@@ -407,7 +407,7 @@ const formatTimestamp = (value) => {
 };
 
 const formatCurrency = (amountCents, currency = "cad") =>
-  new Intl.NumberFormat("fr-CA", {
+  new Intl.NumberFormat(publicI18n.locale, {
     style: "currency",
     currency: `${currency || "cad"}`.toUpperCase()
   }).format((Number(amountCents) || 0) / 100);

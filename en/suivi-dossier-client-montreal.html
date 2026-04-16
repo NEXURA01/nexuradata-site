@@ -119,6 +119,16 @@
           <p><strong>Next step:</strong> <span data-status-next></span></p>
         </div>
         <p class="status-summary" data-status-summary></p>
+        <section class="status-section" data-status-payments-section hidden>
+          <div class="status-section-head">
+            <div>
+              <p class="guide-meta">Payment</p>
+              <h3>Quote and payment</h3>
+            </div>
+            <p class="status-section-note">When a deposit or balance is open for this case, it appears here with its status.</p>
+          </div>
+          <div class="status-payment-list" data-status-payments></div>
+        </section>
         <div class="status-timeline" data-status-timeline></div>
       </section>
       <section class="page-grid">
@@ -128,6 +138,7 @@
             <li>The current case status.</li>
             <li>The latest available update.</li>
             <li>The next concrete step.</li>
+            <li>An active payment request, if a deposit or balance has been issued.</li>
             <li>A clear contact path if the situation changes.</li>
           </ul>
         </section>

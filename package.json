@@ -18,9 +18,13 @@
     "cf:pages:project:create": "node ./scripts/pages-cli.mjs create",
     "cf:pages:deploy:prod": "npm run build && node ./scripts/pages-cli.mjs deploy-prod",
     "cf:pages:deploy:staging": "npm run build && node ./scripts/pages-cli.mjs deploy-staging",
-    "cf:whoami": "wrangler whoami"
+    "cf:whoami": "wrangler whoami",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
+    "sharp": "^0.34.5",
+    "vitest": "^4.1.4",
     "wrangler": "^4.80.0"
   }
 }

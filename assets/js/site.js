@@ -2,6 +2,12 @@ const yearTarget = document.querySelector("[data-year]");
 const documentLanguage = document.documentElement.lang?.toLowerCase() || "fr-ca";
 const isEnglishDocument = documentLanguage.startsWith("en");
 
+const escapeHtml = (text) => {
+  const div = document.createElement("div");
+  div.textContent = text || "";
+  return div.innerHTML;
+};
+
 const publicI18n = isEnglishDocument
   ? {
       locale: "en-CA",
@@ -696,7 +702,7 @@ if (statusForm) {
     const code = `${formData.get("code") || ""}`.trim().toUpperCase();
     const key = `${dossier}|${code}`;
 
-    if (isLocalPreview && window.location.protocol === "file:") {
+    if (isLocalPreview) {
       const record = demoCases[key];
 
       if (!record) {
@@ -1572,7 +1578,10 @@ if (opsViewRoot) {
     custom: "Ponctuel"
   };
 
-  const caseLink = (caseId) => `index.html`;
+  const caseLink = (caseId) => {
+    if (!caseId) return "index.html";
+    return `index.html?caseId=${encodeURIComponent(caseId)}`;
+  };
 
   const renderQuotesTable = (items) => {
     if (!viewTbody) return;
@@ -1668,12 +1677,6 @@ if (opsViewRoot) {
     quotes: renderQuotesTable,
     payments: renderPaymentsTable,
     "follow-up": renderFollowUpTable
-  };
-
-  const escapeHtml = (text) => {
-    const div = document.createElement("div");
-    div.textContent = text || "";
-    return div.innerHTML;
   };
 
   const loadView = async () => {

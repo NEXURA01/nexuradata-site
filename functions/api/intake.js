@@ -1,10 +1,14 @@
 import { createCase, validateSubmission } from "../_lib/cases.js";
 import { sendClientAccessEmail, sendLabNotificationEmail } from "../_lib/email.js";
 import { json, methodNotAllowed, onOptions, parsePayload } from "../_lib/http.js";
+import { checkRateLimit, tooManyRequests } from "../_lib/rate-limit.js";
 
 export const onRequestOptions = () => onOptions("POST, OPTIONS");
 
 export const onRequestPost = async (context) => {
+  const limit = checkRateLimit(context.request, 5);
+  if (!limit.allowed) return tooManyRequests(limit.retryAfter);
+
   try {
     if (!context.env?.INTAKE_DB) {
       return json(

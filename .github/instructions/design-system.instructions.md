@@ -8,7 +8,7 @@ applyTo: ["**/*.html", "assets/**/*.css", "assets/**/*.js"]
 - Semantic HTML only — `<main>`, `<section>`, `<nav>`, `<footer>`. No unnecessary `<div>`.
 - Single CSS file (`assets/css/site.css`), no framework.
 - No JS except for form logic and scroll reveal (`assets/js/site.js`).
-- Typography: Georgia serif (system font) via `var(--serif)`. No external font loading.
+- Typography: IBM Plex Sans (headings, UI), IBM Plex Mono (eyebrows, labels), Georgia serif (body) via `var(--serif)`. Fonts loaded from Google Fonts (`fonts.googleapis.com`).
 
 ## CSS Tokens
 

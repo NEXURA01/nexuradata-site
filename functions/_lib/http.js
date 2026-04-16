@@ -13,6 +13,7 @@ export const onOptions = (allow = "GET, POST, OPTIONS") =>
     status: 204,
     headers: {
       allow,
+      "access-control-allow-origin": "*",
       "access-control-allow-methods": allow,
       "access-control-allow-headers": "content-type"
     }

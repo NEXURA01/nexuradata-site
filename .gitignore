@@ -21,3 +21,21 @@ node_modules/
 .wrangler/
 release-cloudflare/
 *.zip
+
+# Google Drive / OneDrive sync junk
+.tmp.driveupload/
+.tmp.drivedownload/
+*.gsheet
+*.gdoc
+*.gslides
+*.gdraw
+*.gform
+*.gtable
+*.gmap
+User_Download_*
+~$*
+
+# Test / coverage
+coverage/
+.nyc_output/
+*.lcov

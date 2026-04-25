@@ -4477,3 +4477,167 @@ select {
   color: rgba(232,228,220,0.45);
   background: var(--color-bg-soft);
 }
+
+/* ============ APPOINTMENT BOOKING WIDGET ============ */
+.appt-status {
+  font-size: 0.95rem;
+  color: rgba(232,228,220,0.7);
+  font-style: italic;
+}
+.appt-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  margin-top: 1rem;
+}
+@media (min-width: 720px) {
+  .appt-grid { grid-template-columns: 1.4fr 1fr; }
+}
+.appt-step h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232,228,220,0.7);
+  margin: 0 0 0.7rem;
+}
+.appt-days {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.5rem;
+}
+.appt-day {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.7rem 0.85rem;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--os-dim);
+  color: var(--os);
+  border-radius: 1rem 1rem 1rem 0.35rem;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  text-align: left;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.appt-day strong {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.appt-day span {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: rgba(232,228,220,0.55);
+}
+.appt-day:hover { border-color: var(--os); }
+.appt-day.is-active {
+  background: var(--os);
+  color: var(--noir);
+  border-color: var(--os);
+}
+.appt-day.is-active span { color: rgba(13,13,11,0.65); }
+.appt-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-start;
+  color: rgba(232,228,220,0.55);
+}
+.appt-time {
+  padding: 0.55rem 0.95rem;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--os-dim);
+  color: var(--os);
+  border-radius: 1rem 1rem 1rem 0.35rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: border-color 120ms ease, background 120ms ease;
+}
+.appt-time:hover { border-color: var(--os); }
+.appt-time.is-active {
+  background: var(--os);
+  color: var(--noir);
+  border-color: var(--os);
+}
+.appt-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--os-dim);
+}
+.appt-form h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232,228,220,0.7);
+  margin: 0;
+}
+.appt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.appt-field span {
+  font-size: 0.85rem;
+  color: rgba(232,228,220,0.78);
+}
+.appt-field input,
+.appt-field textarea {
+  padding: 0.7rem 0.85rem;
+  background: var(--noir);
+  border: 1px solid var(--os-dim);
+  color: var(--os);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+  border-radius: 0.6rem;
+}
+.appt-field input:focus,
+.appt-field textarea:focus { outline: none; border-color: var(--os); }
+.appt-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important; height: 1px !important;
+  opacity: 0 !important;
+}
+.appt-consent {
+  font-size: 0.78rem;
+  color: rgba(232,228,220,0.55);
+  margin: 0;
+}
+.appt-submit {
+  padding: 0.85rem 1.5rem;
+  background: var(--os);
+  color: var(--noir);
+  border: 1px solid var(--os);
+  border-radius: 1rem 1rem 1rem 0.35rem;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  justify-self: start;
+}
+.appt-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.appt-result {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--os-dim);
+  border-radius: 1rem 1rem 1rem 0.35rem;
+  font-size: 0.92rem;
+  color: var(--os);
+}
+.appt-result.is-error {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+.appt-result code {
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--noir);
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.3rem;
+  color: var(--os);
+}

@@ -1,10 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "nexuradata-site",
-  "assets": {
-    "directory": "./release-cloudflare",
-    "not_found_handling": "404-page"
-  },
+  "name": "nexuradata",
+  "pages_build_output_dir": "./release-cloudflare",
   "compatibility_date": "2026-04-04",
   "d1_databases": [
     {

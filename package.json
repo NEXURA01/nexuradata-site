@@ -20,7 +20,10 @@
     "cf:pages:deploy:staging": "npm run build && node ./scripts/pages-cli.mjs deploy-staging",
     "cf:whoami": "wrangler whoami",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "wa:assets": "node ./scripts/generate-whatsapp-assets.mjs",
+    "wa:card": "node ./scripts/generate-whatsapp-card.mjs",
+    "wa:all": "npm run wa:assets && npm run wa:card"
   },
   "devDependencies": {
     "qrcode": "^1.5.4",

@@ -1,7 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nexuradata-site",
-  "pages_build_output_dir": "./release-cloudflare",
   "assets": {
     "directory": "./release-cloudflare",
     "not_found_handling": "404-page"

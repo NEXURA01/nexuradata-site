@@ -11,9 +11,10 @@ See `README.md` for architecture, prerequisites, and Cloudflare Pages setup.
 ```bash
 npm run build       # regenerate release-cloudflare/
 npm run cf:dev      # local dev with Functions + D1
+npm test            # run unit tests (vitest, 131 tests across 6 files)
 ```
 
-No test suite yet — validate via `npm run cf:dev`. See `README.md` for the full command list.
+Always run `npm test` after changes to `functions/`. See `README.md` for the full command list.
 
 ## Critical Gotchas
 

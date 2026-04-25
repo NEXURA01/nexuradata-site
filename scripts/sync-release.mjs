@@ -12,6 +12,7 @@ const rootFiles = new Set([
   "_headers",
   "_redirects",
   ".nojekyll",
+  "pgp.txt",
   "robots.txt",
   "site.webmanifest",
   "sitemap.xml"

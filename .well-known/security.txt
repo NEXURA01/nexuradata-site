@@ -1,4 +1,9 @@
 Contact: mailto:contact@nexuradata.ca
+Encryption: https://nexuradata.ca/pgp.txt
 Canonical: https://nexuradata.ca/.well-known/security.txt
 Preferred-Languages: fr, en
 Expires: 2027-04-04T00:00:00.000Z
+
+# PGP fingerprint (Bouda — Olivier Blanchet)
+# 0590 456C 323A 170C E581  28AD CD59 8D28 6885 9F68
+# Valid 2026-03-25 → 2029-03-25 · EdDSA 255-bit

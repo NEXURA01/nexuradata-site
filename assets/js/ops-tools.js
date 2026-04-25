@@ -319,6 +319,389 @@
             }
         },
 
+        // ─── Tool 7a : Recovery playbook ──────────────────────────────
+        playbook: {
+            title: "Protocole de récupération",
+            build: function () {
+                // Decision matrix: scenario → ordered steps
+                var protocols = {
+                    hdd_logical: {
+                        label: "HDD — suppression / formatage / partition perdue",
+                        risk: "Faible", duration: "2 à 6 h",
+                        steps: [
+                            "Photographier l'étiquette (modèle, S/N, capacité, date) avant tout branchement.",
+                            "Brancher via bloqueur d'écriture (WriteBlocker Tableau ou Atola TaskForce).",
+                            "Vérifier la santé SMART : <code>smartctl -a /dev/sdX</code>.",
+                            "Imager intégralement avec ddrescue (préset « disque sain ») vers <code>/mnt/lab/NX-XXXX/raw.img</code>.",
+                            "Calculer SHA-256 de l'image (outil « Empreinte forensique »).",
+                            "Travailler exclusivement sur l'image (jamais sur l'original).",
+                            "Reconstruction logique avec R-Studio / UFS Explorer / TestDisk selon le système de fichiers.",
+                            "Triage des fichiers récupérés vs. liste de priorités du client.",
+                            "Livrable chiffré (VeraCrypt ou AES-256 ZIP), SHA-256 du livrable consigné."
+                        ]
+                    },
+                    hdd_mechanical: {
+                        label: "HDD — bruit, cliquetis, panne mécanique",
+                        risk: "Élevé", duration: "1 à 5 j",
+                        steps: [
+                            "<strong>NE JAMAIS RÉ-ALIMENTER</strong> sans diagnostic. Chaque démarrage aggrave les dégâts.",
+                            "Photographier extérieur. Identifier famille (WD, Seagate, Toshiba) et plate-forme.",
+                            "Diagnostic non destructif Atola Insight : alimenter via régulateur, lire bas niveau.",
+                            "Décision : tête / moteur / plateaux ? Documenter au journal de session.",
+                            "Si têtes HS : commander donneur compatible (HDDZone, ACE Lab marketplace), même firmware family.",
+                            "Ouverture en hotte ISO 5 : remplacement HSA, rotation manuelle si plateaux collés.",
+                            "Imagerie immédiate avec PC-3000 ou DeepSpar DDI — préset « disque dégradé », passes courtes.",
+                            "Si imagerie partielle, imagerie head-by-head pour minimiser usure.",
+                            "Reconstruction logique sur image. Triage. Livrable chiffré + SHA-256.",
+                            "Retour disque dans sac ESD scellé, étiquette « Hors usage »."
+                        ]
+                    },
+                    ssd_dead: {
+                        label: "SSD / NVMe — non détecté",
+                        risk: "Très élevé", duration: "3 à 14 j",
+                        steps: [
+                            "Vérifier alimentation et câble (test croisé sur poste sain).",
+                            "Identifier le contrôleur (SandForce, Phison, SMI, Marvell, Samsung).",
+                            "Tenter mode « safe » / technicien selon contrôleur (PC-3000 SSD).",
+                            "Si contrôleur HS : transplantation NAND requise (procédure destructive sur le boîtier).",
+                            "Lecture chip-off des puces NAND : programmateur (PC-3000 Flash, Soft-Center).",
+                            "Réassemblage logique : XOR, ECC, désentrelacement selon famille.",
+                            "Reconstruction du translation layer (FTL) : tâche la plus chronophage.",
+                            "Reconstruction du système de fichiers sur image obtenue.",
+                            "Note client : taux de succès 40-65 % selon contrôleur et usure NAND."
+                        ]
+                    },
+                    raid_degraded: {
+                        label: "RAID / NAS — dégradé ou plusieurs disques HS",
+                        risk: "Élevé", duration: "3 à 10 j",
+                        steps: [
+                            "<strong>STOP</strong> — Jamais de rebuild automatique. Chaque rebuild échoué corrompt davantage.",
+                            "Étiqueter chaque disque avec sa baie d'origine (1, 2, 3…) avant retrait.",
+                            "Imager chaque disque individuellement (ddrescue, log distinct) vers stockage 3× la capacité totale.",
+                            "Documenter SMART de chaque disque, identifier le(s) plus dégradé(s).",
+                            "Pour disques mécaniquement HS : protocole « hdd_mechanical » avant imagerie.",
+                            "Détection du niveau RAID, taille de bloc, ordre, parité (UFS Explorer Pro / R-Studio).",
+                            "Reconstruction virtuelle du volume à partir des images uniquement.",
+                            "Validation : monter en lecture seule, vérifier intégrité de fichiers témoins.",
+                            "Triage selon priorités client. Livrable chiffré + SHA-256 par lot."
+                        ]
+                    },
+                    phone_locked: {
+                        label: "Téléphone — verrouillé / mot de passe oublié",
+                        risk: "Variable", duration: "1 à 7 j",
+                        steps: [
+                            "Vérifier modèle exact, version OS, état batterie. Photographier IMEI.",
+                            "iOS : si compte iCloud connu, exploration backup iCloud avec autorisation écrite + identifiants.",
+                            "iOS bypass mot de passe : non garanti, dépend du modèle (checkm8 jusqu'à A11).",
+                            "Android : mode bootloader, vérifier si chiffrement FDE/FBE activé.",
+                            "Cellebrite UFED ou GrayKey si dossier le justifie (forensique légale uniquement).",
+                            "Acquisition logique d'abord (moins invasif), physique si nécessaire et autorisé.",
+                            "Extraction SMS, photos, contacts, notes selon mandat.",
+                            "Livrable : rapport PDF Cellebrite + dump brut chiffré."
+                        ]
+                    },
+                    phone_water: {
+                        label: "Téléphone — liquide, choc, brûlé",
+                        risk: "Très élevé", duration: "2 à 10 j",
+                        steps: [
+                            "<strong>NE PAS ALIMENTER.</strong> Démontage immédiat, batterie débranchée.",
+                            "Bain ultrasonique solution alcool isopropylique 99 % (15-20 min).",
+                            "Inspection sous microscope : corrosion, brûlures, pads décollés.",
+                            "Réparation board-level si nécessaire (microsoudure) avant toute alimentation.",
+                            "Si SoC HS : chip-off NAND, lecture sur programmateur, déchiffrement clé Secure Enclave (souvent impossible).",
+                            "Extraction logique si l'appareil revient en vie.",
+                            "Livrable : rapport honnête sur ce qui a été récupéré ou non.",
+                            "Note client : prévenir avant intervention que les chances peuvent être minces."
+                        ]
+                    }
+                };
+
+                var node = el(
+                    '<div class="ops-tool ops-tool--playbook">' +
+                    '<header class="ops-tool-head"><h2>Protocole de récupération</h2><p>Choisis le scénario : tu obtiens le protocole étape par étape, le risque opérationnel et la durée typique. À imprimer ou journaliser au dossier.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field" style="grid-column:1/-1;"><span>Scénario</span><select data-pb="key">' +
+                    Object.keys(protocols).map(function (k) { return '<option value="' + k + '">' + protocols[k].label + '</option>'; }).join("") +
+                    '</select></label>' +
+                    '<label class="field"><span>Référence dossier</span><input type="text" placeholder="NX-2026-0123" data-pb="ref"></label>' +
+                    '</div>' +
+                    '<output class="ops-tool-out" data-pb-out></output>' +
+                    '</div>'
+                );
+
+                function build() {
+                    var key = node.querySelector('[data-pb="key"]').value;
+                    var ref = node.querySelector('[data-pb="ref"]').value || "—";
+                    var p = protocols[key];
+                    var listHtml = p.steps.map(function (s, i) { return '<li><span class="ops-pb-num">' + String(i + 1).padStart(2, "0") + '</span><span>' + s + '</span></li>'; }).join("");
+                    var listText = p.steps.map(function (s, i) {
+                        return (i + 1) + ". " + s.replace(/<[^>]+>/g, "");
+                    }).join("\n");
+                    var record =
+                        "Protocole — " + p.label + "\n" +
+                        "Dossier : " + ref + " · Risque : " + p.risk + " · Durée : " + p.duration + "\n" +
+                        "Date : " + new Date().toLocaleString("fr-CA") + "\n" +
+                        "------------------------------------------------------------\n" +
+                        listText + "\n\n" +
+                        "Examinateur : Olivier Blanchet, NEXURA DATA";
+                    node.querySelector("[data-pb-out]").innerHTML =
+                        '<dl class="ops-out-table">' +
+                        '<div><dt>Scénario</dt><dd>' + p.label + '</dd></div>' +
+                        '<div><dt>Risque</dt><dd>' + p.risk + '</dd></div>' +
+                        '<div class="is-total"><dt>Durée typique</dt><dd>' + p.duration + '</dd></div>' +
+                        '</dl>' +
+                        '<ol class="ops-pb-list">' + listHtml + '</ol>' +
+                        '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-pb-copy>Copier le protocole</button><button type="button" class="button button-outline" data-pb-print>Imprimer</button></div>';
+                    node.querySelector("[data-pb-copy]").addEventListener("click", function (e) { copyToClipboard(record, e.currentTarget); });
+                    node.querySelector("[data-pb-print]").addEventListener("click", function () { window.print(); });
+                }
+                node.addEventListener("change", build);
+                node.addEventListener("input", build);
+                setTimeout(build, 0);
+                return node;
+            }
+        },
+
+        // ─── Tool 7b : ddrescue command builder ───────────────────────
+        ddrescue: {
+            title: "Commande ddrescue",
+            build: function () {
+                var presets = {
+                    healthy: { label: "Disque sain — première passe rapide", flags: "-f -n", note: "Première passe sans relecture, plus rapide. Bon pour SSD sains et HDD non dégradés." },
+                    degraded: { label: "Disque dégradé — passes courtes", flags: "-f -n -d -K 1MiB,1MiB", note: "Saute les zones lentes pour récupérer le maximum de données saines avant fatigue." },
+                    failing: { label: "Disque mourant — relecture agressive", flags: "-f -d -r3 -K 1MiB,1MiB -c 1", note: "Trois passes de relecture, blocs minimums. À utiliser après la passe « degraded »." },
+                    final: { label: "Passe finale — combler les trous", flags: "-f -d -R -r5 -c 1 -b 512", note: "Lit en arrière, secteur par secteur. Très lent. À lancer en dernier recours." }
+                };
+                var node = el(
+                    '<div class="ops-tool ops-tool--ddrescue">' +
+                    '<header class="ops-tool-head"><h2>Commande ddrescue</h2><p>Génère la commande exacte selon l\'état du disque et la stratégie. Toujours imager vers un disque distinct, jamais sur le source.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Stratégie</span><select data-dd="preset">' +
+                    Object.keys(presets).map(function (k) { return '<option value="' + k + '">' + presets[k].label + '</option>'; }).join("") +
+                    '</select></label>' +
+                    '<label class="field"><span>Source (device)</span><input type="text" value="/dev/sdb" data-dd="src"></label>' +
+                    '<label class="field"><span>Image de destination</span><input type="text" value="/mnt/lab/NX-2026-0123/raw.img" data-dd="img"></label>' +
+                    '<label class="field"><span>Fichier de log (mapfile)</span><input type="text" value="/mnt/lab/NX-2026-0123/raw.map" data-dd="map"></label>' +
+                    '</div>' +
+                    '<output class="ops-tool-out" data-dd-out></output>' +
+                    '</div>'
+                );
+                function build() {
+                    var k = node.querySelector('[data-dd="preset"]').value;
+                    var src = node.querySelector('[data-dd="src"]').value || "/dev/sdX";
+                    var img = node.querySelector('[data-dd="img"]').value || "raw.img";
+                    var map = node.querySelector('[data-dd="map"]').value || "raw.map";
+                    var p = presets[k];
+                    var cmd = "sudo ddrescue " + p.flags + " " + src + " " + img + " " + map;
+                    var pre =
+                        "# 1. Vérifier que le disque source n'est pas monté\n" +
+                        "lsblk " + src + "\n" +
+                        "sudo umount " + src + "* 2>/dev/null\n\n" +
+                        "# 2. Vérifier l'espace disponible sur la destination\n" +
+                        "df -h $(dirname " + img + ")\n\n" +
+                        "# 3. Lancer l'imagerie\n" +
+                        cmd + "\n\n" +
+                        "# 4. Vérifier les zones manquantes\n" +
+                        "ddrescuelog -t " + map + "\n\n" +
+                        "# 5. Empreinte de l'image\n" +
+                        "sha256sum " + img;
+                    node.querySelector("[data-dd-out]").innerHTML =
+                        '<p class="ops-out-label">Commande</p>' +
+                        '<pre class="ops-out-text" data-dd-cmd></pre>' +
+                        '<p class="ops-out-note">' + p.note + '</p>' +
+                        '<p class="ops-out-label" style="margin-top:1rem;">Bloc complet (vérifications + commande + hash)</p>' +
+                        '<pre class="ops-out-text" data-dd-pre></pre>' +
+                        '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-dd-copy>Copier le bloc</button></div>';
+                    node.querySelector("[data-dd-cmd]").textContent = cmd;
+                    node.querySelector("[data-dd-pre]").textContent = pre;
+                    node.querySelector("[data-dd-copy]").addEventListener("click", function (e) { copyToClipboard(pre, e.currentTarget); });
+                }
+                node.addEventListener("input", build);
+                node.addEventListener("change", build);
+                setTimeout(build, 0);
+                return node;
+            }
+        },
+
+        // ─── Tool 7c : Session log ────────────────────────────────────
+        session: {
+            title: "Journal de session",
+            build: function () {
+                var STORAGE = "nxd_session_log";
+                var node = el(
+                    '<div class="ops-tool ops-tool--session">' +
+                    '<header class="ops-tool-head"><h2>Journal de session</h2><p>Horodate chaque action effectuée sur un dossier. Sauvegarde locale (navigateur). Exportable pour la chaîne de possession.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Référence</span><input type="text" placeholder="NX-2026-0123" data-sl="ref"></label>' +
+                    '<label class="field" style="grid-column:1/-1;"><span>Action</span><input type="text" placeholder="Ex. Imagerie ddrescue passe 1 lancée" data-sl="action"></label>' +
+                    '</div>' +
+                    '<div class="ops-tool-actions">' +
+                    '<button type="button" class="button button-primary" data-sl-add>Horodater</button>' +
+                    '<button type="button" class="button button-outline" data-sl-export>Exporter (CSV)</button>' +
+                    '<button type="button" class="button button-outline" data-sl-clear>Vider</button>' +
+                    '</div>' +
+                    '<output class="ops-tool-out" data-sl-out></output>' +
+                    '</div>'
+                );
+                function getLog() { try { return JSON.parse(localStorage.getItem(STORAGE) || "[]"); } catch (e) { return []; } }
+                function saveLog(l) { localStorage.setItem(STORAGE, JSON.stringify(l)); }
+                function render() {
+                    var log = getLog();
+                    if (!log.length) {
+                        node.querySelector("[data-sl-out]").innerHTML = '<p class="ops-out-label">Aucune entrée</p><p class="ops-out-note">Saisis une action et clique « Horodater ».</p>';
+                        return;
+                    }
+                    var rows = log.slice().reverse().map(function (e) {
+                        return '<div><dt>' + new Date(e.ts).toLocaleString("fr-CA") + ' · <code>' + e.ref + '</code></dt><dd>' + e.action + '</dd></div>';
+                    }).join("");
+                    node.querySelector("[data-sl-out]").innerHTML = '<dl class="ops-out-table ops-sl-list">' + rows + '</dl>';
+                }
+                node.querySelector("[data-sl-add]").addEventListener("click", function () {
+                    var ref = node.querySelector('[data-sl="ref"]').value.trim();
+                    var action = node.querySelector('[data-sl="action"]').value.trim();
+                    if (!ref || !action) return;
+                    var log = getLog();
+                    log.push({ ts: Date.now(), ref: ref, action: action });
+                    saveLog(log);
+                    node.querySelector('[data-sl="action"]').value = "";
+                    render();
+                });
+                node.querySelector("[data-sl-export]").addEventListener("click", function () {
+                    var log = getLog();
+                    var csv = "timestamp_iso,reference,action\n" + log.map(function (e) {
+                        return new Date(e.ts).toISOString() + "," + e.ref + ",\"" + e.action.replace(/"/g, '""') + "\"";
+                    }).join("\n");
+                    var blob = new Blob([csv], { type: "text/csv" });
+                    var a = document.createElement("a");
+                    a.href = URL.createObjectURL(blob);
+                    a.download = "nxd-session-" + new Date().toISOString().slice(0, 10) + ".csv";
+                    a.click();
+                });
+                node.querySelector("[data-sl-clear]").addEventListener("click", function () {
+                    if (confirm("Vider tout le journal ?")) { localStorage.removeItem(STORAGE); render(); }
+                });
+                render();
+                return node;
+            }
+        },
+
+        // ─── Tool 7d : Delivery procedure ─────────────────────────────
+        delivery: {
+            title: "Procédure d'envoi",
+            build: function () {
+                var methods = {
+                    pickup: { label: "Remise en main propre (laboratoire)", fr: "remise au laboratoire sur rendez-vous", en: "in-person pickup at the lab by appointment" },
+                    courier: { label: "Coursier sécurisé (Purolator priorité, signature requise)", fr: "coursier Purolator avec signature à la livraison", en: "Purolator courier, signature required on delivery" },
+                    sftp: { label: "Téléversement SFTP chiffré (volumes < 200 Go)", fr: "téléversement SFTP sur lien à usage unique (expire 72 h)", en: "SFTP upload on a single-use link (expires in 72 h)" },
+                    encrypted_post: { label: "Disque externe chiffré envoyé par poste recommandée", fr: "disque externe chiffré expédié par Poste Canada — Xpresspost recommandé", en: "encrypted external drive shipped by Canada Post — Xpresspost registered" }
+                };
+                var node = el(
+                    '<div class="ops-tool ops-tool--delivery">' +
+                    '<header class="ops-tool-head"><h2>Procédure d\'envoi du livrable</h2><p>Génère les instructions client : transport, chiffrement, transmission du mot de passe par canal séparé, vérification SHA-256.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Référence</span><input type="text" placeholder="NX-2026-0123" data-d="ref"></label>' +
+                    '<label class="field"><span>Client</span><input type="text" placeholder="Marc-André" data-d="client"></label>' +
+                    '<label class="field"><span>Volume livré</span><input type="text" placeholder="142 Go · 38 412 fichiers" data-d="vol"></label>' +
+                    '<label class="field"><span>SHA-256 du livrable</span><input type="text" placeholder="a3f1…" data-d="sha"></label>' +
+                    '<label class="field"><span>Méthode</span><select data-d="method">' +
+                    Object.keys(methods).map(function (k) { return '<option value="' + k + '">' + methods[k].label + '</option>'; }).join("") +
+                    '</select></label>' +
+                    '<label class="field"><span>Langue</span><select data-d="lang"><option value="fr">Français</option><option value="en">English</option></select></label>' +
+                    '</div>' +
+                    '<output class="ops-tool-out"><pre class="ops-out-text" data-d-out></pre><div class="ops-tool-actions"><button type="button" class="button button-primary" data-d-copy>Copier le courriel</button></div></output>' +
+                    '</div>'
+                );
+
+                function build() {
+                    var ref = node.querySelector('[data-d="ref"]').value || "[RÉF]";
+                    var client = node.querySelector('[data-d="client"]').value || "[Client]";
+                    var vol = node.querySelector('[data-d="vol"]').value || "—";
+                    var sha = node.querySelector('[data-d="sha"]').value || "[SHA-256 à insérer]";
+                    var key = node.querySelector('[data-d="method"]').value;
+                    var lang = node.querySelector('[data-d="lang"]').value;
+                    var m = methods[key];
+                    var date = new Date().toLocaleDateString(lang === "fr" ? "fr-CA" : "en-CA", { year: "numeric", month: "long", day: "numeric" });
+
+                    var text;
+                    if (lang === "fr") {
+                        text =
+                            "Objet : Livraison sécurisée — dossier " + ref + "\n\n" +
+                            "Bonjour " + client + ",\n\n" +
+                            "Votre récupération est terminée. Voici la procédure de transmission sécurisée.\n\n" +
+                            "DOSSIER\n" +
+                            "  Référence       : " + ref + "\n" +
+                            "  Volume livré    : " + vol + "\n" +
+                            "  Date            : " + date + "\n\n" +
+                            "MÉTHODE DE LIVRAISON\n" +
+                            "  " + m.fr.charAt(0).toUpperCase() + m.fr.slice(1) + ".\n\n" +
+                            "CHIFFREMENT\n" +
+                            "  Le livrable est chiffré en AES-256 (VeraCrypt). Le mot de passe vous sera\n" +
+                            "  transmis SÉPARÉMENT par téléphone au numéro inscrit au dossier. Aucune clé\n" +
+                            "  n'est jamais transmise par le même canal que les données. Sans exception.\n\n" +
+                            "VÉRIFICATION D'INTÉGRITÉ (recommandée avant ouverture)\n" +
+                            "  SHA-256 attendu :\n" +
+                            "  " + sha + "\n\n" +
+                            "  Windows (PowerShell) :\n" +
+                            "    Get-FileHash chemin\\livrable.vc -Algorithm SHA256\n\n" +
+                            "  macOS / Linux :\n" +
+                            "    shasum -a 256 chemin/livrable.vc\n\n" +
+                            "  Si l'empreinte ne correspond pas EXACTEMENT, ne saisissez pas le mot de\n" +
+                            "  passe et contactez-nous immédiatement.\n\n" +
+                            "RÉCEPTION\n" +
+                            "  À l'ouverture du livrable, accusez réception par retour de courriel. Le\n" +
+                            "  fichier de chaîne de possession (PDF) sera versé au dossier à ce moment.\n\n" +
+                            "CONSERVATION\n" +
+                            "  Vos données originales sont conservées 30 jours après livraison, dans un\n" +
+                            "  conteneur chiffré, sur un volume hors ligne. Passé ce délai, destruction\n" +
+                            "  cryptographique automatique. Sur demande écrite, vous pouvez exiger une\n" +
+                            "  destruction immédiate avec attestation signée.\n\n" +
+                            "Merci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)\n514 555-0199";
+                    } else {
+                        text =
+                            "Subject: Secure delivery — case " + ref + "\n\n" +
+                            "Hello " + client + ",\n\n" +
+                            "Your recovery is complete. Here is the secure transmission procedure.\n\n" +
+                            "CASE\n" +
+                            "  Reference       : " + ref + "\n" +
+                            "  Volume          : " + vol + "\n" +
+                            "  Date            : " + date + "\n\n" +
+                            "DELIVERY METHOD\n" +
+                            "  " + m.en.charAt(0).toUpperCase() + m.en.slice(1) + ".\n\n" +
+                            "ENCRYPTION\n" +
+                            "  The deliverable is AES-256 encrypted (VeraCrypt). The password will be\n" +
+                            "  sent SEPARATELY by phone to the number on file. No key is ever sent\n" +
+                            "  through the same channel as the data. No exception.\n\n" +
+                            "INTEGRITY CHECK (recommended before opening)\n" +
+                            "  Expected SHA-256:\n" +
+                            "  " + sha + "\n\n" +
+                            "  Windows (PowerShell):\n" +
+                            "    Get-FileHash path\\deliverable.vc -Algorithm SHA256\n\n" +
+                            "  macOS / Linux:\n" +
+                            "    shasum -a 256 path/deliverable.vc\n\n" +
+                            "  If the hash does NOT match EXACTLY, do not enter the password and contact\n" +
+                            "  us immediately.\n\n" +
+                            "ACKNOWLEDGEMENT\n" +
+                            "  Once the deliverable is open, acknowledge by return email. The chain-of-\n" +
+                            "  custody PDF will be added to the case at that time.\n\n" +
+                            "RETENTION\n" +
+                            "  Your original data is kept for 30 days after delivery, in an encrypted\n" +
+                            "  container, on an offline volume. After that, automatic cryptographic\n" +
+                            "  destruction. On written request, you may demand immediate destruction\n" +
+                            "  with a signed attestation.\n\n" +
+                            "Thank you,\nOlivier Blanchet\nNEXURA DATA — Certified Forensic Examiner (CFE)\n514 555-0199";
+                    }
+                    node.querySelector("[data-d-out]").textContent = text;
+                }
+                node.addEventListener("input", build);
+                node.addEventListener("change", build);
+                node.querySelector("[data-d-copy]").addEventListener("click", function (e) {
+                    copyToClipboard(node.querySelector("[data-d-out]").textContent, e.currentTarget);
+                });
+                setTimeout(build, 0);
+                return node;
+            }
+        },
+
         // ─── Tool 7 : Forensic hash (SHA-256) ─────────────────────────
         hash: {
             title: "Empreinte forensique",

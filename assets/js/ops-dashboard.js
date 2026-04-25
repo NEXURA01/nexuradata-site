@@ -123,4 +123,121 @@
     document.addEventListener("DOMContentLoaded", render);
     window.addEventListener("storage", render);
     setInterval(render, 5000);
+
+    // ─── Live D1 panel ─────────────────────────────────────────────────
+    function setL(key, value) {
+        var n = document.querySelector('[data-l="' + key + '"]');
+        if (n) n.textContent = value;
+    }
+    function fmtDate(iso) {
+        if (!iso) return "—";
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return iso;
+        return d.toLocaleString("fr-CA", { dateStyle: "short", timeStyle: "short" });
+    }
+    function escapeHtml(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+    }
+
+    async function loadLive() {
+        var statusEl = document.querySelector("[data-live-status]");
+        var daysSel = document.querySelector("[data-live-days]");
+        if (!statusEl || !daysSel) return;
+        var days = parseInt(daysSel.value, 10) || 30;
+        statusEl.textContent = "Chargement…";
+        try {
+            var r = await fetch("/api/ops/dashboard?days=" + days, { credentials: "include" });
+            if (r.status === 403) {
+                statusEl.textContent = "Accès refusé (Cloudflare Access requis)";
+                return;
+            }
+            if (!r.ok) {
+                statusEl.textContent = "Erreur " + r.status;
+                return;
+            }
+            var j = await r.json();
+            if (!j.ok) {
+                statusEl.textContent = "Erreur : " + (j.error || "inconnue");
+                return;
+            }
+
+            // Revenue
+            setL("today", fmtCAD(j.revenue.today_cad));
+            setL("month", fmtCAD(j.revenue.month_cad));
+            setL("year", fmtCAD(j.revenue.year_cad));
+            setL("ar", fmtCAD(j.outstanding.cad));
+            setL("ar-sub", j.outstanding.count + (j.outstanding.count === 1 ? " facture" : " factures"));
+            setL("win", fmtCAD(j.revenue.window_cad));
+            setL("win-sub", j.revenue.window_count + (j.revenue.window_count === 1 ? " paiement" : " paiements"));
+            setL("btc", fmtCAD(j.btc.invoices.window_cad));
+            setL("btc-sub", j.btc.invoices.confirmed + " confirmée(s) au total");
+
+            // Leads
+            setL("leads-window", j.leads.captured_window);
+            setL("leads-conv-window", j.leads.converted_window);
+            setL("leads-rate", (j.leads.conversion_rate * 100).toFixed(1) + " %");
+            setL("leads-pending", j.leads.pending_recovery);
+            setL("leads-unsub", j.leads.unsubscribed);
+
+            // Pipeline
+            var pipeEl = document.querySelector('[data-l="pipeline"]');
+            if (pipeEl) {
+                if (!j.cases.by_status.length) {
+                    pipeEl.innerHTML = '<li class="ops-pipeline-empty">Aucun dossier.</li>';
+                } else {
+                    pipeEl.innerHTML = j.cases.by_status.map(function (s) {
+                        return '<li><span>' + escapeHtml(s.status || "—") + '</span><strong>' + s.n + '</strong></li>';
+                    }).join("");
+                }
+            }
+            setL("cases-new", j.cases.new_in_window);
+
+            // BTC
+            setL("btc-pool-unused", j.btc.pool.unused);
+            setL("btc-pool-assigned", j.btc.pool.assigned);
+            setL("btc-pool-spent", j.btc.pool.spent);
+            setL("btc-total", j.btc.invoices.total);
+            setL("btc-pending", j.btc.invoices.pending);
+            setL("btc-confirmed", j.btc.invoices.confirmed);
+            var warn = document.querySelector('[data-l="btc-warning"]');
+            if (warn) warn.hidden = !j.btc.pool.low_warning;
+
+            // Daily series sparkline
+            var seriesEl = document.querySelector('[data-l="series"]');
+            if (seriesEl) {
+                var maxV = j.daily_revenue.reduce(function (m, d) { return Math.max(m, d.cents); }, 1);
+                seriesEl.innerHTML = j.daily_revenue.map(function (d) {
+                    var h = (d.cents / maxV) * 100;
+                    return '<div class="ops-spark-bar" style="height:' + Math.max(2, h) + '%" title="' + d.day + ' — ' + fmtCAD(d.cents / 100) + '"></div>';
+                }).join("");
+            }
+
+            // Recent paid
+            var rpEl = document.querySelector('[data-l="recent-paid"]');
+            if (rpEl) {
+                if (!j.recent.paid.length) {
+                    rpEl.innerHTML = '<tr><td colspan="4">Aucun paiement enregistré.</td></tr>';
+                } else {
+                    rpEl.innerHTML = j.recent.paid.map(function (p) {
+                        return '<tr><td><code>' + escapeHtml(p.case_id) + '</code></td><td>' + escapeHtml(p.label) + '</td><td>' + fmtCAD(p.cad) + '</td><td>' + fmtDate(p.paid_at) + '</td></tr>';
+                    }).join("");
+                }
+            }
+
+            statusEl.textContent = "Mis à jour " + new Date().toLocaleTimeString("fr-CA");
+        } catch (e) {
+            statusEl.textContent = "Erreur réseau";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var btn = document.querySelector("[data-live-refresh]");
+        var sel = document.querySelector("[data-live-days]");
+        if (btn) btn.addEventListener("click", loadLive);
+        if (sel) sel.addEventListener("change", loadLive);
+        loadLive();
+        setInterval(loadLive, 60000);
+    });
 })();

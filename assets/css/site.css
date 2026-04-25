@@ -4699,3 +4699,190 @@ select {
     font-size: 0.88rem;
     line-height: 1.5;
 }
+
+/* ─── Standards & compliance bar (sous trust-bar) ───────────────────── */
+.standards-bar {
+    background: var(--os-ghost);
+    border-top: 1px solid var(--os-dim);
+    border-bottom: 1px solid var(--os-dim);
+    padding: 1.4rem 0;
+}
+.standards-bar-grid {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 720px) {
+    .standards-bar-grid { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); }
+}
+.standards-bar-label {
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--os);
+    opacity: 0.65;
+}
+.standards-bar-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem 1.25rem;
+}
+.standards-bar-list li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    line-height: 1.3;
+}
+.standards-tag {
+    display: inline-block;
+    align-self: start;
+    padding: 0.18rem 0.55rem;
+    border: 1px solid var(--os);
+    border-radius: 1rem 1rem 1rem 0.35rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--os);
+    background: transparent;
+}
+.standards-bar-list em {
+    font-style: normal;
+    font-size: 0.78rem;
+    color: var(--os);
+    opacity: 0.7;
+}
+
+/* ─── Ops dashboard — live D1 panel ───────────────────────────────── */
+.ops-dash-live {
+    margin: 1.5rem 0 2.5rem;
+    padding: 1.5rem;
+    background: var(--os-ghost);
+    border: 1px solid var(--os-dim);
+    border-radius: 1rem 1rem 1rem 0.35rem;
+    display: grid;
+    gap: 1.5rem;
+}
+.ops-dash-live-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: end;
+    justify-content: space-between;
+}
+.ops-dash-live-head h2 {
+    margin: 0.2rem 0 0;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    color: var(--os);
+}
+.ops-dash-live-controls {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--os);
+}
+.ops-dash-live-controls select {
+    margin-left: 0.4rem;
+    padding: 0.35rem 0.5rem;
+    background: transparent;
+    border: 1px solid var(--os-dim);
+    border-radius: 1rem 1rem 1rem 0.35rem;
+    color: var(--os);
+    font: inherit;
+}
+.ops-dash-live-status {
+    font-size: 0.78rem;
+    opacity: 0.7;
+    font-family: var(--font-mono, monospace);
+}
+.ops-dash-live-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.85rem;
+}
+.ops-dash-live-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.ops-dash-card--wide {
+    grid-column: 1 / -1;
+}
+.ops-funnel {
+    margin: 0;
+    display: grid;
+    gap: 0.4rem;
+}
+.ops-funnel > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px dashed var(--os-dim);
+    font-size: 0.88rem;
+}
+.ops-funnel > div:last-child { border-bottom: none; }
+.ops-funnel dt { margin: 0; color: var(--os); opacity: 0.75; }
+.ops-funnel dd { margin: 0; font-weight: 600; color: var(--os); }
+.ops-pipeline {
+    list-style: none;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    display: grid;
+    gap: 0.4rem;
+}
+.ops-pipeline li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0.65rem;
+    background: rgba(13, 13, 11, 0.04);
+    border-radius: 1rem 1rem 1rem 0.35rem;
+    font-size: 0.86rem;
+}
+.ops-pipeline li strong { color: var(--os); }
+.ops-pipeline-empty {
+    opacity: 0.6;
+    background: transparent !important;
+}
+.ops-spark-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 110px;
+    padding: 0.5rem 0;
+}
+.ops-spark-bars .ops-spark-bar {
+    flex: 1 1 auto;
+    min-width: 4px;
+    background: var(--os);
+    opacity: 0.78;
+    border-radius: 2px 2px 0 0;
+}
+.ops-spark-bars .ops-spark-bar:hover { opacity: 1; }
+.ops-recent-table {
+    width: 100%;
+    font-size: 0.82rem;
+}
+.ops-recent-table th,
+.ops-recent-table td {
+    padding: 0.45rem 0.65rem;
+    text-align: left;
+    border-bottom: 1px dashed var(--os-dim);
+}
+.ops-recent-table thead th {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+.ops-recent-table code {
+    font-family: var(--font-mono, monospace);
+    font-size: 0.78rem;
+}

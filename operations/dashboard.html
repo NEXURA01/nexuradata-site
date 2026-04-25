@@ -48,7 +48,169 @@
                 </p>
             </header>
 
-            <section class="ops-dash-kpis" aria-label="Indicateurs clés">
+            <section class="ops-dash-live" aria-label="Données serveur en direct" data-live>
+                <header class="ops-dash-live-head">
+                    <div>
+                        <p class="eyebrow">Live · D1 + Stripe + BTC</p>
+                        <h2>Cash-flow réel</h2>
+                    </div>
+                    <div class="ops-dash-live-controls">
+                        <label>Fenêtre
+                            <select data-live-days>
+                                <option value="7">7 jours</option>
+                                <option value="14">14 jours</option>
+                                <option value="30" selected>30 jours</option>
+                                <option value="90">90 jours</option>
+                                <option value="180">180 jours</option>
+                            </select>
+                        </label>
+                        <button type="button" class="button button-outline button-small"
+                            data-live-refresh>Rafraîchir</button>
+                        <span class="ops-dash-live-status" data-live-status>Chargement…</span>
+                    </div>
+                </header>
+                <div class="ops-dash-live-kpis">
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Encaissé · aujourd'hui</p>
+                        <p class="ops-kpi-value" data-l="today">—</p>
+                        <p class="ops-kpi-sub" data-l="today-sub">CAD net Stripe</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Encaissé · ce mois</p>
+                        <p class="ops-kpi-value" data-l="month">—</p>
+                        <p class="ops-kpi-sub" data-l="month-sub">CAD net Stripe</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Encaissé · YTD</p>
+                        <p class="ops-kpi-value" data-l="year">—</p>
+                        <p class="ops-kpi-sub" data-l="year-sub">CAD année courante</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">À recevoir Stripe</p>
+                        <p class="ops-kpi-value" data-l="ar">—</p>
+                        <p class="ops-kpi-sub" data-l="ar-sub">factures envoyées impayées</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Encaissé · fenêtre</p>
+                        <p class="ops-kpi-value" data-l="win">—</p>
+                        <p class="ops-kpi-sub" data-l="win-sub">N paiements</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">BTC confirmé · fenêtre</p>
+                        <p class="ops-kpi-value" data-l="btc">—</p>
+                        <p class="ops-kpi-sub" data-l="btc-sub">CAD au taux à la facturation</p>
+                    </article>
+                </div>
+
+                <div class="ops-dash-live-grid">
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Funnel devis → dossier</h3>
+                            <p>Captures de courriels via l'estimateur.</p>
+                        </header>
+                        <dl class="ops-funnel">
+                            <div>
+                                <dt>Leads capturés (fenêtre)</dt>
+                                <dd data-l="leads-window">—</dd>
+                            </div>
+                            <div>
+                                <dt>Convertis (fenêtre)</dt>
+                                <dd data-l="leads-conv-window">—</dd>
+                            </div>
+                            <div>
+                                <dt>Taux de conversion total</dt>
+                                <dd data-l="leads-rate">—</dd>
+                            </div>
+                            <div>
+                                <dt>En attente de relance</dt>
+                                <dd data-l="leads-pending">—</dd>
+                            </div>
+                            <div>
+                                <dt>Désinscrits</dt>
+                                <dd data-l="leads-unsub">—</dd>
+                            </div>
+                        </dl>
+                    </article>
+
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Pipeline dossiers</h3>
+                            <p>Répartition par statut.</p>
+                        </header>
+                        <ul class="ops-pipeline" data-l="pipeline" role="list">
+                            <li class="ops-pipeline-empty">—</li>
+                        </ul>
+                        <p class="ops-out-meta">Nouveaux dossiers (fenêtre) : <strong data-l="cases-new">—</strong></p>
+                    </article>
+
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Wallet BTC HD</h3>
+                            <p>Pool d'adresses dérivées.</p>
+                        </header>
+                        <dl class="ops-funnel">
+                            <div>
+                                <dt>Adresses libres</dt>
+                                <dd data-l="btc-pool-unused">—</dd>
+                            </div>
+                            <div>
+                                <dt>Adresses assignées</dt>
+                                <dd data-l="btc-pool-assigned">—</dd>
+                            </div>
+                            <div>
+                                <dt>Adresses dépensées</dt>
+                                <dd data-l="btc-pool-spent">—</dd>
+                            </div>
+                            <div>
+                                <dt>Factures totales</dt>
+                                <dd data-l="btc-total">—</dd>
+                            </div>
+                            <div>
+                                <dt>En attente</dt>
+                                <dd data-l="btc-pending">—</dd>
+                            </div>
+                            <div>
+                                <dt>Confirmées</dt>
+                                <dd data-l="btc-confirmed">—</dd>
+                            </div>
+                        </dl>
+                        <p class="ops-out-meta" data-l="btc-warning" hidden>⚠ Pool faible — réimporter un lot via
+                            l'outil "Wallet BTC".</p>
+                    </article>
+
+                    <article class="ops-dash-card ops-dash-card--wide">
+                        <header>
+                            <h3>Encaissements quotidiens</h3>
+                            <p>CAD/jour sur la fenêtre choisie.</p>
+                        </header>
+                        <div class="ops-spark-bars" data-l="series" aria-hidden="true"></div>
+                    </article>
+
+                    <article class="ops-dash-card ops-dash-card--wide">
+                        <header>
+                            <h3>Derniers paiements Stripe</h3>
+                            <p>10 plus récents.</p>
+                        </header>
+                        <table class="ops-out-rows ops-recent-table">
+                            <thead>
+                                <tr>
+                                    <th>Dossier</th>
+                                    <th>Libellé</th>
+                                    <th>Montant</th>
+                                    <th>Payé le</th>
+                                </tr>
+                            </thead>
+                            <tbody data-l="recent-paid">
+                                <tr>
+                                    <td colspan="4">—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </article>
+                </div>
+            </section>
+
+            <section class="ops-dash-kpis" aria-label="Indicateurs locaux (legacy)">
                 <article class="ops-kpi" data-kpi="ar">
                     <p class="ops-kpi-label">À recevoir</p>
                     <p class="ops-kpi-value" data-k="ar">—</p>

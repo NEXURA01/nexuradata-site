@@ -1608,6 +1608,40 @@
                     var cur = node.querySelector('[data-c="cur"]').value;
                     var win = parseInt(node.querySelector('[data-c="win"]').value, 10) || 30;
                     if (!cad) { status.textContent = "Saisir un montant."; return; }
+
+                    // BTC: use HD wallet pool API (rotating address per invoice).
+                    if (cur === "btc") {
+                        status.textContent = "Réservation d'une adresse HD du pool…";
+                        status.style.color = "rgba(26,26,24,0.55)";
+                        try {
+                            var apiRes = await fetch("/api/btc/invoice", {
+                                method: "POST",
+                                headers: { "content-type": "application/json" },
+                                body: JSON.stringify({ caseRef: ref, amountCad: cad, expiresMin: win })
+                            });
+                            var apiJson = await apiRes.json();
+                            if (!apiRes.ok || !apiJson.ok) {
+                                var errMap = {
+                                    "address-pool-empty": "Pool d'adresses BTC vide. Importer un nouveau lot via /api/btc/pool-import.",
+                                    "rate-unavailable": "Taux BTC indisponible (CoinGecko). Réessayer.",
+                                    "amount-too-small": "Montant trop faible (minimum ≈ " + (apiJson.minCad || 5) + " CAD).",
+                                    "invalid-amount": "Montant invalide."
+                                };
+                                status.textContent = errMap[apiJson.error] || ("Erreur : " + (apiJson.error || apiRes.status));
+                                status.style.color = "#8f3f2f";
+                                return;
+                            }
+                            renderBtcInvoice(apiJson, ref, cad, win);
+                            status.textContent = "Adresse HD attribuée · index #" + apiJson.derivationIndex + " · ref " + apiJson.ref;
+                            status.style.color = "#1c1c19";
+                            return;
+                        } catch (e) {
+                            status.textContent = "Erreur réseau : " + e.message;
+                            status.style.color = "#8f3f2f";
+                            return;
+                        }
+                    }
+
                     status.textContent = "Récupération du taux en cours…";
                     status.style.color = "rgba(26,26,24,0.55)";
                     var rate = 0;
@@ -1617,7 +1651,7 @@
                         rate = j[curId(cur)].cad;
                     } catch (e) {
                         status.textContent = "Échec API. Saisir le taux manuellement dans le message.";
-                        status.style.color = "#b94a3b";
+                        status.style.color = "#8f3f2f";
                         return;
                     }
                     var amount = cad / rate;
@@ -1669,6 +1703,110 @@
                     });
                 }
                 node.querySelector("[data-c-gen]").addEventListener("click", gen);
+
+                // ─── BTC HD invoice renderer + live status polling ─────────
+                var pollTimer = null;
+                function renderBtcInvoice(inv, caseRef, cad, win) {
+                    var displayAmt = inv.amountBtc.toFixed(8);
+                    var paymentUri = inv.paymentUri;
+                    var expiresLocal = new Date(inv.expiresAt).toLocaleString("fr-CA");
+                    var msg =
+                        "Objet : Demande de paiement BTC — dossier " + caseRef + "\n\n" +
+                        "Bonjour,\n\n" +
+                        "Voici les coordonnées de paiement BTC pour le dossier " + caseRef + " :\n\n" +
+                        "Montant : " + displayAmt + " BTC\n" +
+                        "Équivalent : " + cad.toFixed(2) + " CAD (taux d'émission : 1 BTC = " + inv.rateCadPerBtc.toLocaleString("fr-CA") + " CAD)\n" +
+                        "Adresse (unique à ce dossier) : " + inv.address + "\n" +
+                        "Référence interne : " + inv.ref + "\n" +
+                        "Fenêtre de paiement : " + win + " minutes (jusqu'à " + expiresLocal + ")\n\n" +
+                        "Un reçu officiel en CAD vous sera transmis dès la 2e confirmation sur le réseau Bitcoin.\n\n" +
+                        "Merci,\nNEXURA DATA — Laboratoire de récupération de données et forensique numérique\nLongueuil, Québec";
+
+                    out.hidden = false;
+                    out.innerHTML =
+                        '<div class="ops-c-grid">' +
+                        '<div class="ops-c-qr"><img src="' + qr(paymentUri) + '" alt="QR de paiement BTC" loading="lazy"></div>' +
+                        '<div class="ops-c-info">' +
+                        '<dl class="ops-out-table">' +
+                        '<div><dt>Devise</dt><dd>BTC <small style="color:#1c1c19;opacity:.7">(adresse HD #' + inv.derivationIndex + ')</small></dd></div>' +
+                        '<div><dt>Montant</dt><dd><code>' + displayAmt + '</code> <button type="button" class="ops-tool-copy" data-copy="' + displayAmt + '">Copier</button></dd></div>' +
+                        '<div><dt>Équivalent CAD</dt><dd>' + fmtCAD(cad) + '</dd></div>' +
+                        '<div><dt>Taux</dt><dd>1 BTC = ' + fmtCAD(inv.rateCadPerBtc) + '</dd></div>' +
+                        '<div><dt>Adresse</dt><dd><code>' + inv.address + '</code> <button type="button" class="ops-tool-copy" data-copy="' + inv.address + '">Copier</button></dd></div>' +
+                        '<div><dt>Référence</dt><dd><code>' + inv.ref + '</code></dd></div>' +
+                        '<div><dt>URI</dt><dd><button type="button" class="ops-tool-copy" data-copy="' + paymentUri + '">Copier le lien BIP-21</button></dd></div>' +
+                        '<div class="is-total"><dt>Expire à</dt><dd>' + expiresLocal + '</dd></div>' +
+                        '</dl>' +
+                        '<div class="ops-c-live" data-btc-live>' +
+                        '<p class="ops-out-label" style="margin:0 0 .5rem">État du paiement</p>' +
+                        '<p class="ops-out-value" data-btc-state>En attente…</p>' +
+                        '<p class="ops-out-meta" data-btc-meta>Vérification automatique toutes les 12 secondes.</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '<p class="ops-out-label" style="margin-top:1.25rem;">Message client prêt à envoyer</p>' +
+                        '<pre class="ops-out-text" data-c-msg></pre>' +
+                        '<div class="ops-tool-actions">' +
+                        '<button type="button" class="button button-primary" data-c-copy>Copier le message</button>' +
+                        '<button type="button" class="button" data-btc-refresh>Rafraîchir</button>' +
+                        '</div>' +
+                        '<p class="ops-out-note">Adresse dérivée hors-ligne depuis votre zpub watch-only (BIP-84). La clé privée n\'a jamais touché ce serveur. Polling via mempool.space, 2 confirmations requises.</p>';
+                    out.querySelector("[data-c-msg]").textContent = msg;
+
+                    out.addEventListener("click", function (e) {
+                        var t = e.target.closest("[data-copy]");
+                        if (t) copyToClipboard(t.getAttribute("data-copy"), t);
+                        var c = e.target.closest("[data-c-copy]");
+                        if (c) copyToClipboard(out.querySelector("[data-c-msg]").textContent, c);
+                        var rb = e.target.closest("[data-btc-refresh]");
+                        if (rb) pollBtcStatus(inv.ref, true);
+                    });
+
+                    if (pollTimer) clearInterval(pollTimer);
+                    var startedAt = Date.now();
+                    pollTimer = setInterval(function () {
+                        if (Date.now() - startedAt > 1000 * 60 * (win + 5)) {
+                            clearInterval(pollTimer);
+                            return;
+                        }
+                        pollBtcStatus(inv.ref, false);
+                    }, 12000);
+                    pollBtcStatus(inv.ref, false);
+                }
+
+                async function pollBtcStatus(ref, force) {
+                    var stateEl = out.querySelector("[data-btc-state]");
+                    var metaEl = out.querySelector("[data-btc-meta]");
+                    if (!stateEl) return;
+                    try {
+                        var r = await fetch("/api/btc/status?ref=" + encodeURIComponent(ref));
+                        var j = await r.json();
+                        if (!j.ok) {
+                            stateEl.textContent = "Erreur : " + (j.error || r.status);
+                            return;
+                        }
+                        var labels = {
+                            pending: "En attente du paiement",
+                            seen: "Détecté en mempool — " + j.confirmations + " / " + j.requiredConfirmations + " confirmations",
+                            confirmed: "✓ Confirmé (" + j.confirmations + " confirmations)",
+                            expired: "Expiré — adresse retirée",
+                            cancelled: "Annulé"
+                        };
+                        stateEl.textContent = labels[j.status] || j.status;
+                        var bits = [];
+                        if (j.txId) bits.push('TX : <a href="https://mempool.space/tx/' + j.txId + '" target="_blank" rel="noopener">' + j.txId.slice(0, 12) + '…</a>');
+                        if (j.receivedSats > 0) bits.push("Reçu : " + (j.receivedSats / 1e8).toFixed(8) + " BTC");
+                        if (j.firstSeenAt) bits.push("Vu : " + new Date(j.firstSeenAt).toLocaleTimeString("fr-CA"));
+                        if (!bits.length) bits.push("Vérification automatique toutes les 12 secondes.");
+                        metaEl.innerHTML = bits.join(" · ");
+                        if (j.status === "confirmed" || j.status === "expired" || j.status === "cancelled") {
+                            if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+                        }
+                    } catch (e) {
+                        if (force) stateEl.textContent = "Erreur réseau : " + e.message;
+                    }
+                }
+
                 return node;
             }
         },

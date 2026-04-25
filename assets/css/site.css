@@ -327,7 +327,7 @@ select {
 }
 
 .hero-copy h1 {
-  max-width: 13ch;
+  max-width: 22ch;
   font-size: clamp(2.55rem, 5vw, 4.1rem);
 }
 
@@ -2522,7 +2522,10 @@ select {
 }
 
 @media (max-width: 640px) {
-  .brand-logo,
+  .brand-logo {
+    height: 32px;
+  }
+
   .footer-logo {
     width: 100%;
     max-width: 100%;

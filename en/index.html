@@ -169,6 +169,7 @@
     }
   </script>
   <script src="../assets/js/site.js" defer></script>
+  <script src="../assets/js/quote-estimator.js" defer></script>
 </head>
 
 <body>
@@ -242,6 +243,81 @@
       </div>
     </section>
 
+    <section class="section quote-section" id="instant-quote" aria-labelledby="quote-title">
+      <div class="container">
+        <div class="quote-layout">
+          <div class="quote-intro">
+            <p class="eyebrow">Instant estimate</p>
+            <h2 id="quote-title">How much will it cost? In 30 seconds.</h2>
+            <p class="quote-lead">
+              Three questions. You get a real price range, the turnaround and the next step.
+              No commitment. No email required.
+            </p>
+            <ul class="quote-trust" role="list">
+              <li><strong>No data recovered</strong>, no invoice.</li>
+              <li>Firm price confirmed after diagnosis.</li>
+              <li>Full confidentiality, NDA on request.</li>
+            </ul>
+          </div>
+
+          <form class="quote-card" id="quote-form" novalidate>
+            <fieldset class="quote-step">
+              <legend>1. Which device?</legend>
+              <div class="quote-options" data-quote-group="device">
+                <label><input type="radio" name="device" value="phone"><span>Phone / tablet</span></label>
+                <label><input type="radio" name="device" value="laptop"><span>Laptop / computer</span></label>
+                <label><input type="radio" name="device" value="hdd"><span>Hard drive (HDD)</span></label>
+                <label><input type="radio" name="device" value="ssd"><span>SSD / NVMe</span></label>
+                <label><input type="radio" name="device" value="usb"><span>USB stick / SD card</span></label>
+                <label><input type="radio" name="device" value="raid"><span>RAID / NAS / server</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="quote-step">
+              <legend>2. What happened?</legend>
+              <div class="quote-options" data-quote-group="issue">
+                <label><input type="radio" name="issue" value="logical"><span>Files deleted or formatted</span></label>
+                <label><input type="radio" name="issue" value="not_detected"><span>Device no longer
+                    detected</span></label>
+                <label><input type="radio" name="issue" value="mechanical"><span>Unusual noise, physical
+                    failure</span></label>
+                <label><input type="radio" name="issue" value="liquid"><span>Water, fire, drop, impact</span></label>
+                <label><input type="radio" name="issue" value="encrypted"><span>Locked, encrypted,
+                    ransomware</span></label>
+                <label><input type="radio" name="issue" value="raid_fail"><span>Multiple disks failed
+                    (RAID)</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="quote-step">
+              <legend>3. How urgent?</legend>
+              <div class="quote-options quote-options--inline" data-quote-group="urgency">
+                <label><input type="radio" name="urgency" value="standard" checked><span>Standard<em>5–10
+                      days</em></span></label>
+                <label><input type="radio" name="urgency" value="priority"><span>Priority<em>2–3
+                      days</em></span></label>
+                <label><input type="radio" name="urgency" value="emergency"><span>Emergency<em>24–48
+                      h</em></span></label>
+              </div>
+            </fieldset>
+
+            <output class="quote-result" id="quote-result" aria-live="polite">
+              <p class="quote-result-placeholder">Pick a device and an issue to see the estimate.</p>
+            </output>
+
+            <div class="quote-actions">
+              <a href="#contact" class="button button-primary" id="quote-cta">Open my case</a>
+              <a href="tel:+15145550199" class="button button-secondary">Call the lab</a>
+            </div>
+
+            <p class="quote-disclaimer">
+              Indicative estimate based on the lab's pricing matrix. Firm written quote after free diagnosis.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section class="section audience-section" aria-label="Choose your profile">
       <div class="container">
         <div class="audience-grid">
@@ -281,6 +357,68 @@
             <p class="impact-stat-label">If we recover nothing</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section trust-section" aria-labelledby="trust-title">
+      <div class="container">
+        <div class="trust-layout">
+          <div class="trust-intro">
+            <p class="eyebrow">Who we are</p>
+            <h2 id="trust-title">One lab. One certified examiner. One written commitment.</h2>
+            <p class="trust-lead">
+              NEXURA DATA is not a repair counter. It is an independent laboratory founded in Longueuil in 2023, led by
+              a
+              certified forensic examiner. We rarely open a drive — but when we do, it's in a controlled environment,
+              with the right tools and the right discipline. Every case is tracked, every move is documented.
+            </p>
+            <ul class="trust-bullets" role="list">
+              <li><strong>Independent.</strong> No ties to a repair shop, vendor or reseller.</li>
+              <li><strong>Absolute confidentiality.</strong> NDA on request, chain of custody on every case.</li>
+              <li><strong>Written commitment.</strong> No data recovered, no invoice. No exception.</li>
+            </ul>
+          </div>
+
+          <aside class="trust-credentials" aria-label="Tools, credentials and standards">
+            <p class="trust-cred-eyebrow"><span class="trust-cred-prompt">~/lab</span> Equipment &amp; standards</p>
+            <ul class="trust-cred-list" role="list">
+              <li><span class="trust-cred-tag">PC-3000</span><span>ATA / SAS / NVMe imaging and structural
+                  rebuild.</span></li>
+              <li><span class="trust-cred-tag">Atola Insight</span><span>Non-destructive disk diagnosis,
+                  write-blocked.</span></li>
+              <li><span class="trust-cred-tag">Clean room</span><span>ISO 5 hood, HDD opening in controlled
+                  environment.</span></li>
+              <li><span class="trust-cred-tag">CFE</span><span>Certified Forensic Examiner, court-admissible
+                  expert.</span></li>
+              <li><span class="trust-cred-tag">Law 25</span><span>Practices aligned with Quebec's privacy law.</span>
+              </li>
+              <li><span class="trust-cred-tag">E&amp;O</span><span>Active professional liability coverage.</span></li>
+            </ul>
+          </aside>
+        </div>
+
+        <ol class="trust-testimonials" aria-label="Client testimonials">
+          <li class="trust-testimonial">
+            <blockquote>"My work SSD died Friday night, presentation Monday morning. Recovered overnight, encrypted
+              bundle delivered Sunday. Clear communication, quoted price honoured."</blockquote>
+            <p class="trust-testimonial-meta"><strong>Marc-André L.</strong> · Architect, Plateau-Mont-Royal</p>
+          </li>
+          <li class="trust-testimonial">
+            <blockquote>"Degraded RAID 5 on our accounting NAS. NEXURA DATA refused to touch it before a written
+              assessment. Clean rebuild, chain-of-custody report on file."</blockquote>
+            <p class="trust-testimonial-meta"><strong>Accounting firm</strong> · Brossard, 14 employees</p>
+          </li>
+          <li class="trust-testimonial">
+            <blockquote>"iPhone dropped in the lake. Rare honesty: they told me upfront the odds were thin. Baby photos
+              recovered. I won't forget it."</blockquote>
+            <p class="trust-testimonial-meta"><strong>Sophie T.</strong> · Private client, Laval</p>
+          </li>
+        </ol>
+
+        <p class="trust-footnote">
+          Testimonials published with client authorization. Full identity available on request, subject to renewed
+          consent.
+        </p>
       </div>
     </section>
 
@@ -679,6 +817,11 @@
       </section>
     </div>
   </footer>
+  <a class="sticky-call" href="tel:+15145550199" aria-label="Call the NEXURA DATA lab">
+    <span class="sticky-call-dot" aria-hidden="true"></span>
+    <span class="sticky-call-label">Talk to an examiner</span>
+    <span class="sticky-call-num">514&nbsp;555&#8209;0199</span>
+  </a>
   <script src="/assets/js/cookie-consent.js" defer></script>
 </body>
 

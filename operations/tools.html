@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Outils instantanés — Console NEXURADATA</title>
+    <meta name="description"
+        content="Outils internes instantanés pour le laboratoire NEXURA DATA : estimation, RAID, transfert, taxes Québec, NDA, références.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#141618">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <script src="../assets/js/site.js" defer></script>
+    <script src="../assets/js/ops-tools.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Navigation opérateur">
+            <a class="brand" href="../index.html" aria-label="NEXURA DATA, retour à l'accueil">
+                <img src="../assets/icons/logo-petit.svg" alt="NEXURA DATA" width="200" height="24">
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Dossiers</a>
+                <a href="quotes.html">Soumissions</a>
+                <a href="payments.html">Paiements</a>
+                <a href="follow-up.html">Relances</a>
+                <a href="tools.html" aria-current="page">Outils</a>
+                <a href="../index.html" class="button button-outline button-small">Site public</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="contenu" class="page-shell">
+        <div class="container">
+            <header class="page-hero ops-hero">
+                <p class="eyebrow">Console interne · v1</p>
+                <h1>Outils instantanés</h1>
+                <p class="page-intro">
+                    Petite suite d'outils chargés à la demande pour accélérer les opérations courantes&nbsp;:
+                    estimation, calculs RAID, durée de transfert, taxes Québec, génération de référence
+                    dossier et entente de confidentialité.
+                </p>
+            </header>
+
+            <div class="ops-tools-layout">
+                <aside class="ops-tools-sidebar" aria-label="Catalogue d'outils">
+                    <p class="ops-tools-eyebrow"><span class="ops-tools-prompt">~/tools</span> Charger un outil</p>
+                    <ul class="ops-tools-menu" role="list">
+                        <li><button type="button" class="ops-tools-item is-active" data-tool="quote">Estimation
+                                devis<em>Fourchette + délai en 30&nbsp;s</em></button></li>
+                        <li><button type="button" class="ops-tools-item" data-tool="raid">Calculateur RAID<em>Capacité
+                                    utile · tolérance</em></button></li>
+                        <li><button type="button" class="ops-tools-item" data-tool="transfer">Durée de
+                                transfert<em>Taille ÷ débit</em></button></li>
+                        <li><button type="button" class="ops-tools-item" data-tool="tax">Taxes Québec
+                                (TPS&nbsp;+&nbsp;TVQ)<em>Calcul HT / TTC</em></button></li>
+                        <li><button type="button" class="ops-tools-item" data-tool="reference">Référence
+                                dossier<em>NX-AAAA-NNNN</em></button></li>
+                        <li><button type="button" class="ops-tools-item" data-tool="nda">NDA express<em>FR / EN,
+                                    copiable</em></button></li>
+                    </ul>
+                    <p class="ops-tools-note">Les calculs sont effectués localement, aucun envoi serveur.</p>
+                </aside>
+
+                <section class="ops-tools-stage" aria-live="polite" data-tools-stage>
+                    <div class="ops-tools-loading">Chargement…</div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer ops-footer">
+        <div class="container">
+            <p class="footer-mini">Console interne NEXURA DATA — accès restreint via Cloudflare Access.</p>
+        </div>
+    </footer>
+    <script src="/assets/js/cookie-consent.js" defer></script>
+</body>
+
+</html>

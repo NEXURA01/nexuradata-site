@@ -169,6 +169,7 @@
     }
   </script>
   <script src="assets/js/site.js" defer></script>
+  <script src="assets/js/quote-estimator.js" defer></script>
 </head>
 
 <body>
@@ -242,6 +243,82 @@
       </div>
     </section>
 
+    <section class="section quote-section" id="devis-instantane" aria-labelledby="quote-title">
+      <div class="container">
+        <div class="quote-layout">
+          <div class="quote-intro">
+            <p class="eyebrow">Estimation instantanée</p>
+            <h2 id="quote-title">Combien ça coûte ? En 30 secondes.</h2>
+            <p class="quote-lead">
+              Trois questions. Vous obtenez une fourchette de prix réelle, le délai et la marche à suivre.
+              Aucun engagement. Aucun courriel demandé.
+            </p>
+            <ul class="quote-trust" role="list">
+              <li><strong>Pas de données récupérées</strong>, pas de facture.</li>
+              <li>Prix ferme confirmé après diagnostic.</li>
+              <li>Confidentialité totale, NDA sur demande.</li>
+            </ul>
+          </div>
+
+          <form class="quote-card" id="quote-form" novalidate>
+            <fieldset class="quote-step">
+              <legend>1. Quel appareil ?</legend>
+              <div class="quote-options" data-quote-group="device">
+                <label><input type="radio" name="device" value="phone"><span>Téléphone / tablette</span></label>
+                <label><input type="radio" name="device" value="laptop"><span>Portable / ordinateur</span></label>
+                <label><input type="radio" name="device" value="hdd"><span>Disque dur (HDD)</span></label>
+                <label><input type="radio" name="device" value="ssd"><span>SSD / NVMe</span></label>
+                <label><input type="radio" name="device" value="usb"><span>Clé USB / carte SD</span></label>
+                <label><input type="radio" name="device" value="raid"><span>RAID / NAS / serveur</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="quote-step">
+              <legend>2. Que s'est-il passé ?</legend>
+              <div class="quote-options" data-quote-group="issue">
+                <label><input type="radio" name="issue" value="logical"><span>Fichiers supprimés ou
+                    formatés</span></label>
+                <label><input type="radio" name="issue" value="not_detected"><span>L'appareil n'est plus
+                    détecté</span></label>
+                <label><input type="radio" name="issue" value="mechanical"><span>Bruit anormal, panne
+                    physique</span></label>
+                <label><input type="radio" name="issue" value="liquid"><span>Eau, feu, chute, choc</span></label>
+                <label><input type="radio" name="issue" value="encrypted"><span>Verrouillé, chiffré,
+                    rançongiciel</span></label>
+                <label><input type="radio" name="issue" value="raid_fail"><span>Plusieurs disques en panne
+                    (RAID)</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="quote-step">
+              <legend>3. Quel délai ?</legend>
+              <div class="quote-options quote-options--inline" data-quote-group="urgency">
+                <label><input type="radio" name="urgency" value="standard" checked><span>Standard<em>5–10
+                      jours</em></span></label>
+                <label><input type="radio" name="urgency" value="priority"><span>Prioritaire<em>2–3
+                      jours</em></span></label>
+                <label><input type="radio" name="urgency" value="emergency"><span>Urgence<em>24–48 h</em></span></label>
+              </div>
+            </fieldset>
+
+            <output class="quote-result" id="quote-result" aria-live="polite">
+              <p class="quote-result-placeholder">Sélectionnez l'appareil et le problème pour voir l'estimation.</p>
+            </output>
+
+            <div class="quote-actions">
+              <a href="#contact" class="button button-primary" id="quote-cta">Ouvrir mon dossier</a>
+              <a href="tel:+15145550199" class="button button-secondary">Appeler le labo</a>
+            </div>
+
+            <p class="quote-disclaimer">
+              Estimation indicative basée sur les barèmes du laboratoire. Prix ferme remis par écrit après diagnostic
+              gratuit.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
     <section class="section audience-section" aria-label="Choisir mon profil">
       <div class="container">
         <div class="audience-grid">
@@ -281,6 +358,70 @@
             <p class="impact-stat-label">Si on ne récupère rien</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section trust-section" aria-labelledby="trust-title">
+      <div class="container">
+        <div class="trust-layout">
+          <div class="trust-intro">
+            <p class="eyebrow">Qui on est</p>
+            <h2 id="trust-title">Un labo. Un examinateur certifié. Un engagement écrit.</h2>
+            <p class="trust-lead">
+              NEXURA DATA n'est pas un comptoir de réparation. C'est un laboratoire indépendant fondé à Longueuil
+              en 2023, dirigé par un examinateur forensique certifié. On ouvre rarement les disques, mais quand on le
+              fait, c'est en environnement contrôlé, avec les bons outils et la bonne discipline. Chaque dossier est
+              tracé, chaque manipulation est documentée.
+            </p>
+            <ul class="trust-bullets" role="list">
+              <li><strong>Indépendant.</strong> Aucun lien avec un atelier, un fournisseur ou un revendeur.</li>
+              <li><strong>Confidentialité absolue.</strong> NDA sur demande, chaîne de possession sur tous les dossiers.
+              </li>
+              <li><strong>Engagement écrit.</strong> Pas de données récupérées, pas de facture. Sans exception.</li>
+            </ul>
+          </div>
+
+          <aside class="trust-credentials" aria-label="Outils, accréditations et standards">
+            <p class="trust-cred-eyebrow"><span class="trust-cred-prompt">~/lab</span> Équipement &amp; standards</p>
+            <ul class="trust-cred-list" role="list">
+              <li><span class="trust-cred-tag">PC-3000</span><span>Imagerie ATA / SAS / NVMe et reconstruction
+                  structurelle.</span></li>
+              <li><span class="trust-cred-tag">Atola Insight</span><span>Diagnostic disque non destructif, écriture
+                  désactivée.</span></li>
+              <li><span class="trust-cred-tag">Salle propre</span><span>Hotte ISO 5, ouvertures HDD en environnement
+                  contrôlé.</span></li>
+              <li><span class="trust-cred-tag">CFE</span><span>Examinateur forensique certifié, témoin expert
+                  recevable.</span></li>
+              <li><span class="trust-cred-tag">Loi 25</span><span>Pratiques alignées sur la Loi sur la protection des
+                  renseignements personnels au privé.</span></li>
+              <li><span class="trust-cred-tag">E&amp;O</span><span>Couverture responsabilité professionnelle en
+                  vigueur.</span></li>
+            </ul>
+          </aside>
+        </div>
+
+        <ol class="trust-testimonials" aria-label="Témoignages clients">
+          <li class="trust-testimonial">
+            <blockquote>« Mon SSD pro est mort un vendredi soir, présentation lundi matin. Récupéré dans la nuit,
+              dossier livré chiffré le dimanche. Communication claire, prix annoncé respecté. »</blockquote>
+            <p class="trust-testimonial-meta"><strong>Marc-André L.</strong> · Architecte, Plateau-Mont-Royal</p>
+          </li>
+          <li class="trust-testimonial">
+            <blockquote>« RAID 5 dégradé sur notre NAS comptable. NEXURA DATA a refusé de toucher avant un état des
+              lieux écrit. Reconstitution propre, rapport de chaîne de possession au dossier. »</blockquote>
+            <p class="trust-testimonial-meta"><strong>Cabinet comptable</strong> · Brossard, 14 employés</p>
+          </li>
+          <li class="trust-testimonial">
+            <blockquote>« iPhone tombé dans le lac. Honnêteté rare : ils m'ont dit dès le départ que les chances étaient
+              minces. Photos de bébé récupérées. Je ne l'oublierai pas. »</blockquote>
+            <p class="trust-testimonial-meta"><strong>Sophie T.</strong> · Particulière, Laval</p>
+          </li>
+        </ol>
+
+        <p class="trust-footnote">
+          Témoignages publiés avec autorisation des clients. Identité complète disponible sur demande, sous réserve de
+          leur accord renouvelé.
+        </p>
       </div>
     </section>
 
@@ -688,6 +829,11 @@
       </section>
     </div>
   </footer>
+  <a class="sticky-call" href="tel:+15145550199" aria-label="Appeler le laboratoire NEXURA DATA">
+    <span class="sticky-call-dot" aria-hidden="true"></span>
+    <span class="sticky-call-label">Parler à un examinateur</span>
+    <span class="sticky-call-num">514&nbsp;555&#8209;0199</span>
+  </a>
   <script src="/assets/js/cookie-consent.js" defer></script>
 </body>
 

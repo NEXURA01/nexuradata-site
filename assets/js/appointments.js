@@ -26,6 +26,7 @@
             ref: "Référence&nbsp;:",
             addr: "Adresse exacte transmise dans la confirmation. Stationnement gratuit, accès sans escalier.",
             consent: "En réservant, vous acceptez d'être contacté à propos de ce rendez-vous.",
+            slotsLabel: (n) => n === 1 ? "1 créneau" : (n + " créneaux"),
             weekdays: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
             months: ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
             error: "Une erreur est survenue. Réessayez."
@@ -50,6 +51,7 @@
             ref: "Reference:",
             addr: "Exact address sent in the confirmation. Free parking, step-free access.",
             consent: "By booking, you agree to be contacted about this appointment.",
+            slotsLabel: (n) => n === 1 ? "1 slot" : (n + " slots"),
             weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
             months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             error: "Something went wrong. Please try again."
@@ -122,7 +124,7 @@
             btn.type = "button";
             btn.className = "appt-day";
             btn.dataset.date = day.date;
-            btn.innerHTML = `<strong>${fmtDate(day.date)}</strong><span>${day.available.length}</span>`;
+            btn.innerHTML = `<strong>${fmtDate(day.date)}</strong><span>${T.slotsLabel(day.available.length)}</span>`;
             if (day.date === selectedDate) btn.classList.add("is-active");
             btn.addEventListener("click", () => {
                 selectedDate = day.date;

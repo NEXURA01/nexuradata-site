@@ -186,7 +186,7 @@ const revealElements = document.querySelectorAll("[data-reveal]");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 const initializeMobileNav = () => {
-  const navbars = document.querySelectorAll(".navbar");
+  const navbars = document.querySelectorAll(".navbar, .site-nav");
 
   if (navbars.length === 0) {
     return;

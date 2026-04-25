@@ -3850,3 +3850,37 @@ select {
   word-break: break-word;
   border-left: 2px solid rgba(201,169,106,0.4);
 }
+
+/* Ops tools — extras for hash/intake/crypto */
+.ops-hash-drop {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1.5rem;
+  border: 2px dashed rgba(201,169,106,0.4);
+  background: rgba(201,169,106,0.04);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.ops-hash-drop.is-drag, .ops-hash-drop:hover { border-color: #c9a96a; background: rgba(201,169,106,0.1); }
+.ops-hash-hint { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: rgba(26,26,24,0.55); }
+.ops-hash-hint code { background: rgba(0,0,0,0.06); padding: 0.05rem 0.35rem; border-radius: 1px; }
+
+.ops-pv { display: grid; gap: 1rem; color: #f5f1e8; }
+.ops-pv header h3 { margin: 0; font-family: 'IBM Plex Sans', sans-serif; }
+.ops-pv header p { margin: 0.25rem 0 0; font-size: 0.85rem; color: rgba(245,241,232,0.6); }
+.ops-pv-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
+.ops-pv-sign span { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,241,232,0.55); }
+.ops-pv-line { border-bottom: 1px solid rgba(245,241,232,0.4); height: 2.4rem; margin: 0.4rem 0 0.3rem; }
+.ops-pv-sign small { color: rgba(245,241,232,0.7); font-size: 0.78rem; }
+@media print {
+  body * { visibility: hidden; }
+  .ops-tool--intake, .ops-tool--intake * { visibility: visible; }
+  .ops-tool--intake { position: absolute; left: 0; top: 0; width: 100%; background: white !important; color: #000 !important; }
+  .ops-tool--intake .ops-tool-out, .ops-tool--intake dl, .ops-tool--intake dd, .ops-tool--intake dt { color: #000 !important; background: white !important; }
+}
+
+.ops-c-grid { display: grid; grid-template-columns: 220px 1fr; gap: 1.25rem; align-items: start; }
+.ops-c-qr img { display: block; background: white; padding: 0.5rem; border: 1px solid rgba(201,169,106,0.3); }
+@media (max-width: 640px) { .ops-c-grid { grid-template-columns: 1fr; } }
+.ops-c-status { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: rgba(26,26,24,0.55); align-self: center; }

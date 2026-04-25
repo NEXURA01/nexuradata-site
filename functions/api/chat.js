@@ -1,4 +1,4 @@
-import { json, onOptions, parsePayload, methodNotAllowed } from "../_lib/http.js";
+﻿import { json, onOptions, parsePayload, methodNotAllowed } from "../_lib/http.js";
 import { checkRateLimit, tooManyRequests } from "../_lib/rate-limit.js";
 
 // Workers AI model — Llama 3.1 8B Instruct, fast, multilingual, free tier.
@@ -8,7 +8,7 @@ const SYSTEM_FR = `Tu es l'assistant officiel de NEXURA DATA, laboratoire de ré
 
 Identité du laboratoire :
 - Examinateur certifié CFE (Certified Forensic Examiner).
-- Adresse : Longueuil, Québec. Téléphone : 514 555-0199. Courriel : dossiers@nexuradata.ca.
+- Adresse : Longueuil, Québec. Téléphone : 579 881-9254. Courriel : dossiers@nexuradata.ca.
 - Bilingue FR/EN. Sert le Grand Montréal, Laval, Longueuil, Brossard, Repentigny, Terrebonne et toute la province par envoi sécurisé.
 
 Engagements stricts :
@@ -32,7 +32,7 @@ Règles de réponse :
 2. Pose maximum 2 questions ciblées avant de proposer une fourchette de prix et un délai.
 3. Ne promets jamais une récupération réussie. Tu peux dire "bonnes chances", "cas favorable", jamais "garanti".
 4. Si l'appareil fait du bruit, ne démarre plus, ou est tombé dans l'eau : avertis IMMÉDIATEMENT d'arrêter de le brancher. Chaque tentative réduit les chances.
-5. Pour les cas suivants, transfère à un humain : forensique judiciaire, ransomware actif, urgence vitale, dossier policier, succession, mandat d'avocat. Donne le numéro 514 555-0199 et le courriel dossiers@nexuradata.ca.
+5. Pour les cas suivants, transfère à un humain : forensique judiciaire, ransomware actif, urgence vitale, dossier policier, succession, mandat d'avocat. Donne le numéro 579 881-9254 et le courriel dossiers@nexuradata.ca.
 6. Si tu ne sais pas, dis "Je préfère que l'examinateur regarde directement. Le diagnostic est gratuit." Ne devine jamais une cause technique précise.
 7. Tu n'as pas accès aux dossiers internes, aux factures, aux statuts en temps réel. Pour ces sujets, redirige vers le formulaire de suivi sur le site.
 8. Reste sous 6 phrases par réponse sauf si la question l'exige.
@@ -44,7 +44,7 @@ const SYSTEM_EN = `You are the official assistant for NEXURA DATA, a data-recove
 
 Lab profile:
 - Certified Forensic Examiner (CFE).
-- Address: Longueuil, Quebec. Phone: 514 555-0199. Email: dossiers@nexuradata.ca.
+- Address: Longueuil, Quebec. Phone: 579 881-9254. Email: dossiers@nexuradata.ca.
 - Bilingual FR/EN. Serves Greater Montreal, Laval, Longueuil, Brossard, Repentigny, Terrebonne and the whole province via secure shipping.
 
 Hard commitments:
@@ -68,7 +68,7 @@ Response rules:
 2. Ask at most 2 targeted questions before giving a price range and a turnaround.
 3. Never promise a successful recovery. You may say "good odds", "favourable case", never "guaranteed".
 4. If the device makes noise, won't boot, or got wet: WARN IMMEDIATELY to stop plugging it in. Every attempt cuts the odds.
-5. Escalate to a human for: judicial forensics, active ransomware, life-critical emergency, police case, estate, attorney mandate. Give 514 555-0199 and dossiers@nexuradata.ca.
+5. Escalate to a human for: judicial forensics, active ransomware, life-critical emergency, police case, estate, attorney mandate. Give 579 881-9254 and dossiers@nexuradata.ca.
 6. If unsure, say "I'd rather have the examiner look at it directly. The assessment is free." Never guess a precise technical cause.
 7. You have no access to internal files, invoices, or live status. For those, redirect to the case-tracking form on the site.
 8. Stay under 6 sentences per reply unless the question requires more.
@@ -128,8 +128,8 @@ export const onRequest = async ({ request, env }) => {
         messages.push({
             role: "system",
             content: locale === "en"
-                ? "The user mentioned a sensitive topic (legal / forensic / emergency). After answering briefly, you MUST recommend they call 514 555-0199 or email dossiers@nexuradata.ca right away."
-                : "L'utilisateur a mentionné un sujet sensible (juridique / forensique / urgence). Après une brève réponse, tu DOIS recommander d'appeler le 514 555-0199 ou d'écrire à dossiers@nexuradata.ca sans tarder."
+                ? "The user mentioned a sensitive topic (legal / forensic / emergency). After answering briefly, you MUST recommend they call 579 881-9254 or email dossiers@nexuradata.ca right away."
+                : "L'utilisateur a mentionné un sujet sensible (juridique / forensique / urgence). Après une brève réponse, tu DOIS recommander d'appeler le 579 881-9254 ou d'écrire à dossiers@nexuradata.ca sans tarder."
         });
     }
 
@@ -137,8 +137,8 @@ export const onRequest = async ({ request, env }) => {
         return json({
             ok: false,
             message: locale === "en"
-                ? "Assistant offline. Please call 514 555-0199 or email dossiers@nexuradata.ca."
-                : "Assistant indisponible. Appelez le 514 555-0199 ou écrivez à dossiers@nexuradata.ca."
+                ? "Assistant offline. Please call 579 881-9254 or email dossiers@nexuradata.ca."
+                : "Assistant indisponible. Appelez le 579 881-9254 ou écrivez à dossiers@nexuradata.ca."
         }, { status: 503 });
     }
 
@@ -151,16 +151,16 @@ export const onRequest = async ({ request, env }) => {
 
         const reply = sanitize(out?.response || out?.result?.response || "", 4000).trim()
             || (locale === "en"
-                ? "Sorry, I couldn't form a clear answer. Please call 514 555-0199."
-                : "Désolé, je n'ai pas pu formuler de réponse claire. Appelez le 514 555-0199.");
+                ? "Sorry, I couldn't form a clear answer. Please call 579 881-9254."
+                : "Désolé, je n'ai pas pu formuler de réponse claire. Appelez le 579 881-9254.");
 
         return json({ ok: true, reply, escalate });
     } catch (err) {
         return json({
             ok: false,
             message: locale === "en"
-                ? "Assistant error. Please call 514 555-0199."
-                : "Erreur assistant. Appelez le 514 555-0199."
+                ? "Assistant error. Please call 579 881-9254."
+                : "Erreur assistant. Appelez le 579 881-9254."
         }, { status: 502 });
     }
 };

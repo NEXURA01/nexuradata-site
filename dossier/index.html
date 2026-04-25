@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Mon dossier | NEXURA DATA</title>
+    <meta name="description"
+        content="Portail client NEXURA DATA. Consultez l'état de votre dossier avec votre numéro et votre code d'accès.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0d0d0b">
+    <link rel="canonical" href="https://nexuradata.ca/dossier/">
+    <link rel="alternate" hreflang="fr-CA" href="https://nexuradata.ca/dossier/">
+    <link rel="alternate" hreflang="en-CA" href="https://nexuradata.ca/en/dossier/">
+    <link rel="alternate" hreflang="x-default" href="https://nexuradata.ca/en/dossier/">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/site.css">
+    <script src="/assets/js/site.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+        <div class="container">
+            <nav class="site-nav" aria-label="Navigation principale">
+                <a class="brand" href="/" aria-label="Accueil NEXURA DATA">
+                    <img src="/assets/icons/logo-petit.svg" alt="NEXURA DATA" class="brand-logo">
+                </a>
+                <div class="nav-links">
+                    <a href="/services-recuperation-forensique-montreal.html">Services</a>
+                    <a href="/tarifs-recuperation-donnees-montreal.html">Tarifs</a>
+                    <a href="/reserver-creneau-laboratoire.html">Réserver</a>
+                    <a href="/#contact">Contact</a>
+                    <a href="/en/dossier/" class="lang-switch" lang="en">EN</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main id="contenu" class="page-shell">
+        <div class="container">
+            <header class="page-hero">
+                <p class="eyebrow">Portail client</p>
+                <h1>Mon dossier</h1>
+                <p class="page-intro">
+                    Saisissez votre numéro de dossier et votre code d'accès pour consulter l'état actuel,
+                    la dernière mise à jour et toute demande de paiement active.
+                </p>
+            </header>
+
+            <div class="status-layout">
+                <section class="page-card status-gate">
+                    <h2>Accès sécurisé</h2>
+                    <form class="status-form" data-status-form data-status-endpoint="/api/status" novalidate>
+                        <label class="field">
+                            <span>Numéro de dossier</span>
+                            <input type="text" name="dossier" placeholder="Exemple : NX-2026-0412" autocomplete="off"
+                                required>
+                        </label>
+
+                        <label class="field">
+                            <span>Code d'accès</span>
+                            <input type="password" name="code" placeholder="Code transmis par NEXURA DATA"
+                                autocomplete="off" required>
+                        </label>
+
+                        <div class="form-actions">
+                            <button type="submit" class="button button-primary">Consulter le dossier</button>
+                            <a href="mailto:dossiers@nexuradata.ca?subject=Demande%20de%20suivi"
+                                class="button button-secondary">Demander un accès</a>
+                        </div>
+
+                        <p class="form-note">
+                            Aucun détail technique sensible n'est exposé via ce portail. En cas de doute,
+                            écrivez à dossiers@nexuradata.ca depuis l'adresse associée au dossier.
+                        </p>
+                        <p class="form-status" data-status-form-message aria-live="polite"></p>
+                    </form>
+                </section>
+
+                <aside class="contact-rail">
+                    <article class="contact-card">
+                        <h3>Lien direct</h3>
+                        <p>Vous pouvez ajouter <code>?caseId=NX-…</code> à l'URL pour pré-remplir votre numéro de
+                            dossier (le code reste à saisir manuellement).</p>
+                    </article>
+
+                    <article class="contact-card">
+                        <h3>Besoin urgent</h3>
+                        <a
+                            href="mailto:contact@nexuradata.ca?subject=Urgence%20sur%20un%20dossier">contact@nexuradata.ca</a>
+                        <p>Écrivez-nous si l'urgence a changé ou si une autorisation doit être confirmée.</p>
+                    </article>
+
+                    <article class="contact-card">
+                        <h3>Suivi détaillé</h3>
+                        <p>Le portail complet avec timeline et historique est disponible <a
+                                href="/suivi-dossier-client-montreal.html">ici</a>.</p>
+                    </article>
+                </aside>
+            </div>
+
+            <section class="status-panel page-card" data-status-panel hidden>
+                <div class="status-panel-head">
+                    <div>
+                        <p class="guide-meta">Dossier</p>
+                        <h2 data-status-case>NX-0000-0000</h2>
+                    </div>
+                    <div class="status-badge" data-status-badge>État</div>
+                </div>
+
+                <div class="status-meta">
+                    <p><strong>Dernière mise à jour&nbsp;:</strong> <span data-status-updated></span></p>
+                    <p><strong>Support&nbsp;:</strong> <span data-status-support></span></p>
+                    <p><strong>Prochaine étape&nbsp;:</strong> <span data-status-next></span></p>
+                </div>
+
+                <p class="status-summary" data-status-summary></p>
+
+                <section class="status-section" data-status-payments-section hidden>
+                    <div class="status-section-head">
+                        <div>
+                            <p class="guide-meta">Paiement</p>
+                            <h3>Soumission et règlement</h3>
+                        </div>
+                        <p class="status-section-note">Les acomptes ou soldes ouverts pour ce dossier apparaissent ici
+                            avec leur statut.</p>
+                    </div>
+                    <div class="status-payment-list" data-status-payments></div>
+                </section>
+
+                <div class="status-timeline" data-status-timeline></div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <section class="footer-top" aria-label="Identité et informations">
+                <img src="/assets/nexuradata-master.svg" alt="NEXURA DATA" class="footer-logo">
+            </section>
+            <section class="footer-grid" aria-label="Informations du site">
+                <div class="footer-block"><small>ACTIVITÉ</small>
+                    <p>Récupération de données, RAID, NAS, serveurs et forensique numérique.</p>
+                </div>
+                <div class="footer-block"><small>LOCALISATION</small>
+                    <p>Longueuil, Québec, Canada</p>
+                </div>
+                <div class="footer-block"><small>COURRIEL</small>
+                    <p><a href="mailto:contact@nexuradata.ca">contact@nexuradata.ca</a></p>
+                </div>
+                <div class="footer-block"><small>HORAIRE</small>
+                    <p>7 jours, 9 h à 18 h</p>
+                    <p>Urgences acceptées en tout temps</p>
+                </div>
+                <div class="footer-block"><small>CONFIDENTIALITÉ</small>
+                    <p><a href="mailto:privacy@nexuradata.ca">privacy@nexuradata.ca</a></p>
+                </div>
+            </section>
+            <section class="footer-legal" aria-label="Liens légaux">
+                <a href="/mentions-legales.html">Mentions légales</a>
+                <a href="/politique-confidentialite.html">Politique de confidentialité</a>
+                <a href="/engagements-conformite-quebec.html">Engagements Québec</a>
+                <a href="/conditions-intervention-paiement.html">Conditions d'intervention</a>
+            </section>
+        </div>
+    </footer>
+    <script src="/assets/js/cookie-consent.js" defer></script>
+    <script src="/assets/js/nexura-chat.js" defer></script>
+</body>
+
+</html>

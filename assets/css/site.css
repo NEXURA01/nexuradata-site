@@ -4168,9 +4168,14 @@ select {
   box-shadow: 0 12px 32px rgba(0,0,0,0.35);
 }
 .sticky-bar-item--call { flex: 1.2; }
-.sticky-bar-item--bot {
+.sticky-bar-item--wa {
   background: var(--os);
   color: var(--noir);
+  border-color: var(--os);
+}
+.sticky-bar-item--bot {
+  background: var(--noir);
+  color: var(--os);
 }
 .sticky-bar-label { letter-spacing: 0.02em; }
 @media (max-width: 720px) {

@@ -1730,8 +1730,9 @@ if (opsViewRoot) {
   if (typeof window === "undefined" || typeof document === "undefined") return;
 
   var PHONE = "+15145550199";
-  var SMS_BODY_FR = "Bonjour%2C%20j%27ai%20besoin%20d%27une%20%C3%A9valuation%20pour%20";
-  var SMS_BODY_EN = "Hi%2C%20I%20need%20an%20assessment%20for%20";
+  var WA_NUMBER = "15145550199";
+  var WA_BODY_FR = "Bonjour%2C%20j%27ai%20besoin%20d%27une%20%C3%A9valuation%20pour%20";
+  var WA_BODY_EN = "Hi%2C%20I%20need%20an%20assessment%20for%20";
 
   function init() {
     var path = window.location.pathname || "";
@@ -1742,9 +1743,9 @@ if (opsViewRoot) {
     var lang = (document.documentElement.lang || "fr").toLowerCase();
     var isFR = lang.indexOf("fr") === 0;
     var labels = isFR
-      ? { call: "Appeler", sms: "SMS", bot: "Assistant IA", aria: "Contacts rapides", ariaCall: "Appeler le laboratoire", ariaSms: "Envoyer un SMS", ariaBot: "Ouvrir l'assistant IA" }
-      : { call: "Call", sms: "Text", bot: "AI Assistant", aria: "Quick contacts", ariaCall: "Call the lab", ariaSms: "Send a text", ariaBot: "Open the AI assistant" };
-    var smsBody = isFR ? SMS_BODY_FR : SMS_BODY_EN;
+      ? { call: "Appeler", wa: "WhatsApp", bot: "Assistant IA", aria: "Contacts rapides", ariaCall: "Appeler le laboratoire", ariaWa: "Discuter sur WhatsApp", ariaBot: "Ouvrir l'assistant IA" }
+      : { call: "Call", wa: "WhatsApp", bot: "AI Assistant", aria: "Quick contacts", ariaCall: "Call the lab", ariaWa: "Chat on WhatsApp", ariaBot: "Open the AI assistant" };
+    var waBody = isFR ? WA_BODY_FR : WA_BODY_EN;
 
     var bar = document.createElement("div");
     bar.className = "sticky-bar";
@@ -1754,8 +1755,8 @@ if (opsViewRoot) {
       '<a class="sticky-bar-item sticky-bar-item--call" href="tel:' + PHONE + '" aria-label="' + labels.ariaCall + '">' +
       '<span class="sticky-call-dot" aria-hidden="true"></span>' +
       '<span class="sticky-bar-label">' + labels.call + '</span></a>' +
-      '<a class="sticky-bar-item sticky-bar-item--sms" href="sms:' + PHONE + '?body=' + smsBody + '" aria-label="' + labels.ariaSms + '">' +
-      '<span class="sticky-bar-label">' + labels.sms + '</span></a>' +
+      '<a class="sticky-bar-item sticky-bar-item--wa" href="https://wa.me/' + WA_NUMBER + '?text=' + waBody + '" target="_blank" rel="noopener" aria-label="' + labels.ariaWa + '">' +
+      '<span class="sticky-bar-label">' + labels.wa + '</span></a>' +
       '<button type="button" class="sticky-bar-item sticky-bar-item--bot" data-open-chat aria-label="' + labels.ariaBot + '">' +
       '<span class="sticky-bar-label">' + labels.bot + '</span></button>';
 

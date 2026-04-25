@@ -30,6 +30,10 @@ const shouldCopyRootEntry = (entry) => {
     return true;
   }
 
+  if (entry === "functions") {
+    return true;
+  }
+
   if (entry === ".well-known") {
     return true;
   }

@@ -144,11 +144,78 @@
             '<div><dt>' + L.delayLabel + '</dt><dd>' + L.delay[urgency] + '</dd></div>' +
             '<div><dt>' + L.successLabel + '</dt><dd>' + L.success[device] + '</dd></div>' +
             '</dl>' +
-            (note ? '<p class="quote-result-note"><strong>' + L.noteLabel + ' :</strong> ' + note + '</p>' : '');
+            (note ? '<p class="quote-result-note"><strong>' + L.noteLabel + ' :</strong> ' + note + '</p>' : '') +
+            '<form class="quote-capture" data-quote-capture novalidate>' +
+            '  <label class="quote-capture-field">' +
+            '    <span>' + (isFR ? "Recevoir cette estimation par courriel (facultatif)" : "Email this estimate to me (optional)") + '</span>' +
+            '    <input type="email" name="email" autocomplete="email" placeholder="vous@exemple.ca" maxlength="254">' +
+            '  </label>' +
+            '  <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">' +
+            '  <label class="quote-capture-consent"><input type="checkbox" name="consent" required><span>' +
+            (isFR
+                ? "J'accepte de recevoir un courriel de NEXURA DATA. Désinscription en un clic."
+                : "I agree to receive an email from NEXURA DATA. One-click unsubscribe.") +
+            '</span></label>' +
+            '  <button type="submit" class="button button-secondary">' +
+            (isFR ? "M'envoyer l'estimation" : "Email me the estimate") +
+            '</button>' +
+            '  <p class="quote-capture-status" data-quote-capture-status aria-live="polite"></p>' +
+            '</form>';
 
         if (ctaEl) {
             ctaEl.textContent = urgency === "emergency" ? L.ctaUrgent : L.ctaCase;
             ctaEl.setAttribute("href", "#contact");
+        }
+
+        var capForm = resultEl.querySelector("[data-quote-capture]");
+        if (capForm && !capForm.dataset.bound) {
+            capForm.dataset.bound = "1";
+            capForm.addEventListener("submit", function (ev) {
+                ev.preventDefault();
+                var statusEl = capForm.querySelector("[data-quote-capture-status]");
+                var emailInput = capForm.querySelector('[name="email"]');
+                var consent = capForm.querySelector('[name="consent"]').checked;
+                var hp = capForm.querySelector('[name="website"]').value;
+                var email = (emailInput.value || "").trim();
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+                    statusEl.textContent = isFR ? "Adresse courriel invalide." : "Invalid email address.";
+                    return;
+                }
+                if (!consent) {
+                    statusEl.textContent = isFR ? "Cocher la case de consentement." : "Please check the consent box.";
+                    return;
+                }
+                statusEl.textContent = isFR ? "Envoi…" : "Sending…";
+                fetch("/api/leads/capture", {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({
+                        email: email,
+                        locale: isFR ? "fr" : "en",
+                        source: "quote",
+                        device: device,
+                        issue: issue,
+                        urgency: urgency,
+                        estimateMinCad: min,
+                        estimateMaxCad: max,
+                        consent: true,
+                        website: hp
+                    })
+                })
+                    .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+                    .then(function (res) {
+                        if (res.ok && res.j.ok) {
+                            capForm.innerHTML = '<p class="quote-capture-success">' + (isFR
+                                ? "Merci. Nous garderons votre estimation au chaud — pas de spam, désinscription en un clic."
+                                : "Thank you. We'll keep your estimate handy — no spam, one-click unsubscribe.") + '</p>';
+                        } else {
+                            statusEl.textContent = isFR ? "Erreur. Réessayer plus tard." : "Error. Please try again later.";
+                        }
+                    })
+                    .catch(function () {
+                        statusEl.textContent = isFR ? "Réseau indisponible." : "Network unavailable.";
+                    });
+            });
         }
     }
 

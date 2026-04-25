@@ -4641,3 +4641,61 @@ select {
   border-radius: 0.3rem;
   color: var(--os);
 }
+
+/* ─── Quote estimator — email capture ─────────────────────────────────── */
+.quote-capture {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--os-dim);
+    display: grid;
+    gap: 0.75rem;
+}
+.quote-capture-field {
+    display: grid;
+    gap: 0.35rem;
+}
+.quote-capture-field span {
+    font-size: 0.85rem;
+    color: var(--os);
+    opacity: 0.85;
+}
+.quote-capture-field input[type="email"] {
+    background: var(--os-ghost);
+    border: 1px solid var(--os-dim);
+    border-radius: 1rem 1rem 1rem 0.35rem;
+    padding: 0.65rem 0.85rem;
+    color: var(--os);
+    font: inherit;
+}
+.quote-capture-field input[type="email"]:focus {
+    outline: none;
+    border-color: var(--os);
+}
+.quote-capture-consent {
+    display: flex;
+    gap: 0.55rem;
+    align-items: flex-start;
+    font-size: 0.82rem;
+    color: var(--os);
+    opacity: 0.85;
+    line-height: 1.45;
+}
+.quote-capture-consent input[type="checkbox"] {
+    margin-top: 0.18rem;
+    accent-color: var(--os);
+}
+.quote-capture-status {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--color-warning);
+    min-height: 1em;
+}
+.quote-capture-success {
+    margin: 0;
+    padding: 0.65rem 0.85rem;
+    background: var(--os-ghost);
+    border-radius: 1rem 1rem 1rem 0.35rem;
+    color: var(--os);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}

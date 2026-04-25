@@ -2007,6 +2007,99 @@
                 node.querySelector("[data-r-gen]").addEventListener("click", gen);
                 return node;
             }
+        },
+
+        // ─── Tool : Win-back leads abandonnés ──────────────────────────────
+        winback: {
+            title: "Relances leads abandonnés",
+            build: function () {
+                var node = el(
+                    '<div class="ops-tool ops-tool--winback">' +
+                    '<header class="ops-tool-head"><h2>Relances leads abandonnés</h2><p>Envoie un courriel de récupération aux personnes ayant consulté une estimation sans ouvrir de dossier (≥ 24 h, ≤ 14 jours, jamais relancées). 1 envoi maximum par lead, désinscription en un clic.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Secret opérateur (x-ops-secret)</span><input type="password" data-w="secret" placeholder="ACCESS_CODE_SECRET" autocomplete="off"></label>' +
+                    '<label class="field"><span>Lot maximum</span><input type="number" min="1" max="100" value="25" data-w="batch"></label>' +
+                    '<label class="field"><span>Âge maximum (jours)</span><input type="number" min="1" max="30" value="14" data-w="age"></label>' +
+                    '</div>' +
+                    '<div class="ops-tool-actions">' +
+                    '<button type="button" class="button button-secondary" data-w-dry>Aperçu (dry-run)</button>' +
+                    '<button type="button" class="button button-primary" data-w-go>Envoyer la vague</button>' +
+                    '<span class="ops-out-meta" data-w-status></span>' +
+                    '</div>' +
+                    '<output class="ops-tool-out" data-w-out hidden></output>' +
+                    '<p class="ops-out-note">Le secret est envoyé via l\'en-tête HTTP <code>x-ops-secret</code> et n\'est jamais stocké côté navigateur. Les leads convertis (dossier ouvert avec le même courriel) sont ignorés automatiquement.</p>' +
+                    '</div>'
+                );
+
+                var status = node.querySelector("[data-w-status]");
+                var out = node.querySelector("[data-w-out]");
+
+                async function call(dryRun) {
+                    var secret = node.querySelector('[data-w="secret"]').value || "";
+                    var batch = parseInt(node.querySelector('[data-w="batch"]').value, 10) || 25;
+                    var age = parseInt(node.querySelector('[data-w="age"]').value, 10) || 14;
+                    if (!secret) {
+                        status.textContent = "Secret requis.";
+                        status.style.color = "#8f3f2f";
+                        return;
+                    }
+                    status.textContent = dryRun ? "Aperçu en cours…" : "Envoi en cours…";
+                    status.style.color = "#1c1c19";
+                    try {
+                        var r = await fetch("/api/leads/recover", {
+                            method: "POST",
+                            headers: {
+                                "content-type": "application/json",
+                                "x-ops-secret": secret
+                            },
+                            body: JSON.stringify({ dryRun: dryRun, batch: batch, maxAgeDays: age })
+                        });
+                        var j = await r.json();
+                        if (!r.ok || !j.ok) {
+                            status.textContent = "Erreur : " + (j.error || r.status);
+                            status.style.color = "#8f3f2f";
+                            return;
+                        }
+                        out.hidden = false;
+                        if (dryRun) {
+                            status.textContent = j.eligible + " lead(s) éligible(s)";
+                            status.style.color = "#1c1c19";
+                            var rows = (j.sample || []).map(function (s) {
+                                return '<tr><td><code>' + s.email + '</code></td><td>' + (s.locale || "fr") + '</td><td>' + (s.device || "—") + ' / ' + (s.issue || "—") + '</td><td>' + (s.captured_at || "") + '</td></tr>';
+                            }).join("");
+                            out.innerHTML =
+                                '<p class="ops-out-label">Aperçu — ' + j.eligible + ' lead(s) éligibles</p>' +
+                                (rows
+                                    ? '<table class="ops-out-rows"><thead><tr><th>Courriel</th><th>Langue</th><th>Cas</th><th>Capturé</th></tr></thead><tbody>' + rows + '</tbody></table>'
+                                    : '<p class="ops-out-meta">Aucun échantillon à montrer.</p>');
+                        } else {
+                            status.textContent = "Vague envoyée : " + j.sent + " envoi(s) · " + j.skipped + " ignoré(s)";
+                            status.style.color = "#1c1c19";
+                            var failRows = (j.failures || []).map(function (f) {
+                                return '<tr><td><code>' + f.email + '</code></td><td>' + f.reason + '</td></tr>';
+                            }).join("");
+                            out.innerHTML =
+                                '<dl class="ops-out-table">' +
+                                '<div><dt>Éligibles</dt><dd>' + j.eligible + '</dd></div>' +
+                                '<div><dt>Envoyés</dt><dd>' + j.sent + '</dd></div>' +
+                                '<div><dt>Ignorés (convertis ou désinscrits)</dt><dd>' + j.skipped + '</dd></div>' +
+                                '<div><dt>Échecs</dt><dd>' + (j.failures || []).length + '</dd></div>' +
+                                '</dl>' +
+                                (failRows ? '<p class="ops-out-label" style="margin-top:1rem">Détail des échecs</p><table class="ops-out-rows"><thead><tr><th>Courriel</th><th>Raison</th></tr></thead><tbody>' + failRows + '</tbody></table>' : '');
+                        }
+                    } catch (e) {
+                        status.textContent = "Erreur réseau : " + e.message;
+                        status.style.color = "#8f3f2f";
+                    }
+                }
+
+                node.querySelector("[data-w-dry]").addEventListener("click", function () { call(true); });
+                node.querySelector("[data-w-go]").addEventListener("click", function () {
+                    if (!confirm("Confirmer l'envoi de la vague de relance ? (1 courriel max par lead, irréversible)")) return;
+                    call(false);
+                });
+                return node;
+            }
         }
     };
 

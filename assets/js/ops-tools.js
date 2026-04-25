@@ -1119,6 +1119,12 @@
                         if (del) del.addEventListener("click", function () {
                             if (confirm("Marquer la facture " + inv.ref + " comme payée et la retirer ?")) {
                                 saveList(getList().filter(function (x) { return x.ref !== inv.ref; }));
+                                // Archive vers nxd_paid_invoices (alimente le tableau de bord)
+                                try {
+                                    var paid = JSON.parse(localStorage.getItem("nxd_paid_invoices") || "[]");
+                                    paid.push({ ref: inv.ref, client: inv.client, amount: inv.amount, issuedAt: inv.date, paidAt: new Date().toISOString() });
+                                    localStorage.setItem("nxd_paid_invoices", JSON.stringify(paid));
+                                } catch (e) { /* ignore */ }
                                 render();
                             }
                         });

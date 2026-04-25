@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Tableau de bord cash-flow — Console NEXURADATA</title>
+    <meta name="description" content="Tableau de bord cash-flow interne NEXURA DATA.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#141618">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <script src="../assets/js/site.js" defer></script>
+    <script src="../assets/js/ops-dashboard.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Navigation opérateur">
+            <a class="brand" href="../index.html" aria-label="NEXURA DATA, retour à l'accueil">
+                <img src="../assets/icons/logo-petit.svg" alt="NEXURA DATA" width="200" height="24">
+            </a>
+            <div class="nav-links">
+                <a href="dashboard.html" aria-current="page">Tableau de bord</a>
+                <a href="tools.html">Outils</a>
+                <a href="../index.html" class="button button-outline button-small">Site public</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="contenu" class="page-shell">
+        <div class="container">
+            <header class="page-hero ops-hero">
+                <p class="eyebrow">Console interne · Cash-flow</p>
+                <h1>Tableau de bord</h1>
+                <p class="page-intro">
+                    Vue 360° sur les liquidités, les dossiers actifs et les relances en cours.
+                    Les données proviennent de tes outils locaux (factures impayées + journal de session)
+                    et se rafraîchissent en temps réel.
+                </p>
+            </header>
+
+            <section class="ops-dash-kpis" aria-label="Indicateurs clés">
+                <article class="ops-kpi" data-kpi="ar">
+                    <p class="ops-kpi-label">À recevoir</p>
+                    <p class="ops-kpi-value" data-k="ar">—</p>
+                    <p class="ops-kpi-sub" data-k="ar-count">0 facture</p>
+                </article>
+                <article class="ops-kpi" data-kpi="overdue">
+                    <p class="ops-kpi-label">En retard</p>
+                    <p class="ops-kpi-value" data-k="overdue">—</p>
+                    <p class="ops-kpi-sub" data-k="overdue-count">0 facture</p>
+                </article>
+                <article class="ops-kpi" data-kpi="critical">
+                    <p class="ops-kpi-label">Critique (≥ 14 j)</p>
+                    <p class="ops-kpi-value" data-k="critical">—</p>
+                    <p class="ops-kpi-sub" data-k="critical-count">0 facture</p>
+                </article>
+                <article class="ops-kpi" data-kpi="avg">
+                    <p class="ops-kpi-label">Panier moyen</p>
+                    <p class="ops-kpi-value" data-k="avg">—</p>
+                    <p class="ops-kpi-sub">par facture en attente</p>
+                </article>
+                <article class="ops-kpi" data-kpi="dso">
+                    <p class="ops-kpi-label">DSO moyen</p>
+                    <p class="ops-kpi-value" data-k="dso">—</p>
+                    <p class="ops-kpi-sub">jours depuis émission</p>
+                </article>
+                <article class="ops-kpi" data-kpi="sessions">
+                    <p class="ops-kpi-label">Sessions actives</p>
+                    <p class="ops-kpi-value" data-k="sessions">—</p>
+                    <p class="ops-kpi-sub" data-k="sessions-sub">événements 30 j</p>
+                </article>
+            </section>
+
+            <section class="ops-dash-grid">
+                <article class="ops-dash-card">
+                    <header>
+                        <h2>À recevoir — par âge</h2>
+                        <p>Répartition du portefeuille de créances.</p>
+                    </header>
+                    <div class="ops-aging" data-aging>
+                        <div class="ops-aging-row" data-bucket="0-7"><span class="ops-aging-l">0–6 jours</span>
+                            <div class="ops-aging-bar"><span></span></div><span class="ops-aging-v">—</span>
+                        </div>
+                        <div class="ops-aging-row" data-bucket="7-14"><span class="ops-aging-l">7–13 jours</span>
+                            <div class="ops-aging-bar"><span></span></div><span class="ops-aging-v">—</span>
+                        </div>
+                        <div class="ops-aging-row" data-bucket="14-30"><span class="ops-aging-l">14–29 jours</span>
+                            <div class="ops-aging-bar"><span></span></div><span class="ops-aging-v">—</span>
+                        </div>
+                        <div class="ops-aging-row" data-bucket="30+"><span class="ops-aging-l">30 jours et +</span>
+                            <div class="ops-aging-bar"><span></span></div><span class="ops-aging-v">—</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="ops-dash-card">
+                    <header>
+                        <h2>Top 5 créances</h2>
+                        <p>À traiter en priorité, montant décroissant.</p>
+                    </header>
+                    <ol class="ops-top5" data-top5>
+                        <li class="ops-top5-empty">Aucune créance enregistrée. Ouvre l'outil <a
+                                href="tools.html">Relances</a>.</li>
+                    </ol>
+                </article>
+
+                <article class="ops-dash-card">
+                    <header>
+                        <h2>Encaissé — 30 derniers jours</h2>
+                        <p>Calculé à partir des factures marquées « payée » dans le journal.</p>
+                    </header>
+                    <div class="ops-spark" data-spark>
+                        <p class="ops-spark-empty">Pas encore de données. Marque une facture comme payée pour
+                            commencer.</p>
+                    </div>
+                </article>
+
+                <article class="ops-dash-card">
+                    <header>
+                        <h2>Actions rapides</h2>
+                        <p>Lance un outil sans quitter le tableau de bord.</p>
+                    </header>
+                    <ul class="ops-quick" role="list">
+                        <li><a href="tools.html#relances" class="button button-primary">Relancer une
+                                facture</a></li>
+                        <li><a href="tools.html#forfaits" class="button button-secondary">Vendre un add-on</a></li>
+                        <li><a href="tools.html#stripe" class="button button-outline">Lien Stripe instantané</a></li>
+                        <li><a href="tools.html#crypto" class="button button-outline">Facture BTC / USDC</a></li>
+                    </ul>
+                </article>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer ops-footer">
+        <div class="container">
+            <p>Console interne — données stockées localement (localStorage). Aucune transmission externe.</p>
+        </div>
+    </footer>
+
+    <script src="/assets/js/cookie-consent.js" defer></script>
+</body>
+
+</html>

@@ -577,6 +577,65 @@
       </div>
     </section>
 
+    <section class="section section-lined compare-section" aria-labelledby="compare-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Why a real lab</p>
+          <h2 id="compare-title">Why not your IT guy? Why not Geek Squad?</h2>
+          <p class="section-intro">
+            Three good intentions, three very different outcomes. The honest comparison, no flattery for anyone.
+          </p>
+        </div>
+
+        <div class="compare-grid" data-reveal>
+          <article class="page-card compare-card">
+            <p class="compare-tag">Option A</p>
+            <h3>Your usual technician</h3>
+            <p class="compare-lead">The friend who knows a thing or two, or the local shop.</p>
+            <ul class="compare-list">
+              <li class="is-yes">Cheap, sometimes free</li>
+              <li class="is-no">Plugs the drive into Windows to "take a look" — makes physical cases worse</li>
+              <li class="is-no">No controlled environment (dust, static)</li>
+              <li class="is-no">No chain of custody — useless in court</li>
+            </ul>
+            <p class="compare-verdict">Good for: reinstalling Windows. Risky for: your data.</p>
+          </article>
+
+          <article class="page-card compare-card">
+            <p class="compare-tag">Option B</p>
+            <h3>Big-box chain (Geek&nbsp;Squad, etc.)</h3>
+            <p class="compare-lead">Counter in store, file shipped elsewhere.</p>
+            <ul class="compare-list">
+              <li class="is-yes">Convenient, available everywhere</li>
+              <li class="is-no">Opaque outsourcing to third-party labs</li>
+              <li class="is-no">3–6 week turnaround, little communication</li>
+              <li class="is-no">Non-refundable diagnostic fees, even on failure</li>
+            </ul>
+            <p class="compare-verdict">Good for: device warranties. Risky for: your timeline.</p>
+          </article>
+
+          <article class="page-card compare-card compare-card--us">
+            <p class="compare-tag">Option C</p>
+            <h3>NEXURA&nbsp;DATA</h3>
+            <p class="compare-lead">Certified examiner (CFE), single lab in Longueuil.</p>
+            <ul class="compare-list">
+              <li class="is-yes">Free assessment, firm price before any work</li>
+              <li class="is-yes">No data recovered, no invoice</li>
+              <li class="is-yes">Signed chain of custody, court-admissible</li>
+              <li class="is-yes">4.2-day average turnaround, encrypted delivery</li>
+              <li class="is-yes">Full confidentiality, NDA on request</li>
+            </ul>
+            <p class="compare-verdict">Good for: every case that actually matters.</p>
+          </article>
+        </div>
+
+        <p class="compare-foot">
+          Golden rule: if the device makes noise, won't boot, or holds data you can't afford to lose,
+          don't try anything else. Each extra plug-in cuts your odds.
+        </p>
+      </div>
+    </section>
+
     <section class="section section-lined" aria-labelledby="trust-title">
       <div class="container">
         <div class="section-heading">
@@ -776,6 +835,33 @@
         </div>
       </div>
     </section>
+
+    <section class="section section-lined newsletter-section" aria-labelledby="newsletter-title">
+      <div class="container newsletter-container">
+        <div class="newsletter-copy">
+          <p class="eyebrow">Newsletter</p>
+          <h2 id="newsletter-title">One note a month, never more.</h2>
+          <p>
+            Real cases solved, reflexes to protect your data, active ransomware alerts in Quebec.
+            No ads, no sharing. One-click unsubscribe.
+          </p>
+        </div>
+        <form class="newsletter-form" data-newsletter data-locale="en" data-source="footer-home-en" novalidate>
+          <label class="newsletter-label" for="newsletter-email-en">Your email</label>
+          <div class="newsletter-row">
+            <input id="newsletter-email-en" type="email" name="email" required autocomplete="email"
+              placeholder="you@example.com" class="newsletter-input">
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="newsletter-hp" aria-hidden="true">
+            <button type="submit" class="button button-primary newsletter-submit">Subscribe</button>
+          </div>
+          <p class="newsletter-consent">
+            By submitting this form, I agree to receive occasional emails from NEXURA DATA.
+            I can unsubscribe at any time. Quebec Law 25 compliant.
+          </p>
+          <p class="newsletter-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -828,12 +914,22 @@
       </section>
     </div>
   </footer>
-  <a class="sticky-call" href="tel:+15145550199" aria-label="Call the NEXURA DATA lab">
-    <span class="sticky-call-dot" aria-hidden="true"></span>
-    <span class="sticky-call-label">Talk to an examiner</span>
-    <span class="sticky-call-num">514&nbsp;555&#8209;0199</span>
-  </a>
+  <div class="sticky-bar" role="group" aria-label="Quick contacts">
+    <a class="sticky-bar-item sticky-bar-item--call" href="tel:+15145550199" aria-label="Call the lab">
+      <span class="sticky-call-dot" aria-hidden="true"></span>
+      <span class="sticky-bar-label">Call</span>
+    </a>
+    <a class="sticky-bar-item sticky-bar-item--sms"
+      href="sms:+15145550199?body=Hi%2C%20I%20need%20an%20assessment%20for%20" aria-label="Text the lab">
+      <span class="sticky-bar-label">Text</span>
+    </a>
+    <button type="button" class="sticky-bar-item sticky-bar-item--bot" data-open-chat aria-label="Open AI assistant">
+      <span class="sticky-bar-label">AI assistant</span>
+    </button>
+  </div>
   <script src="/assets/js/cookie-consent.js" defer></script>
+  <script src="/assets/js/nexura-chat.js" defer></script>
+  <script src="/assets/js/newsletter.js" defer></script>
 </body>
 
 </html>

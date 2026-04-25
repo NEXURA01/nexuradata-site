@@ -585,6 +585,66 @@
       </div>
     </section>
 
+    <section class="section section-lined compare-section" aria-labelledby="compare-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Pourquoi un laboratoire</p>
+          <h2 id="compare-title">Pourquoi pas votre informaticien&nbsp;? Pourquoi pas Geek Squad&nbsp;?</h2>
+          <p class="section-intro">
+            Trois bonnes intentions, trois résultats très différents. Voici la comparaison honnête, sans flatterie pour
+            personne.
+          </p>
+        </div>
+
+        <div class="compare-grid" data-reveal>
+          <article class="page-card compare-card">
+            <p class="compare-tag">Option A</p>
+            <h3>Votre technicien habituel</h3>
+            <p class="compare-lead">L’ami qui s’y connaît, ou la boutique du coin.</p>
+            <ul class="compare-list">
+              <li class="is-yes">Bon marché, parfois gratuit</li>
+              <li class="is-no">Branche le disque sur Windows pour «&nbsp;voir&nbsp;» : aggrave les cas physiques</li>
+              <li class="is-no">Aucun environnement contrôlé (poussière, statique)</li>
+              <li class="is-no">Aucune chaîne de possession — inutilisable en cour</li>
+            </ul>
+            <p class="compare-verdict">Bon pour&nbsp;: réinstaller Windows. Risqué pour&nbsp;: vos données.</p>
+          </article>
+
+          <article class="page-card compare-card">
+            <p class="compare-tag">Option B</p>
+            <h3>Chaîne grand public (Geek&nbsp;Squad, etc.)</h3>
+            <p class="compare-lead">Comptoir en magasin, dossier envoyé ailleurs.</p>
+            <ul class="compare-list">
+              <li class="is-yes">Pratique, accessible partout</li>
+              <li class="is-no">Sous-traitance opaque vers laboratoires tiers</li>
+              <li class="is-no">Délais de 3–6 semaines, peu de communication</li>
+              <li class="is-no">Frais de diagnostic non remboursables, même en cas d’échec</li>
+            </ul>
+            <p class="compare-verdict">Bon pour&nbsp;: garanties d’appareil. Risqué pour&nbsp;: vos délais.</p>
+          </article>
+
+          <article class="page-card compare-card compare-card--us">
+            <p class="compare-tag">Option C</p>
+            <h3>NEXURA&nbsp;DATA</h3>
+            <p class="compare-lead">Examinateur certifié (CFE), labo unique à Longueuil.</p>
+            <ul class="compare-list">
+              <li class="is-yes">Diagnostic gratuit, prix ferme avant toute manipulation</li>
+              <li class="is-yes">Pas de récupération, pas de facture</li>
+              <li class="is-yes">Chaîne de possession signée, recevable en cour</li>
+              <li class="is-yes">Délai moyen 4,2 jours, livraison chiffrée</li>
+              <li class="is-yes">Confidentialité totale, NDA sur demande</li>
+            </ul>
+            <p class="compare-verdict">Bon pour&nbsp;: chaque dossier qui compte vraiment.</p>
+          </article>
+        </div>
+
+        <p class="compare-foot">
+          Règle d’or&nbsp;: si l’appareil fait du bruit, ne démarre plus, ou contient des données que vous ne pouvez pas
+          perdre, n’essayez rien d’autre. Chaque branchement supplémentaire réduit vos chances.
+        </p>
+      </div>
+    </section>
+
     <section class="section section-lined" aria-labelledby="trust-title">
       <div class="container">
         <div class="section-heading">
@@ -788,6 +848,33 @@
         </div>
       </div>
     </section>
+
+    <section class="section section-lined newsletter-section" aria-labelledby="newsletter-title">
+      <div class="container newsletter-container">
+        <div class="newsletter-copy">
+          <p class="eyebrow">Infolettre</p>
+          <h2 id="newsletter-title">Une note par mois, jamais plus.</h2>
+          <p>
+            Cas réels dépannés, réflexes pour protéger vos données, alertes ransomware actives au Québec.
+            Aucune publicité, aucun partage. Désinscription en un clic.
+          </p>
+        </div>
+        <form class="newsletter-form" data-newsletter data-locale="fr" data-source="footer-home-fr" novalidate>
+          <label class="newsletter-label" for="newsletter-email-fr">Votre courriel</label>
+          <div class="newsletter-row">
+            <input id="newsletter-email-fr" type="email" name="email" required autocomplete="email"
+              placeholder="vous@exemple.ca" class="newsletter-input">
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="newsletter-hp" aria-hidden="true">
+            <button type="submit" class="button button-primary newsletter-submit">M’inscrire</button>
+          </div>
+          <p class="newsletter-consent">
+            En soumettant ce formulaire, j’accepte de recevoir des courriels occasionnels de NEXURA DATA.
+            Je peux me désinscrire à tout moment. Conforme à la Loi 25.
+          </p>
+          <p class="newsletter-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -840,12 +927,24 @@
       </section>
     </div>
   </footer>
-  <a class="sticky-call" href="tel:+15145550199" aria-label="Appeler le laboratoire NEXURA DATA">
-    <span class="sticky-call-dot" aria-hidden="true"></span>
-    <span class="sticky-call-label">Parler à un examinateur</span>
-    <span class="sticky-call-num">514&nbsp;555&#8209;0199</span>
-  </a>
+  <div class="sticky-bar" role="group" aria-label="Contacts rapides">
+    <a class="sticky-bar-item sticky-bar-item--call" href="tel:+15145550199" aria-label="Appeler le laboratoire">
+      <span class="sticky-call-dot" aria-hidden="true"></span>
+      <span class="sticky-bar-label">Appeler</span>
+    </a>
+    <a class="sticky-bar-item sticky-bar-item--sms"
+      href="sms:+15145550199?body=Bonjour%2C%20j%27ai%20besoin%20d%27une%20%C3%A9valuation%20pour%20"
+      aria-label="Envoyer un SMS">
+      <span class="sticky-bar-label">SMS</span>
+    </a>
+    <button type="button" class="sticky-bar-item sticky-bar-item--bot" data-open-chat
+      aria-label="Ouvrir l'assistant IA">
+      <span class="sticky-bar-label">Assistant IA</span>
+    </button>
+  </div>
   <script src="/assets/js/cookie-consent.js" defer></script>
+  <script src="/assets/js/nexura-chat.js" defer></script>
+  <script src="/assets/js/newsletter.js" defer></script>
 </body>
 
 </html>

@@ -585,6 +585,245 @@
             }
         },
 
+        // ─── Tool 7e : SMART analyzer ─────────────────────────────────
+        smart: {
+            title: "Analyseur SMART",
+            build: function () {
+                var critical = {
+                    5: { name: "Reallocated Sectors Count", threshold: 1, level: "critical" },
+                    187: { name: "Reported Uncorrectable Errors", threshold: 1, level: "critical" },
+                    188: { name: "Command Timeout", threshold: 1, level: "warn" },
+                    197: { name: "Current Pending Sectors", threshold: 1, level: "critical" },
+                    198: { name: "Offline Uncorrectable", threshold: 1, level: "critical" },
+                    194: { name: "Temperature", threshold: 55, level: "warn" },
+                    9: { name: "Power-On Hours", threshold: 0, level: "info" },
+                    241: { name: "Total LBAs Written", threshold: 0, level: "info" }
+                };
+                var node = el(
+                    '<div class="ops-tool ops-tool--smart">' +
+                    '<header class="ops-tool-head"><h2>Analyseur SMART</h2><p>Colle la sortie complète de <code>smartctl -a /dev/sdX</code>. Verdict immédiat sur les attributs critiques. Aucun envoi serveur.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field" style="grid-column:1/-1;"><span>Sortie smartctl -a</span><textarea data-sm="raw" rows="10" placeholder="Device Model:     ST2000DM008-2FR102&#10;Serial Number:    WFL1234A&#10;...&#10;ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE&#10;  5 Reallocated_Sector_Ct   0x0033   100   100   010    Pre-fail  Always       -       0&#10;..."></textarea></label>' +
+                    '</div>' +
+                    '<output class="ops-tool-out" data-sm-out></output>' +
+                    '</div>'
+                );
+                function parse(raw) {
+                    var lines = raw.split(/\r?\n/);
+                    var found = {}, model = null, serial = null, ata = false;
+                    for (var i = 0; i < lines.length; i++) {
+                        var l = lines[i].trim();
+                        if (/^Device Model:/i.test(l)) model = l.split(":").slice(1).join(":").trim();
+                        if (/^Serial Number:/i.test(l)) serial = l.split(":").slice(1).join(":").trim();
+                        var m = l.match(/^(\d{1,3})\s+(\S+)\s+0x[0-9a-fA-F]+\s+\d+\s+\d+\s+\d+\s+\S+\s+\S+\s+\S+\s+(.+)$/);
+                        if (m) {
+                            var id = parseInt(m[1], 10);
+                            var rawval = m[3].trim().split(/\s+/)[0];
+                            var num = parseInt(rawval, 10);
+                            if (!isNaN(num)) { found[id] = { name: m[2], raw: num }; ata = true; }
+                        }
+                    }
+                    return { model: model, serial: serial, attrs: found, ata: ata };
+                }
+                function build() {
+                    var raw = node.querySelector('[data-sm="raw"]').value;
+                    var out = node.querySelector("[data-sm-out]");
+                    if (!raw.trim()) { out.innerHTML = '<p class="ops-out-label">En attente de la sortie smartctl…</p>'; return; }
+                    var p = parse(raw);
+                    if (!p.ata) { out.innerHTML = '<p class="ops-out-label">Impossible de lire la table SMART. Colle la sortie complète de <code>smartctl -a</code>.</p>'; return; }
+                    var verdict = "healthy", reasons = [], rows = [];
+                    Object.keys(critical).forEach(function (idStr) {
+                        var id = parseInt(idStr, 10), a = p.attrs[id], def = critical[id];
+                        if (!a) return;
+                        var flag = "ok";
+                        if (def.level === "critical" && a.raw >= def.threshold && a.raw > 0) {
+                            flag = "critical"; verdict = "critical";
+                            reasons.push(def.name + " = " + a.raw);
+                        } else if (def.level === "warn" && a.raw >= def.threshold) {
+                            flag = "warn"; if (verdict !== "critical") verdict = "warn";
+                            reasons.push(def.name + " = " + a.raw);
+                        }
+                        rows.push('<div data-flag="' + flag + '"><dt>' + id + ' · ' + def.name + '</dt><dd>' + a.raw.toLocaleString("fr-CA") + '</dd></div>');
+                    });
+                    var verdictMap = {
+                        healthy: { label: "Disque sain", note: "Aucun attribut critique en alerte. Imagerie standard (préset « Disque sain » de l'outil ddrescue)." },
+                        warn: { label: "Surveillance requise", note: "Au moins un attribut en alerte basse. Imagerie immédiate avant manipulation client (préset « degraded »). Documenter au journal de session." },
+                        critical: { label: "Disque mourant — agir vite", note: "Attributs critiques actifs. NE PAS RÉ-ALIMENTER inutilement. Imagerie d'urgence avec préset « failing », passes courtes, jamais d'écriture sur l'original." }
+                    };
+                    var v = verdictMap[verdict];
+                    out.innerHTML =
+                        '<dl class="ops-out-table">' +
+                        (p.model ? '<div><dt>Modèle</dt><dd>' + p.model + '</dd></div>' : '') +
+                        (p.serial ? '<div><dt>S/N</dt><dd>' + p.serial + '</dd></div>' : '') +
+                        '<div class="is-total ops-sm-verdict ops-sm-verdict--' + verdict + '"><dt>Verdict</dt><dd>' + v.label + '</dd></div>' +
+                        '</dl>' +
+                        '<dl class="ops-out-table ops-sm-attrs">' + rows.join("") + '</dl>' +
+                        '<p class="ops-out-note"><strong>Action :</strong> ' + v.note + '</p>' +
+                        (reasons.length ? '<p class="ops-out-note">Motifs : ' + reasons.join(" · ") + '</p>' : '');
+                }
+                node.addEventListener("input", build);
+                build();
+                return node;
+            }
+        },
+
+        // ─── Tool 7f : Symptom triage ─────────────────────────────────
+        triage: {
+            title: "Triage symptômes",
+            build: function () {
+                var questions = [
+                    {
+                        id: "device", label: "Type d'appareil", type: "select", options: [
+                            { v: "hdd", l: "HDD (disque mécanique)" },
+                            { v: "ssd", l: "SSD / NVMe" },
+                            { v: "raid", l: "RAID / NAS" },
+                            { v: "phone", l: "Téléphone / tablette" },
+                            { v: "usb", l: "USB / carte SD" }
+                        ]
+                    },
+                    {
+                        id: "detected", label: "Détecté par le système ?", type: "radio", options: [
+                            { v: "yes", l: "Oui" }, { v: "intermittent", l: "Par intermittence" }, { v: "no", l: "Non" }
+                        ]
+                    },
+                    {
+                        id: "noise", label: "Bruit anormal ?", type: "radio", options: [
+                            { v: "none", l: "Aucun" }, { v: "click", l: "Cliquetis / claquements" }, { v: "buzz", l: "Bourdonnement / rotation lente" }, { v: "silent", l: "Aucune rotation" }
+                        ]
+                    },
+                    {
+                        id: "trauma", label: "Traumatisme récent ?", type: "radio", options: [
+                            { v: "none", l: "Aucun" }, { v: "drop", l: "Chute / choc" }, { v: "liquid", l: "Liquide" }, { v: "fire", l: "Feu / surchauffe" }, { v: "power", l: "Surtension électrique" }
+                        ]
+                    }
+                ];
+
+                function diagnose(a) {
+                    var d = a.device, det = a.detected, n = a.noise, t = a.trauma;
+                    var go = "go", risk = "moyen", protocol = "hdd_logical", cause = "Cause indéterminée", actions = [];
+                    if (d === "hdd") {
+                        if (n === "click" || n === "silent") {
+                            cause = "Panne mécanique probable (têtes ou moteur)";
+                            protocol = "hdd_mechanical"; risk = "élevé"; go = "stop";
+                            actions.push("NE PAS rebrancher le disque");
+                            actions.push("Diagnostic en hotte ISO 5 requis");
+                        } else if (t === "drop") {
+                            cause = "Choc mécanique, têtes potentiellement déplacées";
+                            protocol = "hdd_mechanical"; risk = "élevé"; go = "stop";
+                        } else if (t === "liquid" || t === "fire") {
+                            cause = "Dégât physique — inspection PCB et plateaux requise";
+                            protocol = "hdd_mechanical"; risk = "très élevé"; go = "stop";
+                        } else if (det === "yes") {
+                            cause = "Disque détecté — problème logique probable";
+                            protocol = "hdd_logical"; risk = "faible"; go = "go";
+                        } else if (det === "intermittent") {
+                            cause = "Disque dégradé, secteurs défectueux probables";
+                            protocol = "hdd_mechanical"; risk = "moyen"; go = "caution";
+                            actions.push("Imagerie ddrescue préset « degraded » immédiate");
+                        } else {
+                            cause = "Disque non détecté — PCB ou firmware probable";
+                            protocol = "hdd_mechanical"; risk = "élevé"; go = "caution";
+                        }
+                    } else if (d === "ssd") {
+                        if (det === "no") {
+                            cause = "Contrôleur SSD probablement HS — chip-off NAND requis";
+                            protocol = "ssd_dead"; risk = "très élevé"; go = "caution";
+                            actions.push("Identifier le contrôleur (SandForce, Phison, SMI…)");
+                            actions.push("Prévenir le client : taux de succès 40-65 %");
+                        } else if (t === "power") {
+                            cause = "Surtension — contrôleur probablement endommagé";
+                            protocol = "ssd_dead"; risk = "très élevé"; go = "stop";
+                        } else {
+                            cause = "Problème logique — TRIM peut avoir effacé les données";
+                            protocol = "hdd_logical"; risk = "moyen"; go = "caution";
+                            actions.push("Vérifier si TRIM était actif (réduit fortement les chances)");
+                        }
+                    } else if (d === "raid") {
+                        cause = "Volume RAID dégradé — ne JAMAIS lancer de rebuild automatique";
+                        protocol = "raid_degraded"; risk = "élevé"; go = "stop";
+                        actions.push("Étiqueter chaque disque avec sa baie d'origine");
+                        actions.push("Imager chaque disque individuellement avant toute reconstruction");
+                    } else if (d === "phone") {
+                        if (t === "liquid" || t === "fire") {
+                            cause = "Dégât physique — réparation board-level possible";
+                            protocol = "phone_water"; risk = "très élevé"; go = "stop";
+                            actions.push("NE PAS alimenter — démontage immédiat, batterie débranchée");
+                        } else if (det === "no") {
+                            cause = "Téléphone HS — extraction NAND / Cellebrite";
+                            protocol = "phone_water"; risk = "élevé"; go = "caution";
+                        } else {
+                            cause = "Téléphone fonctionnel — verrou ou extraction logique";
+                            protocol = "phone_locked"; risk = "moyen"; go = "go";
+                        }
+                    } else if (d === "usb") {
+                        if (n === "none" && det === "yes") {
+                            cause = "Récupération logique standard";
+                            protocol = "hdd_logical"; risk = "faible"; go = "go";
+                        } else {
+                            cause = "Contrôleur USB ou NAND endommagé — chip-off possible";
+                            protocol = "ssd_dead"; risk = "élevé"; go = "caution";
+                        }
+                    }
+                    return { cause: cause, protocol: protocol, risk: risk, go: go, actions: actions };
+                }
+
+                var formHtml = questions.map(function (q) {
+                    if (q.type === "select") {
+                        return '<label class="field"><span>' + q.label + '</span><select data-tg="' + q.id + '">' +
+                            q.options.map(function (o) { return '<option value="' + o.v + '">' + o.l + '</option>'; }).join("") +
+                            '</select></label>';
+                    }
+                    return '<fieldset class="field ops-tg-radio"><legend>' + q.label + '</legend>' +
+                        q.options.map(function (o, i) {
+                            return '<label><input type="radio" name="tg-' + q.id + '" value="' + o.v + '"' + (i === 0 ? ' checked' : '') + '> ' + o.l + '</label>';
+                        }).join("") +
+                        '</fieldset>';
+                }).join("");
+
+                var node = el(
+                    '<div class="ops-tool ops-tool--triage">' +
+                    '<header class="ops-tool-head"><h2>Triage symptômes</h2><p>Réponds aux 4 questions à l\'intake. Diagnostic, risque et protocole à utiliser apparaissent immédiatement. Filet de sécurité pour ne rien oublier.</p></header>' +
+                    '<div class="ops-tool-grid">' + formHtml + '</div>' +
+                    '<output class="ops-tool-out" data-tg-out></output>' +
+                    '</div>'
+                );
+
+                function readAnswers() {
+                    var a = {};
+                    questions.forEach(function (q) {
+                        if (q.type === "select") {
+                            a[q.id] = node.querySelector('[data-tg="' + q.id + '"]').value;
+                        } else {
+                            var checked = node.querySelector('input[name="tg-' + q.id + '"]:checked');
+                            a[q.id] = checked ? checked.value : q.options[0].v;
+                        }
+                    });
+                    return a;
+                }
+                var goLabels = {
+                    go: { label: "GO — récupération en autonomie", css: "go" },
+                    caution: { label: "PRUDENCE — prévenir le client avant", css: "warn" },
+                    stop: { label: "STOP — diagnostic en hotte / spécialisé", css: "stop" }
+                };
+                function build() {
+                    var a = readAnswers();
+                    var r = diagnose(a);
+                    var g = goLabels[r.go];
+                    node.querySelector("[data-tg-out]").innerHTML =
+                        '<dl class="ops-out-table">' +
+                        '<div><dt>Diagnostic présumé</dt><dd>' + r.cause + '</dd></div>' +
+                        '<div><dt>Risque opérationnel</dt><dd>' + r.risk + '</dd></div>' +
+                        '<div><dt>Protocole</dt><dd><code>' + r.protocol + '</code> — voir outil « Protocole de récupération »</dd></div>' +
+                        '<div class="is-total ops-tg-go ops-tg-go--' + g.css + '"><dt>Décision</dt><dd>' + g.label + '</dd></div>' +
+                        '</dl>' +
+                        (r.actions.length ? '<p class="ops-out-label">Actions immédiates</p><ul class="ops-tg-actions">' + r.actions.map(function (x) { return '<li>' + x + '</li>'; }).join("") + '</ul>' : '');
+                }
+                node.addEventListener("change", build);
+                build();
+                return node;
+            }
+        },
+
         // ─── Tool 7d : Delivery procedure ─────────────────────────────
         delivery: {
             title: "Procédure d'envoi",

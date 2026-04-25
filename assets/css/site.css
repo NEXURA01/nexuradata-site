@@ -3942,3 +3942,23 @@ select {
   font-style: italic;
   color: rgba(245,241,232,0.92);
 }
+
+/* SMART analyzer */
+.ops-sm-attrs > div { padding: 0.45rem 0; }
+.ops-sm-attrs > div[data-flag="critical"] dt::before { content: "● "; color: #d96a5b; }
+.ops-sm-attrs > div[data-flag="warn"] dt::before     { content: "● "; color: #c9a96a; }
+.ops-sm-attrs > div[data-flag="ok"] dt::before       { content: "● "; color: #6abf8a; }
+.ops-sm-verdict--healthy  dd { color: #6abf8a; }
+.ops-sm-verdict--warn     dd { color: #c9a96a; }
+.ops-sm-verdict--critical dd { color: #d96a5b; }
+
+/* Triage */
+.ops-tg-radio { display: grid; gap: 0.35rem; padding: 0.5rem 0.75rem; border: 1px solid rgba(245,241,232,0.12); border-radius: 1px; }
+.ops-tg-radio legend { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,241,232,0.55); padding: 0 0.4rem; }
+.ops-tg-radio label { display: flex; gap: 0.5rem; align-items: baseline; font-size: 0.9rem; cursor: pointer; }
+.ops-tg-radio input { accent-color: #c9a96a; }
+.ops-tg-go--go   dd { color: #6abf8a; font-weight: 600; }
+.ops-tg-go--warn dd { color: #c9a96a; font-weight: 600; }
+.ops-tg-go--stop dd { color: #d96a5b; font-weight: 700; letter-spacing: 0.05em; }
+.ops-tg-actions { margin: 0.5rem 0 0; padding-left: 1.2rem; color: rgba(245,241,232,0.85); font-size: 0.92rem; line-height: 1.5; }
+.ops-tg-actions li { margin: 0.3rem 0; }

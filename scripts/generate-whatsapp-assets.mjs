@@ -1,6 +1,6 @@
 // Generate WhatsApp-related brand assets:
 //   1. assets/icons/whatsapp-profile.png  (640x640, square brand portrait for WA Business profile photo)
-//   2. assets/icons/whatsapp-qr.svg       (vector QR pointing to wa.me/15798819254)
+//   2. assets/icons/whatsapp-qr.svg       (vector QR pointing to wa.me/14388130592)
 //   3. assets/icons/whatsapp-qr.png       (1024x1024 PNG version, useful for print)
 //
 // Run: node ./scripts/generate-whatsapp-assets.mjs
@@ -16,7 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const OUT_DIR = resolve(ROOT, "assets/icons");
 
-const WA_URL = "https://wa.me/15798819254";
+const WA_URL = "https://wa.me/14388130592";
 
 mkdirSync(OUT_DIR, { recursive: true });
 

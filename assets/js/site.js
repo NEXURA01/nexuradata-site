@@ -1,4 +1,4 @@
-﻿const yearTarget = document.querySelector("[data-year]");
+const yearTarget = document.querySelector("[data-year]");
 const documentLanguage = document.documentElement.lang?.toLowerCase() || "fr-ca";
 const isEnglishDocument = documentLanguage.startsWith("en");
 
@@ -1729,8 +1729,8 @@ if (opsViewRoot) {
   "use strict";
   if (typeof window === "undefined" || typeof document === "undefined") return;
 
-  var PHONE = "+15798819254";
-  var WA_NUMBER = "15798819254";
+  var PHONE = "+14388130592";
+  var WA_NUMBER = "14388130592";
   var WA_BODY_FR = "Bonjour%2C%20j%27ai%20besoin%20d%27une%20%C3%A9valuation%20pour%20";
   var WA_BODY_EN = "Hi%2C%20I%20need%20an%20assessment%20for%20";
 

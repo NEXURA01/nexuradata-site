@@ -1,4 +1,4 @@
-﻿/* NEXURADATA — Ops instant tools loader -----------------------------------
+/* NEXURADATA — Ops instant tools loader -----------------------------------
  * Lazy-loads tool widgets into the staging area on demand.
  * No external dependencies. All computations happen in-browser.
  * --------------------------------------------------------------------------*/
@@ -1219,7 +1219,7 @@
                             "  conteneur chiffré, sur un volume hors ligne. Passé ce délai, destruction\n" +
                             "  cryptographique automatique. Sur demande écrite, vous pouvez exiger une\n" +
                             "  destruction immédiate avec attestation signée.\n\n" +
-                            "Merci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)\n579 881-9254";
+                            "Merci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)\n438 813-0592";
                     } else {
                         text =
                             "Subject: Secure delivery — case " + ref + "\n\n" +
@@ -1252,7 +1252,7 @@
                             "  container, on an offline volume. After that, automatic cryptographic\n" +
                             "  destruction. On written request, you may demand immediate destruction\n" +
                             "  with a signed attestation.\n\n" +
-                            "Thank you,\nOlivier Blanchet\nNEXURA DATA — Certified Forensic Examiner (CFE)\n579 881-9254";
+                            "Thank you,\nOlivier Blanchet\nNEXURA DATA — Certified Forensic Examiner (CFE)\n438 813-0592";
                     }
                     node.querySelector("[data-d-out]").textContent = text;
                 }
@@ -1346,7 +1346,7 @@
                     '<div class="ops-tool-grid">' +
                     '<label class="field"><span>Référence</span><input type="text" placeholder="NX-2026-0123" data-i="ref"></label>' +
                     '<label class="field"><span>Client</span><input type="text" placeholder="Nom complet ou raison sociale" data-i="client"></label>' +
-                    '<label class="field"><span>Téléphone</span><input type="tel" placeholder="579-881-9254" data-i="tel"></label>' +
+                    '<label class="field"><span>Téléphone</span><input type="tel" placeholder="438-813-0592" data-i="tel"></label>' +
                     '<label class="field"><span>Courriel</span><input type="email" placeholder="client@exemple.com" data-i="mail"></label>' +
                     '<label class="field"><span>Type d\'appareil</span><input type="text" placeholder="HDD WD 2 To, MacBook Pro 2021…" data-i="dev"></label>' +
                     '<label class="field"><span>Numéro de série</span><input type="text" placeholder="S/N visible" data-i="sn"></label>' +
@@ -1432,8 +1432,8 @@
                         ? "\n\nVous pouvez consulter l'état de votre dossier en tout temps : https://nexuradata.ca/suivi-dossier-client-montreal.html?ref=" + ref
                         : "\n\nYou can check the status of your case at any time: https://nexuradata.ca/en/suivi-dossier-client-montreal.html?ref=" + ref;
                     var sign = lang === "fr"
-                        ? "\n\nMerci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)\n579 881-9254"
-                        : "\n\nThank you,\nOlivier Blanchet\nNEXURA DATA — Certified Forensic Examiner (CFE)\n579 881-9254";
+                        ? "\n\nMerci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)\n438 813-0592"
+                        : "\n\nThank you,\nOlivier Blanchet\nNEXURA DATA — Certified Forensic Examiner (CFE)\n438 813-0592";
                     node.querySelector("[data-s-out]").textContent = "Objet : " + subject + "\n\n" + greet + body + portal + sign;
                 }
                 node.addEventListener("input", build);

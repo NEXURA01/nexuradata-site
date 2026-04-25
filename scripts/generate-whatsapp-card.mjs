@@ -12,8 +12,8 @@ const ROOT = resolve(__dirname, "..");
 const OUT_DIR = resolve(ROOT, "assets/icons");
 mkdirSync(OUT_DIR, { recursive: true });
 
-const WA_URL = "https://wa.me/15798819254";
-const PHONE_DISPLAY = "+1 579-881-9254";
+const WA_URL = "https://wa.me/14388130592";
+const PHONE_DISPLAY = "+1 438-813-0592";
 
 // QR generated as data URL so we can embed in SVG
 const qrDataUrl = await QRCode.toDataURL(WA_URL, {

@@ -1,4 +1,4 @@
-﻿// NEXURA DATA — AI chat widget
+// NEXURA DATA — AI chat widget
 // - Bilingual (auto-detect via <html lang>)
 // - Calls /api/chat backed by Cloudflare Workers AI (Llama 3.1)
 // - Conversation kept locally only (no server storage)
@@ -19,7 +19,7 @@
             opener: 'Ask the AI',
             intro: "Hi. I'm the NEXURA DATA AI assistant. Tell me what happened — device, symptoms, urgency. I give a price range and a turnaround. For sensitive cases (legal, ransomware, emergency), I hand you to a human right away.",
             foot: 'AI · responses indicative · the examiner confirms.',
-            error: 'Connection issue. Try again or call 579 881-9254.',
+            error: 'Connection issue. Try again or call 438 813-0592.',
             rate: 'Too many messages. Take a breath, try again in a moment.'
         }
         : {
@@ -31,7 +31,7 @@
             opener: 'Parler à l’IA',
             intro: "Bonjour. Je suis l’assistant IA de NEXURA DATA. Dites-moi ce qui s’est passé — appareil, symptômes, urgence. Je donne une fourchette de prix et un délai. Pour les cas sensibles (juridique, ransomware, urgence), je vous transfère à un humain immédiatement.",
             foot: 'IA · réponses indicatives · l’examinateur confirme.',
-            error: 'Problème de connexion. Réessayez ou appelez le 579 881-9254.',
+            error: 'Problème de connexion. Réessayez ou appelez le 438 813-0592.',
             rate: 'Trop de messages. Reprenez votre souffle, réessayez dans un moment.'
         };
 
@@ -188,8 +188,8 @@
                         const esc = document.createElement('div');
                         esc.className = 'chat-msg chat-msg--system';
                         esc.innerHTML = locale === 'en'
-                            ? 'Sensitive case detected — recommended: <a href="tel:+15798819254">579 881-9254</a> or <a href="mailto:dossiers@nexuradata.ca">dossiers@nexuradata.ca</a>.'
-                            : 'Cas sensible détecté — recommandé : <a href="tel:+15798819254">579 881-9254</a> ou <a href="mailto:dossiers@nexuradata.ca">dossiers@nexuradata.ca</a>.';
+                            ? 'Sensitive case detected — recommended: <a href="tel:+14388130592">438 813-0592</a> or <a href="mailto:dossiers@nexuradata.ca">dossiers@nexuradata.ca</a>.'
+                            : 'Cas sensible détecté — recommandé : <a href="tel:+14388130592">438 813-0592</a> ou <a href="mailto:dossiers@nexuradata.ca">dossiers@nexuradata.ca</a>.';
                         log.appendChild(esc);
                     }
                     // Trim history client-side to last 16 turns

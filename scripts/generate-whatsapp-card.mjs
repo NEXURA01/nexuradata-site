@@ -89,8 +89,16 @@ const outPng = resolve(OUT_DIR, "whatsapp-card.png");
 await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(outPng);
 console.log("✓", outPng, "(1080x1350)");
 
-// Also drop a copy on the Desktop for easy access
+// Also drop a copy on the Desktop for easy access (handles OneDrive redirect on Windows)
 import { homedir } from "node:os";
-const desktop = resolve(homedir(), "Desktop", "NEXURA-whatsapp.png");
+import { existsSync } from "node:fs";
+const candidates = [
+    resolve(homedir(), "OneDrive", "Desktop"),
+    resolve(homedir(), "OneDrive", "Bureau"),
+    resolve(homedir(), "Desktop"),
+    resolve(homedir(), "Bureau"),
+];
+const desktopDir = candidates.find((p) => existsSync(p)) || candidates[2];
+const desktop = resolve(desktopDir, "NEXURA-whatsapp.png");
 await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(desktop);
 console.log("✓", desktop);

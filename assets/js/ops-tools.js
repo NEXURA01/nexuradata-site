@@ -585,6 +585,128 @@
             }
         },
 
+        // ─── Tool 7g : PhotoRec / file carving ────────────────────────
+        photorec: {
+            title: "PhotoRec / carving",
+            build: function () {
+                var families = [
+                    { id: "jpg", l: "Photos JPEG", types: "jpg" },
+                    { id: "raw", l: "Photos RAW (Canon, Nikon, Sony)", types: "cr2,cr3,nef,arw,raf,dng" },
+                    { id: "video", l: "Vidéos (MP4, MOV, AVI, MKV)", types: "mp4,mov,avi,mkv" },
+                    { id: "doc", l: "Documents Office", types: "doc,docx,xls,xlsx,ppt,pptx,odt,ods" },
+                    { id: "pdf", l: "PDF", types: "pdf" },
+                    { id: "archive", l: "Archives (ZIP, RAR, 7Z)", types: "zip,rar,7z,tar,gz" },
+                    { id: "email", l: "Courriels (PST, MBOX, EML)", types: "pst,mbox,eml" },
+                    { id: "audio", l: "Audio (MP3, WAV, FLAC)", types: "mp3,wav,flac,m4a" },
+                    { id: "db", l: "Bases de données (SQLite, MDB)", types: "sqlite,mdb,accdb" }
+                ];
+                var node = el(
+                    '<div class="ops-tool ops-tool--photorec">' +
+                    '<header class="ops-tool-head"><h2>PhotoRec / file carving</h2><p>Récupération par signature de fichiers (sans table de partition). Idéal pour cartes SD formatées, partitions perdues, suppressions sur FAT/exFAT. Toujours travailler sur l\'image, pas sur l\'original.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Image source</span><input type="text" value="/mnt/lab/NX-2026-0123/raw.img" data-pr="src"></label>' +
+                    '<label class="field"><span>Dossier de sortie</span><input type="text" value="/mnt/lab/NX-2026-0123/recovered" data-pr="dst"></label>' +
+                    '<label class="field"><span>Mode</span><select data-pr="mode"><option value="free">Espace libre uniquement (rapide)</option><option value="whole">Disque entier (complet)</option></select></label>' +
+                    '<fieldset class="field ops-pr-types" style="grid-column:1/-1;"><legend>Types de fichiers</legend>' +
+                    families.map(function (f, i) {
+                        return '<label><input type="checkbox" data-pr-fam="' + f.id + '"' + (i < 3 ? ' checked' : '') + '> ' + f.l + '</label>';
+                    }).join("") +
+                    '</fieldset>' +
+                    '</div>' +
+                    '<output class="ops-tool-out" data-pr-out></output>' +
+                    '</div>'
+                );
+                function build() {
+                    var src = node.querySelector('[data-pr="src"]').value || "raw.img";
+                    var dst = node.querySelector('[data-pr="dst"]').value || "recovered";
+                    var mode = node.querySelector('[data-pr="mode"]').value;
+                    var checked = families.filter(function (f) { return node.querySelector('[data-pr-fam="' + f.id + '"]').checked; });
+                    var typeList = checked.map(function (f) { return f.types; }).join(",").split(",").filter(Boolean);
+                    var typeOpts = typeList.map(function (t) { return t + ",enable"; }).join(",");
+                    var script =
+                        "# 1. Préparer le dossier de sortie\n" +
+                        "mkdir -p " + dst + "\n\n" +
+                        "# 2. Lancer PhotoRec en non interactif\n" +
+                        "sudo photorec /d " + dst + "/recup_dir /cmd " + src + " options,paranoid_yes,keep_corrupted_no,expert_yes,lowmem_no," +
+                        (mode === "free" ? "freespace" : "wholespace") +
+                        ",fileopt,everything,disable," + typeOpts + ",search\n\n" +
+                        "# 3. Tri par type après extraction\n" +
+                        "cd " + dst + "/recup_dir.1 && ls | awk -F. '{print $NF}' | sort | uniq -c | sort -rn\n\n" +
+                        "# 4. Empreinte du dossier complet (manifeste)\n" +
+                        "find " + dst + " -type f -print0 | sort -z | xargs -0 sha256sum > " + dst + "/manifest.sha256";
+                    var note = checked.length === 0
+                        ? "⚠ Sélectionne au moins un type de fichier."
+                        : "Types ciblés : " + typeList.join(", ") + ". Mode : " + (mode === "free" ? "espace libre uniquement (rapide)" : "disque entier (complet)") + ".";
+                    node.querySelector("[data-pr-out]").innerHTML =
+                        '<p class="ops-out-label">Bloc complet</p>' +
+                        '<pre class="ops-out-text" data-pr-pre></pre>' +
+                        '<p class="ops-out-note">' + note + '</p>' +
+                        '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-pr-copy>Copier le bloc</button></div>';
+                    node.querySelector("[data-pr-pre]").textContent = script;
+                    node.querySelector("[data-pr-copy]").addEventListener("click", function (e) { copyToClipboard(script, e.currentTarget); });
+                }
+                node.addEventListener("input", build);
+                node.addEventListener("change", build);
+                build();
+                return node;
+            }
+        },
+
+        // ─── Tool 7h : Chain of custody PV ────────────────────────────
+        custody: {
+            title: "Chaîne de possession",
+            build: function () {
+                var node = el(
+                    '<div class="ops-tool ops-tool--custody">' +
+                    '<header class="ops-tool-head"><h2>Chaîne de possession</h2><p>Procès-verbal à imprimer et faire signer. Indispensable pour tout dossier forensique destiné à la cour ou à un assureur.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Référence dossier</span><input type="text" placeholder="NX-2026-0123" data-cu="ref"></label>' +
+                    '<label class="field"><span>Date d\'ouverture</span><input type="date" data-cu="date"></label>' +
+                    '<label class="field"><span>Mandant</span><input type="text" placeholder="Étude Tremblay & Associés" data-cu="client"></label>' +
+                    '<label class="field"><span>Personne remettant</span><input type="text" placeholder="Marie Tremblay, avocate" data-cu="from"></label>' +
+                    '<label class="field"><span>Numéro de pièce</span><input type="text" placeholder="P-1" data-cu="exhibit"></label>' +
+                    '<label class="field"><span>Description</span><input type="text" placeholder="HDD Seagate 2 To, S/N WFL1234A" data-cu="desc"></label>' +
+                    '<label class="field"><span>SHA-256 image source</span><input type="text" placeholder="a3f1…" data-cu="sha"></label>' +
+                    '<label class="field"><span>Méthode d\'imagerie</span><input type="text" value="ddrescue 1.27 (préset degraded)" data-cu="method"></label>' +
+                    '<label class="field" style="grid-column:1/-1;"><span>Observations</span><textarea rows="3" placeholder="Sceau d\'origine intact à la réception. Étiquette inventaire P-1 apposée…" data-cu="obs"></textarea></label>' +
+                    '</div>' +
+                    '<output class="ops-tool-out"><div class="ops-cu-doc" data-cu-out></div><div class="ops-tool-actions"><button type="button" class="button button-primary" data-cu-print>Imprimer / PDF</button></div></output>' +
+                    '</div>'
+                );
+                node.querySelector('[data-cu="date"]').valueAsDate = new Date();
+                function build() {
+                    var v = function (k) { return (node.querySelector('[data-cu="' + k + '"]').value || "—"); };
+                    var html =
+                        '<header class="ops-cu-head"><h3>Procès-verbal — Chaîne de possession</h3><p>NEXURA DATA · Examinateur forensique certifié (CFE)</p></header>' +
+                        '<dl class="ops-cu-fields">' +
+                        '<div><dt>Référence dossier</dt><dd>' + v("ref") + '</dd></div>' +
+                        '<div><dt>Date</dt><dd>' + v("date") + '</dd></div>' +
+                        '<div><dt>Mandant</dt><dd>' + v("client") + '</dd></div>' +
+                        '<div><dt>Remis par</dt><dd>' + v("from") + '</dd></div>' +
+                        '<div><dt>Pièce</dt><dd>' + v("exhibit") + '</dd></div>' +
+                        '<div><dt>Description</dt><dd>' + v("desc") + '</dd></div>' +
+                        '<div><dt>Méthode d\'imagerie</dt><dd>' + v("method") + '</dd></div>' +
+                        '<div><dt>SHA-256 image</dt><dd><code>' + v("sha") + '</code></dd></div>' +
+                        '<div><dt>Observations</dt><dd>' + v("obs").replace(/\n/g, "<br>") + '</dd></div>' +
+                        '</dl>' +
+                        '<table class="ops-cu-log"><thead><tr><th>Date / heure</th><th>Action</th><th>Personne</th><th>Signature</th></tr></thead><tbody>' +
+                        '<tr><td>' + v("date") + '</td><td>Réception de la pièce, sceau intact, étiquette apposée</td><td>Olivier Blanchet</td><td>&nbsp;</td></tr>' +
+                        '<tr><td>&nbsp;</td><td>Imagerie forensique, SHA-256 calculé</td><td>Olivier Blanchet</td><td>&nbsp;</td></tr>' +
+                        '<tr><td>&nbsp;</td><td>Stockage en coffre-fort, accès journalisé</td><td>Olivier Blanchet</td><td>&nbsp;</td></tr>' +
+                        '<tr><td>&nbsp;</td><td>Restitution / destruction</td><td>&nbsp;</td><td>&nbsp;</td></tr>' +
+                        '</tbody></table>' +
+                        '<div class="ops-cu-sign"><div><span class="ops-cu-line"></span><p>Signature — examinateur</p></div><div><span class="ops-cu-line"></span><p>Signature — mandant / témoin</p></div></div>' +
+                        '<footer class="ops-cu-foot"><p>Document généré localement · NEXURA DATA · Région de Longueuil (Québec)</p></footer>';
+                    node.querySelector("[data-cu-out]").innerHTML = html;
+                }
+                node.addEventListener("input", build);
+                node.addEventListener("change", build);
+                node.querySelector("[data-cu-print]").addEventListener("click", function () { window.print(); });
+                build();
+                return node;
+            }
+        },
+
         // ─── Tool 7e : SMART analyzer ─────────────────────────────────
         smart: {
             title: "Analyseur SMART",
@@ -820,6 +942,203 @@
                 }
                 node.addEventListener("change", build);
                 build();
+                return node;
+            }
+        },
+
+        // ─── Tool 8 : Forfaits express (productized add-ons) ──────────
+        forfaits: {
+            title: "Forfaits express",
+            build: function () {
+                var packs = [
+                    { id: "express24", label: "Surcharge urgence 24 h", price: 250, desc: "Traitement prioritaire, examen débuté dans les 24 h ouvrables." },
+                    { id: "weekend", label: "Astreinte fin de semaine", price: 350, desc: "Réception et examen samedi/dimanche, livraison lundi matin." },
+                    { id: "afterhours", label: "Astreinte hors-heures (soir)", price: 175, desc: "Examen débuté entre 18 h et 23 h, livraison à 8 h le lendemain." },
+                    { id: "diag", label: "Diagnostic à distance", price: 99, desc: "Analyse SMART + rapport écrit + estimation ferme. Crédité sur le mandat si vous procédez." },
+                    { id: "encrypted_usb", label: "Livraison USB chiffré (256 Go)", price: 49, desc: "Clé USB Kingston IronKey, livrable AES-256 préchargé." },
+                    { id: "second_copy", label: "Copie additionnelle chiffrée", price: 79, desc: "Deuxième livrable identique sur support distinct, pour archivage." },
+                    { id: "courier_mtl", label: "Coursier Grand Montréal (A/R)", price: 89, desc: "Pickup et retour à votre adresse, signature requise." },
+                    { id: "rush_court", label: "Rapport pour la cour (rush)", price: 450, desc: "Rapport d'expert détaillé, livré sous 5 jours ouvrables, signé CFE." }
+                ];
+                var node = el(
+                    '<div class="ops-tool ops-tool--forfaits">' +
+                    '<header class="ops-tool-head"><h2>Forfaits express</h2><p>Add-ons productisés à prix fixe. Sélectionne, génère le courriel client avec lien Stripe pré-rempli. Prêt à envoyer.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Référence dossier</span><input type="text" placeholder="NX-2026-0123" data-fx="ref"></label>' +
+                    '<label class="field"><span>Courriel client</span><input type="email" placeholder="client@exemple.ca" data-fx="email"></label>' +
+                    '<label class="field"><span>Lien Stripe (template)</span><input type="text" value="https://buy.stripe.com/votreLink?prefilled_email={EMAIL}&client_reference_id={REF}" data-fx="link"></label>' +
+                    '<fieldset class="field ops-fx-list" style="grid-column:1/-1;"><legend>Forfaits à inclure</legend>' +
+                    packs.map(function (p) {
+                        return '<label class="ops-fx-row"><input type="checkbox" data-fx-pack="' + p.id + '"> ' +
+                            '<span class="ops-fx-l">' + p.label + '</span>' +
+                            '<span class="ops-fx-p">' + fmtCAD(p.price) + '</span>' +
+                            '<span class="ops-fx-d">' + p.desc + '</span></label>';
+                    }).join("") +
+                    '</fieldset>' +
+                    '</div>' +
+                    '<output class="ops-tool-out" data-fx-out></output>' +
+                    '</div>'
+                );
+                function build() {
+                    var ref = node.querySelector('[data-fx="ref"]').value || "[RÉF]";
+                    var email = node.querySelector('[data-fx="email"]').value || "client@exemple.ca";
+                    var linkTpl = node.querySelector('[data-fx="link"]').value;
+                    var selected = packs.filter(function (p) { return node.querySelector('[data-fx-pack="' + p.id + '"]').checked; });
+                    if (!selected.length) {
+                        node.querySelector("[data-fx-out]").innerHTML = '<p class="ops-out-label">Sélectionne au moins un forfait.</p>';
+                        return;
+                    }
+                    var subTotal = selected.reduce(function (s, p) { return s + p.price; }, 0);
+                    var gst = subTotal * 0.05;
+                    var qst = subTotal * 0.09975;
+                    var total = subTotal + gst + qst;
+                    var link = linkTpl.replace("{EMAIL}", encodeURIComponent(email)).replace("{REF}", encodeURIComponent(ref));
+                    var lines = selected.map(function (p) { return "  • " + p.label + " — " + fmtCAD(p.price); }).join("\n");
+                    var mail =
+                        "Objet : Devis additionnel — dossier " + ref + "\n\n" +
+                        "Bonjour,\n\n" +
+                        "Voici le détail des prestations additionnelles demandées sur votre dossier " + ref + " :\n\n" +
+                        lines + "\n\n" +
+                        "Sous-total : " + fmtCAD(subTotal) + "\n" +
+                        "TPS (5,000 %) : " + fmtCAD(gst) + "\n" +
+                        "TVQ (9,975 %) : " + fmtCAD(qst) + "\n" +
+                        "─────────────────────────────\n" +
+                        "TOTAL : " + fmtCAD(total) + "\n\n" +
+                        "Paiement sécurisé en un clic :\n" +
+                        link + "\n\n" +
+                        "Le travail démarre dès la confirmation du paiement. Une facture officielle vous sera transmise.\n\n" +
+                        "Merci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)";
+                    node.querySelector("[data-fx-out]").innerHTML =
+                        '<dl class="ops-out-table">' +
+                        '<div><dt>Sous-total</dt><dd>' + fmtCAD(subTotal) + '</dd></div>' +
+                        '<div><dt>TPS</dt><dd>' + fmtCAD(gst) + '</dd></div>' +
+                        '<div><dt>TVQ</dt><dd>' + fmtCAD(qst) + '</dd></div>' +
+                        '<div class="is-total"><dt>Total à facturer</dt><dd>' + fmtCAD(total) + '</dd></div>' +
+                        '</dl>' +
+                        '<p class="ops-out-label">Courriel prêt à envoyer</p>' +
+                        '<pre class="ops-out-text" data-fx-mail></pre>' +
+                        '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-fx-copy>Copier le courriel</button><a class="button button-outline" data-fx-mailto>Ouvrir dans courriel</a></div>';
+                    node.querySelector("[data-fx-mail]").textContent = mail;
+                    node.querySelector("[data-fx-copy]").addEventListener("click", function (e) { copyToClipboard(mail, e.currentTarget); });
+                    node.querySelector("[data-fx-mailto]").href = "mailto:" + email + "?subject=" + encodeURIComponent("Devis additionnel — dossier " + ref) + "&body=" + encodeURIComponent(mail);
+                }
+                node.addEventListener("input", build);
+                node.addEventListener("change", build);
+                build();
+                return node;
+            }
+        },
+
+        // ─── Tool 9 : Relances de paiement ────────────────────────────
+        relances: {
+            title: "Relances de paiement",
+            build: function () {
+                var STORAGE = "nxd_unpaid_invoices";
+                function getList() { try { return JSON.parse(localStorage.getItem(STORAGE) || "[]"); } catch (e) { return []; } }
+                function saveList(l) { localStorage.setItem(STORAGE, JSON.stringify(l)); }
+
+                var node = el(
+                    '<div class="ops-tool ops-tool--relances">' +
+                    '<header class="ops-tool-head"><h2>Relances de paiement</h2><p>Liste des factures impayées (sauvegarde locale). Tonalité de relance qui monte selon l\'âge : J+3 amical, J+7 ferme, J+14 mise en demeure douce.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Référence</span><input type="text" placeholder="NX-2026-0123" data-rl="ref"></label>' +
+                    '<label class="field"><span>Client</span><input type="text" placeholder="Marc-André Lavoie" data-rl="client"></label>' +
+                    '<label class="field"><span>Courriel</span><input type="email" placeholder="client@exemple.ca" data-rl="email"></label>' +
+                    '<label class="field"><span>Montant (CAD, taxes incl.)</span><input type="number" min="0" step="0.01" placeholder="1450.00" data-rl="amount"></label>' +
+                    '<label class="field"><span>Date d\'émission</span><input type="date" data-rl="date"></label>' +
+                    '<label class="field"><span>Lien de paiement Stripe</span><input type="text" placeholder="https://buy.stripe.com/…" data-rl="link"></label>' +
+                    '</div>' +
+                    '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-rl-add>Ajouter / mettre à jour</button></div>' +
+                    '<output class="ops-tool-out" data-rl-out></output>' +
+                    '</div>'
+                );
+                node.querySelector('[data-rl="date"]').valueAsDate = new Date();
+
+                function tone(daysOverdue) {
+                    if (daysOverdue < 7) return { label: "Rappel amical", css: "ok" };
+                    if (daysOverdue < 14) return { label: "Relance ferme", css: "warn" };
+                    return { label: "Mise en demeure douce", css: "stop" };
+                }
+                function template(invoice, daysOverdue) {
+                    var t = tone(daysOverdue);
+                    if (daysOverdue < 7) {
+                        return "Objet : Petit rappel — facture " + invoice.ref + "\n\n" +
+                            "Bonjour " + invoice.client + ",\n\n" +
+                            "Petit suivi amical : la facture " + invoice.ref + " (" + fmtCAD(invoice.amount) + ") émise le " + invoice.date + " est en attente.\n\n" +
+                            "Vous pouvez régler en un clic ici :\n" + (invoice.link || "[lien Stripe à insérer]") + "\n\n" +
+                            "Si le paiement est déjà parti, ignorez ce message — Stripe peut prendre 24-48 h à confirmer.\n\n" +
+                            "Merci,\nOlivier";
+                    }
+                    if (daysOverdue < 14) {
+                        return "Objet : Facture " + invoice.ref + " — paiement requis\n\n" +
+                            "Bonjour " + invoice.client + ",\n\n" +
+                            "La facture " + invoice.ref + " au montant de " + fmtCAD(invoice.amount) + " émise le " + invoice.date + " demeure impayée après " + daysOverdue + " jours.\n\n" +
+                            "Lien de paiement direct :\n" + (invoice.link || "[lien Stripe à insérer]") + "\n\n" +
+                            "Si vous rencontrez une difficulté, répondez à ce courriel — j\'accepte aussi Interac, BTC, USDC.\n" +
+                            "Sans nouvelles d\'ici 7 jours, le dossier sera transmis aux étapes formelles de recouvrement.\n\n" +
+                            "Cordialement,\nOlivier Blanchet\nNEXURA DATA";
+                    }
+                    return "Objet : Mise en demeure — facture " + invoice.ref + "\n\n" +
+                        "Madame, Monsieur " + invoice.client + ",\n\n" +
+                        "La présente fait suite à mes communications restées sans paiement concernant la facture " + invoice.ref + " émise le " + invoice.date + " au montant de " + fmtCAD(invoice.amount) + ", maintenant en retard de " + daysOverdue + " jours.\n\n" +
+                        "Je vous accorde un dernier délai de 10 jours, à compter de la réception du présent avis, pour acquitter intégralement cette somme :\n" + (invoice.link || "[lien Stripe à insérer]") + "\n\n" +
+                        "À défaut de paiement dans ce délai, je transmettrai le dossier à la Cour des petites créances du Québec et je facturerai des intérêts au taux légal applicable, en plus de tous frais légaux.\n\n" +
+                        "Veuillez prendre cet avis au sérieux.\n\n" +
+                        "Olivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)";
+                }
+                function render() {
+                    var list = getList();
+                    var out = node.querySelector("[data-rl-out]");
+                    if (!list.length) {
+                        out.innerHTML = '<p class="ops-out-label">Aucune facture en attente. Saisis-en une et clique « Ajouter ».</p>';
+                        return;
+                    }
+                    var today = new Date();
+                    var rows = list.slice().sort(function (a, b) { return new Date(a.date) - new Date(b.date); }).map(function (inv) {
+                        var d = new Date(inv.date);
+                        var days = Math.floor((today - d) / 86400000);
+                        var t = tone(days);
+                        return '<details class="ops-rl-row" data-tone="' + t.css + '">' +
+                            '<summary><span class="ops-rl-ref"><code>' + inv.ref + '</code> — ' + inv.client + '</span><span class="ops-rl-amt">' + fmtCAD(inv.amount) + '</span><span class="ops-rl-age">' + days + ' j</span><span class="ops-rl-tone ops-rl-tone--' + t.css + '">' + t.label + '</span></summary>' +
+                            '<pre class="ops-out-text" data-rl-mail="' + inv.ref + '"></pre>' +
+                            '<div class="ops-tool-actions"><a class="button button-primary" data-rl-mailto="' + inv.ref + '">Ouvrir dans courriel</a><button type="button" class="button button-outline" data-rl-copy="' + inv.ref + '">Copier</button><button type="button" class="button button-outline" data-rl-del="' + inv.ref + '">Marquer payée</button></div>' +
+                            '</details>';
+                    }).join("");
+                    out.innerHTML = '<div class="ops-rl-list">' + rows + '</div>';
+                    list.forEach(function (inv) {
+                        var d = new Date(inv.date);
+                        var days = Math.floor((today - d) / 86400000);
+                        var msg = template(inv, days);
+                        var pre = out.querySelector('[data-rl-mail="' + CSS.escape(inv.ref) + '"]');
+                        if (pre) pre.textContent = msg;
+                        var mailto = out.querySelector('[data-rl-mailto="' + CSS.escape(inv.ref) + '"]');
+                        if (mailto) mailto.href = "mailto:" + inv.email + "?subject=" + encodeURIComponent(msg.split("\n")[0].replace(/^Objet\s*:\s*/i, "")) + "&body=" + encodeURIComponent(msg.split("\n").slice(2).join("\n"));
+                        var cp = out.querySelector('[data-rl-copy="' + CSS.escape(inv.ref) + '"]');
+                        if (cp) cp.addEventListener("click", function (e) { copyToClipboard(msg, e.currentTarget); });
+                        var del = out.querySelector('[data-rl-del="' + CSS.escape(inv.ref) + '"]');
+                        if (del) del.addEventListener("click", function () {
+                            if (confirm("Marquer la facture " + inv.ref + " comme payée et la retirer ?")) {
+                                saveList(getList().filter(function (x) { return x.ref !== inv.ref; }));
+                                render();
+                            }
+                        });
+                    });
+                }
+                node.querySelector("[data-rl-add]").addEventListener("click", function () {
+                    var ref = node.querySelector('[data-rl="ref"]').value.trim();
+                    var client = node.querySelector('[data-rl="client"]').value.trim();
+                    var email = node.querySelector('[data-rl="email"]').value.trim();
+                    var amount = parseFloat(node.querySelector('[data-rl="amount"]').value);
+                    var date = node.querySelector('[data-rl="date"]').value;
+                    var link = node.querySelector('[data-rl="link"]').value.trim();
+                    if (!ref || !client || !amount || !date) { alert("Référence, client, montant et date sont requis."); return; }
+                    var list = getList().filter(function (x) { return x.ref !== ref; });
+                    list.push({ ref: ref, client: client, email: email, amount: amount, date: date, link: link });
+                    saveList(list);
+                    ["ref", "client", "email", "amount", "link"].forEach(function (k) { node.querySelector('[data-rl="' + k + '"]').value = ""; });
+                    render();
+                });
+                render();
                 return node;
             }
         },

@@ -129,3 +129,27 @@ Secrets:
 - `ACCESS_CODE_SECRET`
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
+
+## 7. Cron externe — Relance leads abandonnés
+
+L'endpoint `POST /api/leads/recover` envoie un courriel unique aux leads captures
+plus de 24 h auparavant qui n'ont jamais converti (dedupe via `recovery_sent_at`).
+Pour automatiser sans CF Workers cron, configurer **UptimeRobot** (gratuit) :
+
+1. Cree un monitor type **HTTP(s)**.
+2. URL : `https://nexuradata.ca/api/leads/recover`
+3. Methode : `POST`
+4. Headers HTTP custom :
+   - `content-type: application/json`
+   - `x-ops-secret: <ACCESS_CODE_SECRET>`
+5. Body : `{"batch": 25, "maxAgeDays": 14}`
+6. Interval : **24 h** (ou 12 h pour reactivite accrue ; rate limit naturel via
+   `recovery_sent_at`).
+7. Alertes : email vers `ops@nexuradata.ca` si non-2xx.
+
+Verification manuelle :
+
+`Invoke-RestMethod -Method Post -Uri https://nexuradata.ca/api/leads/recover -Headers @{"x-ops-secret"="<secret>"; "content-type"="application/json"} -Body (ConvertTo-Json @{dryRun=True; batch=5})`
+
+L'endpoint retourne `{ok, eligible, sent, skipped, failures}`. Surveiller que
+`failures` reste a 0 ; sinon inspecter Resend dashboard pour rebonds.

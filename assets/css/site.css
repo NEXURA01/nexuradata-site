@@ -306,12 +306,12 @@ select {
 }
 
 .eyebrow {
-  margin: 0 0 1rem;
-  color: var(--color-accent);
+  margin: 0 0 1.25rem;
+  color: rgba(245, 241, 232, 0.55);
   text-transform: uppercase;
-  letter-spacing: 0.28em;
-  font-size: 0.78rem;
-  font-weight: 600;
+  letter-spacing: 0.32em;
+  font-size: 0.72rem;
+  font-weight: 500;
   font-family: "IBM Plex Mono", monospace;
 }
 
@@ -327,8 +327,11 @@ select {
 }
 
 .hero-copy h1 {
-  max-width: 22ch;
-  font-size: clamp(2.55rem, 5vw, 4.1rem);
+  max-width: 18ch;
+  font-size: clamp(2.6rem, 4.6vw, 4.25rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
 }
 
 .section-heading h2,
@@ -2363,6 +2366,174 @@ select {
   color: rgba(245, 241, 232, 0.7);
 }
 
+/* ── Hero split layout (editorial / cabinet) ─────────────── */
+.hero {
+  padding-top: 5.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.hero-grid--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 4rem;
+  align-items: start;
+}
+
+.hero-grid--split .hero-copy {
+  max-width: none;
+  padding-top: 0.5rem;
+}
+
+.hero-checklist {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  color: rgba(245, 241, 232, 0.85);
+}
+
+.hero-checklist li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.hero-checklist li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 14px;
+  height: 1px;
+  background: rgba(245, 241, 232, 0.55);
+}
+
+.hero-panel {
+  position: relative;
+  align-self: stretch;
+}
+
+.hero-panel-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.25rem 2.25rem 2rem;
+  border: 1px solid rgba(232, 228, 220, 0.16);
+  border-top: 2px solid #c9a96a;
+  border-radius: 4px;
+  background: linear-gradient(160deg, rgba(245, 241, 232, 0.025) 0%, rgba(13, 13, 11, 0) 55%), var(--color-bg-soft);
+  box-shadow: 0 1px 0 rgba(245, 241, 232, 0.04) inset, 0 30px 60px -45px rgba(0, 0, 0, 0.85);
+}
+
+.hero-panel-eyebrow {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #d8b87c;
+}
+
+.hero-panel-headline {
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: 1.18rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  max-width: 28ch;
+}
+
+.hero-panel-list {
+  list-style: none;
+  margin: 0;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid rgba(232, 228, 220, 0.1);
+  display: grid;
+  gap: 0.95rem;
+}
+
+.hero-panel-list li {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  gap: 0.85rem;
+  align-items: baseline;
+}
+
+.hero-panel-list li > span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: rgba(245, 241, 232, 0.45);
+  font-feature-settings: "tnum";
+}
+
+.hero-panel-list li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.hero-panel-list strong {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.hero-panel-list em {
+  font-style: normal;
+  font-family: var(--serif);
+  font-size: 0.88rem;
+  color: rgba(245, 241, 232, 0.6);
+}
+
+.hero-panel-signature {
+  margin-top: 0.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(232, 228, 220, 0.1);
+}
+
+.hero-panel-signature .sig-name {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--color-text);
+}
+
+.hero-panel-signature .sig-title {
+  margin: 0.2rem 0 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(245, 241, 232, 0.78);
+}
+
+.hero-panel-signature .sig-meta {
+  margin: 0.15rem 0 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 232, 0.45);
+}
+
+@media (max-width: 980px) {
+  .hero-grid--split {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .hero-panel-card {
+    max-width: 32rem;
+  }
+}
+
 @media (max-width: 880px) {
   .audience-grid {
     grid-template-columns: 1fr;
@@ -2788,3 +2959,4 @@ select {
     break-inside: avoid;
   }
 }
+/* === Hero split layout (editorial) === */

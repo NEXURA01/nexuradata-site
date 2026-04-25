@@ -31,9 +31,9 @@
   --color-info: #c4b8a8;
   --shadow-soft: 0 14px 32px -28px rgba(0, 0, 0, 0.48);
   --shadow-strong: 0 24px 56px -40px rgba(0, 0, 0, 0.62);
-  --radius-sm: 1rem;
-  --radius-md: 1.5rem;
-  --radius-lg: 2rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
   --width-content: min(1160px, calc(100% - 3rem));
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -1196,9 +1196,9 @@ select {
 }
 
 .page-card {
-  padding: 1.75rem 1.75rem 1.75rem 2rem;
-  border-left-width: 3px;
-  border-left-color: rgba(232, 228, 220, 0.45);
+  padding: 1.75rem 1.75rem 1.75rem 1.75rem;
+  border-left-width: 2px;
+  border-left-color: rgba(232, 228, 220, 0.28);
 }
 
 .page-content :first-child {
@@ -2218,6 +2218,160 @@ select {
 [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ── Audience volets (Particulier / Entreprise) ──────────── */
+.audience-section {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.audience-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.audience-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 280px;
+  padding: 2.25rem 2.25rem 2rem;
+  border: 1px solid rgba(232, 228, 220, 0.18);
+  border-radius: var(--radius-md);
+  background: linear-gradient(155deg, rgba(245, 241, 232, 0.04) 0%, rgba(13, 13, 11, 0) 60%), var(--color-bg-soft);
+  color: var(--color-text);
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.35s var(--ease-out), border-color 0.25s ease, background 0.25s ease;
+}
+
+.audience-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--color-text);
+  opacity: 0.65;
+  transition: opacity 0.25s ease, width 0.25s ease;
+}
+
+.audience-card--pro::before {
+  background: #c9a96a;
+  opacity: 0.8;
+}
+
+.audience-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(232, 228, 220, 0.45);
+  background: linear-gradient(155deg, rgba(245, 241, 232, 0.07) 0%, rgba(13, 13, 11, 0) 60%), var(--color-bg-soft);
+}
+
+.audience-card:hover::before {
+  width: 6px;
+  opacity: 1;
+}
+
+.audience-tag {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 232, 0.7);
+}
+
+.audience-card--pro .audience-tag {
+  color: #d8b87c;
+}
+
+.audience-card h2 {
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: clamp(1.55rem, 2.4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.audience-card p {
+  margin: 0;
+  color: rgba(245, 241, 232, 0.78);
+  font-size: 1rem;
+  max-width: 32ch;
+}
+
+.audience-cta {
+  display: inline-block;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+}
+
+/* ── Impact stats band ───────────────────────────────────── */
+.impact-stats-section {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+}
+
+.impact-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  align-items: end;
+}
+
+.impact-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.impact-stat-value {
+  margin: 0;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  font-size: clamp(3.25rem, 6vw, 5.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+}
+
+.impact-stat-value span {
+  font-size: 0.55em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: rgba(245, 241, 232, 0.65);
+  margin-left: 0.05em;
+}
+
+.impact-stat-label {
+  margin: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245, 241, 232, 0.7);
+}
+
+@media (max-width: 880px) {
+  .audience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .impact-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.25rem 1.5rem;
+  }
 }
 
 @media (max-width: 1080px) {

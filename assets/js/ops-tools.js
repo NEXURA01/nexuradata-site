@@ -1671,6 +1671,204 @@
                 node.querySelector("[data-c-gen]").addEventListener("click", gen);
                 return node;
             }
+        },
+
+        // ─── Tool : Rapport expert PDF (jsPDF lazy-loaded) ─────────────────
+        report: {
+            title: "Rapport expert PDF",
+            build: function () {
+                var node = el(
+                    '<div class="ops-tool ops-tool--report">' +
+                    '<header class="ops-tool-head"><h2>Rapport expert PDF</h2><p>Livrable forensique signé pour mandats B2B et juridiques. Génération locale (aucun envoi serveur). Format A4, palette NEXURA verrouillée.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Référence dossier</span><input data-r="ref" placeholder="NX-2026-0001"></label>' +
+                    '<label class="field"><span>Date du rapport</span><input data-r="date" type="date"></label>' +
+                    '<label class="field"><span>Client (raison sociale)</span><input data-r="client" placeholder="Étude Bélanger Avocats inc."></label>' +
+                    '<label class="field"><span>Contact (Me / responsable)</span><input data-r="contact" placeholder="Me Sophie Bélanger"></label>' +
+                    '<label class="field"><span>Type d\'appareil</span><input data-r="device" placeholder="HDD Western Digital WD20EZRX"></label>' +
+                    '<label class="field"><span>Numéro de série</span><input data-r="serial" placeholder="WCC4M0345671"></label>' +
+                    '<label class="field"><span>Capacité</span><input data-r="capacity" placeholder="2 To"></label>' +
+                    '<label class="field"><span>Date de réception</span><input data-r="received" type="date"></label>' +
+                    '</div>' +
+                    '<label class="field"><span>État physique constaté</span><textarea data-r="physical" rows="2" placeholder="Boîtier intact. Plateaux audibles. Aucune trace de liquide ni de choc."></textarea></label>' +
+                    '<label class="field"><span>Diagnostic technique</span><textarea data-r="diagnostic" rows="3" placeholder="Microcode service area corrompu. Lecture de la zone système impossible avec firmware d\'origine. Substitution PCB compatible et patch ROM réalisés."></textarea></label>' +
+                    '<label class="field"><span>Méthodologie</span><textarea data-r="method" rows="3" placeholder="1) Examen physique sous loupe binoculaire. 2) Sortie SMART via PC-3000. 3) Imagerie ddrescue avec PCB de remplacement. 4) Reconstruction NTFS et extraction $MFT."></textarea></label>' +
+                    '<label class="field"><span>Résultats</span><textarea data-r="results" rows="3" placeholder="Image disque complète à 99,98 % (4 secteurs illisibles, hors zone utilisateur). 312 482 fichiers récupérés. Empreinte SHA-256 de l\'image disque générée et remise sur clé chiffrée."></textarea></label>' +
+                    '<label class="field"><span>Empreinte SHA-256 (image disque)</span><input data-r="hash" placeholder="a1b2c3d4..."></label>' +
+                    '<label class="field"><span>Examinateur</span><input data-r="examiner" placeholder="O. B. — examinateur certifié CFE"></label>' +
+                    '<label class="field"><span>Mandat / numéro de cause (facultatif)</span><input data-r="mandate" placeholder="500-17-XXXXXX-XXX"></label>' +
+                    '<div class="ops-tool-actions">' +
+                    '<button type="button" class="button button-primary" data-r-gen>Télécharger le PDF</button>' +
+                    '<span class="ops-out-meta" data-r-status></span>' +
+                    '</div>' +
+                    '<p class="ops-out-note">Le PDF est généré dans votre navigateur. Aucune donnée n\'est transmise à un tiers. La bibliothèque jsPDF est chargée à la demande depuis cdnjs.cloudflare.com.</p>' +
+                    '</div>'
+                );
+
+                // Pre-fill date today / received yesterday
+                var today = new Date();
+                var iso = function (d) { return d.toISOString().slice(0, 10); };
+                node.querySelector('[data-r="date"]').value = iso(today);
+                var y = new Date(today.getTime() - 86400000);
+                node.querySelector('[data-r="received"]').value = iso(y);
+
+                function loadJsPdf() {
+                    if (window.jspdf && window.jspdf.jsPDF) return Promise.resolve(window.jspdf.jsPDF);
+                    return new Promise(function (resolve, reject) {
+                        var s = document.createElement("script");
+                        s.src = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+                        s.onload = function () {
+                            if (window.jspdf && window.jspdf.jsPDF) resolve(window.jspdf.jsPDF);
+                            else reject(new Error("jsPDF unavailable"));
+                        };
+                        s.onerror = function () { reject(new Error("CDN unreachable")); };
+                        document.head.appendChild(s);
+                    });
+                }
+
+                function val(k) { return (node.querySelector('[data-r="' + k + '"]').value || "").trim(); }
+
+                function gen() {
+                    var status = node.querySelector("[data-r-status]");
+                    status.textContent = "Génération en cours…";
+                    loadJsPdf().then(function (jsPDF) {
+                        var doc = new jsPDF({ unit: "mm", format: "a4" });
+                        var pageW = doc.internal.pageSize.getWidth();
+                        var pageH = doc.internal.pageSize.getHeight();
+                        var margin = 18;
+                        var y = margin;
+                        var os = "#0d0d0b";
+                        var dim = "#1c1c19";
+                        var muted = "#8a857a";
+
+                        // Header band
+                        doc.setFillColor(13, 13, 11);
+                        doc.rect(0, 0, pageW, 26, "F");
+                        doc.setTextColor("#e8e4dc");
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(18);
+                        doc.text("NEXURA DATA", margin, 16);
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(9);
+                        doc.text("Laboratoire de récupération de données et forensique numérique · Longueuil, QC", margin, 22);
+
+                        y = 36;
+                        doc.setTextColor(os);
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(14);
+                        doc.text("Rapport d'expertise technique", margin, y);
+                        y += 6;
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(9);
+                        doc.setTextColor(muted);
+                        doc.text("Référence : " + (val("ref") || "—") + "    ·    Date : " + (val("date") || "—") +
+                            (val("mandate") ? "    ·    Mandat : " + val("mandate") : ""), margin, y);
+                        y += 8;
+
+                        function section(title, lines) {
+                            if (y > pageH - 40) { doc.addPage(); y = margin; }
+                            doc.setDrawColor(196, 184, 168);
+                            doc.setLineWidth(0.2);
+                            doc.line(margin, y, pageW - margin, y);
+                            y += 5;
+                            doc.setTextColor(os);
+                            doc.setFont("helvetica", "bold");
+                            doc.setFontSize(10);
+                            doc.text(title.toUpperCase(), margin, y);
+                            y += 5;
+                            doc.setFont("helvetica", "normal");
+                            doc.setFontSize(10);
+                            doc.setTextColor(dim);
+                            for (var i = 0; i < lines.length; i++) {
+                                if (!lines[i]) continue;
+                                var wrapped = doc.splitTextToSize(lines[i], pageW - margin * 2);
+                                if (y + wrapped.length * 5 > pageH - 25) { doc.addPage(); y = margin; }
+                                doc.text(wrapped, margin, y);
+                                y += wrapped.length * 5;
+                            }
+                            y += 4;
+                        }
+
+                        section("1. Identification du dossier", [
+                            "Client : " + (val("client") || "—"),
+                            "Contact : " + (val("contact") || "—"),
+                            "Examinateur : " + (val("examiner") || "—")
+                        ]);
+
+                        section("2. Support reçu", [
+                            "Type d'appareil : " + (val("device") || "—"),
+                            "Numéro de série : " + (val("serial") || "—"),
+                            "Capacité nominale : " + (val("capacity") || "—"),
+                            "Date de réception : " + (val("received") || "—")
+                        ]);
+
+                        section("3. État physique constaté", [val("physical") || "—"]);
+                        section("4. Diagnostic technique", [val("diagnostic") || "—"]);
+                        section("5. Méthodologie", [val("method") || "—"]);
+                        section("6. Résultats", [val("results") || "—"]);
+
+                        if (val("hash")) {
+                            section("7. Empreinte forensique (intégrité)", [
+                                "Algorithme : SHA-256",
+                                "Empreinte de l'image disque : " + val("hash"),
+                                "Cette empreinte permet de vérifier à tout moment que l'image fournie au client n'a pas été altérée depuis sa génération en laboratoire."
+                            ]);
+                        }
+
+                        // Signature block
+                        if (y > pageH - 60) { doc.addPage(); y = margin; }
+                        y += 6;
+                        doc.setDrawColor(196, 184, 168);
+                        doc.line(margin, y, pageW - margin, y);
+                        y += 6;
+                        doc.setTextColor(os);
+                        doc.setFont("helvetica", "bold");
+                        doc.setFontSize(10);
+                        doc.text("ATTESTATION", margin, y);
+                        y += 5;
+                        doc.setFont("helvetica", "normal");
+                        doc.setFontSize(10);
+                        doc.setTextColor(dim);
+                        var attest = doc.splitTextToSize(
+                            "Je soussigné(e), examinateur(rice) au laboratoire NEXURA DATA, atteste que les " +
+                            "constatations et résultats consignés dans le présent rapport ont été obtenus selon " +
+                            "les méthodes décrites, sans altération volontaire de la preuve, et que la chaîne de " +
+                            "possession a été maintenue depuis la réception du support.",
+                            pageW - margin * 2
+                        );
+                        doc.text(attest, margin, y);
+                        y += attest.length * 5 + 12;
+
+                        doc.setDrawColor(13, 13, 11);
+                        doc.line(margin, y, margin + 70, y);
+                        doc.line(pageW - margin - 70, y, pageW - margin, y);
+                        y += 4;
+                        doc.setFontSize(8);
+                        doc.setTextColor(muted);
+                        doc.text("Signature de l'examinateur", margin, y);
+                        doc.text("Date", pageW - margin - 70, y);
+
+                        // Footer on every page
+                        var pageCount = doc.getNumberOfPages();
+                        for (var p = 1; p <= pageCount; p++) {
+                            doc.setPage(p);
+                            doc.setFontSize(8);
+                            doc.setTextColor(muted);
+                            doc.text("NEXURA DATA · Longueuil, QC · contact@nexuradata.ca", margin, pageH - 10);
+                            doc.text("Page " + p + " / " + pageCount, pageW - margin - 20, pageH - 10);
+                        }
+
+                        var fname = "rapport-" + (val("ref") || "nexuradata") + ".pdf";
+                        doc.save(fname);
+                        status.textContent = "PDF généré : " + fname;
+                    }).catch(function (e) {
+                        status.textContent = "Erreur : " + e.message;
+                    });
+                }
+
+                node.querySelector("[data-r-gen]").addEventListener("click", gen);
+                return node;
+            }
         }
     };
 

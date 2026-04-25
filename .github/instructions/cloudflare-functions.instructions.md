@@ -1,4 +1,4 @@
-release-cloudflare/---
+---
 description: "Use when writing or editing Cloudflare Pages Functions. Covers ESM exports, _lib reuse, input normalization, error handling, auth, and secret access. Triggers on: API endpoint, function, worker, D1 query, webhook."
 applyTo: "functions/**/*.js"
 ---

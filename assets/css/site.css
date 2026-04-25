@@ -11,7 +11,7 @@
 
   /* ── Layout & functional tokens (not locked) ─────────────── */
   --color-bg: #0d0d0b;
-  --color-bg-soft: #151513;
+  --color-bg-soft: #1c1c19;
   --color-surface: rgba(20, 20, 18, 0.94);
   --color-surface-strong: #1a1a17;
   --color-surface-elevated: rgba(22, 22, 19, 0.98);
@@ -455,17 +455,17 @@ select {
 .page-card,
 .faq-item {
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(232, 228, 220, 0.18);
   border-radius: var(--radius-md);
   background: var(--color-bg-soft);
-  box-shadow: none;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 32px -24px rgba(0, 0, 0, 0.8);
   overflow: hidden;
 }
 
 .hero-panel .panel-card,
 .contact-card {
   background: var(--color-bg-soft);
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(232, 228, 220, 0.18);
 }
 
 .hero-panel .panel-value,
@@ -814,7 +814,7 @@ select {
   font-family: "IBM Plex Mono", monospace;
 }
 
-.service-card > p:not(.service-index),
+.service-card>p:not(.service-index),
 .contact-card p:last-child {
   margin: 0;
   color: var(--color-text-soft);
@@ -1084,7 +1084,7 @@ select {
   color: rgba(232, 228, 220, 0.6);
 }
 
-.contact-list li + li {
+.contact-list li+li {
   margin-top: 0.5rem;
 }
 
@@ -1196,7 +1196,9 @@ select {
 }
 
 .page-card {
-  padding: 1.5rem;
+  padding: 1.75rem 1.75rem 1.75rem 2rem;
+  border-left-width: 3px;
+  border-left-color: rgba(232, 228, 220, 0.45);
 }
 
 .page-content :first-child {
@@ -1211,7 +1213,7 @@ select {
   padding-left: 1.1rem;
 }
 
-.page-content li + li {
+.page-content li+li {
   margin-top: 0.55rem;
 }
 
@@ -1323,7 +1325,7 @@ select {
   color: var(--color-text-soft);
 }
 
-.lane-card li + li {
+.lane-card li+li {
   margin-top: 0.55rem;
 }
 
@@ -1395,7 +1397,7 @@ select {
   gap: 1.25rem;
 }
 
-.guide-grid > :nth-child(odd):last-child {
+.guide-grid> :nth-child(odd):last-child {
   grid-column: 1 / -1;
 }
 
@@ -2166,8 +2168,8 @@ select {
   color: var(--color-text-soft);
 }
 
-.catalog-card li + li,
-.page-content li + li {
+.catalog-card li+li,
+.page-content li+li {
   margin-top: 0.55rem;
 }
 
@@ -2217,6 +2219,7 @@ select {
 }
 
 @media (max-width: 1080px) {
+
   .hero-grid,
   .tactical-grid,
   .authority-grid,
@@ -2537,6 +2540,7 @@ select {
 }
 
 @media (max-width: 560px) {
+
   .proof-figure-secondary,
   .hero-panel-links {
     display: none;
@@ -2565,6 +2569,7 @@ select {
 
 /* ── Print ── */
 @media print {
+
   *,
   *::before,
   *::after {
@@ -2615,7 +2620,9 @@ select {
     max-width: 100% !important;
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     page-break-after: avoid;
   }
 

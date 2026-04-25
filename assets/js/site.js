@@ -1723,3 +1723,48 @@ if (opsViewRoot) {
     loadView();
   }
 }
+
+/* ─── Sticky mobile CTA — auto-injects on public pages without one ── */
+(function () {
+  "use strict";
+  if (typeof window === "undefined" || typeof document === "undefined") return;
+
+  var PHONE = "+15145550199";
+  var SMS_BODY_FR = "Bonjour%2C%20j%27ai%20besoin%20d%27une%20%C3%A9valuation%20pour%20";
+  var SMS_BODY_EN = "Hi%2C%20I%20need%20an%20assessment%20for%20";
+
+  function init() {
+    var path = window.location.pathname || "";
+    if (/\/operations\//.test(path) || /\/dossier\//.test(path)) return;
+    if (document.body && document.body.dataset && document.body.dataset.noStickyCta) return;
+    if (document.querySelector(".sticky-bar")) return; // existing one wins
+
+    var lang = (document.documentElement.lang || "fr").toLowerCase();
+    var isFR = lang.indexOf("fr") === 0;
+    var labels = isFR
+      ? { call: "Appeler", sms: "SMS", bot: "Assistant IA", aria: "Contacts rapides", ariaCall: "Appeler le laboratoire", ariaSms: "Envoyer un SMS", ariaBot: "Ouvrir l'assistant IA" }
+      : { call: "Call", sms: "Text", bot: "AI Assistant", aria: "Quick contacts", ariaCall: "Call the lab", ariaSms: "Send a text", ariaBot: "Open the AI assistant" };
+    var smsBody = isFR ? SMS_BODY_FR : SMS_BODY_EN;
+
+    var bar = document.createElement("div");
+    bar.className = "sticky-bar";
+    bar.setAttribute("role", "group");
+    bar.setAttribute("aria-label", labels.aria);
+    bar.innerHTML =
+      '<a class="sticky-bar-item sticky-bar-item--call" href="tel:' + PHONE + '" aria-label="' + labels.ariaCall + '">' +
+      '<span class="sticky-call-dot" aria-hidden="true"></span>' +
+      '<span class="sticky-bar-label">' + labels.call + '</span></a>' +
+      '<a class="sticky-bar-item sticky-bar-item--sms" href="sms:' + PHONE + '?body=' + smsBody + '" aria-label="' + labels.ariaSms + '">' +
+      '<span class="sticky-bar-label">' + labels.sms + '</span></a>' +
+      '<button type="button" class="sticky-bar-item sticky-bar-item--bot" data-open-chat aria-label="' + labels.ariaBot + '">' +
+      '<span class="sticky-bar-label">' + labels.bot + '</span></button>';
+
+    document.body.appendChild(bar);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

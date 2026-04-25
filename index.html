@@ -193,7 +193,7 @@
   </header>
 
   <main id="contenu">
-        <section class="hero section" aria-labelledby="hero-title">
+    <section class="hero section" aria-labelledby="hero-title">
       <div class="hero-backdrop" aria-hidden="true"></div>
       <div class="container hero-grid hero-grid--split">
         <div class="hero-copy">
@@ -219,10 +219,18 @@
             <p class="hero-panel-eyebrow">Engagement laboratoire</p>
             <p class="hero-panel-headline">Diagnostic gratuit, sans engagement, en 24 h.</p>
             <ol class="hero-panel-list" role="list">
-              <li><span>1</span><div><strong>Vous décrivez le problème</strong><em>2 minutes en ligne</em></div></li>
-              <li><span>2</span><div><strong>On examine l'appareil</strong><em>Aucun frais à cette étape</em></div></li>
-              <li><span>3</span><div><strong>On vous donne un prix ferme</strong><em>Délai et chances de succès</em></div></li>
-              <li><span>4</span><div><strong>Vous décidez</strong><em>Pas d'accord, pas de facture</em></div></li>
+              <li><span>1</span>
+                <div><strong>Vous décrivez le problème</strong><em>2 minutes en ligne</em></div>
+              </li>
+              <li><span>2</span>
+                <div><strong>On examine l'appareil</strong><em>Aucun frais à cette étape</em></div>
+              </li>
+              <li><span>3</span>
+                <div><strong>On vous donne un prix ferme</strong><em>Délai et chances de succès</em></div>
+              </li>
+              <li><span>4</span>
+                <div><strong>Vous décidez</strong><em>Pas d'accord, pas de facture</em></div>
+              </li>
             </ol>
             <div class="hero-panel-signature">
               <p class="sig-name">Olivier Blanchet</p>
@@ -583,10 +591,9 @@
 
                 <label class="consent-check field-full">
                   <input type="checkbox" name="consentement" required>
-                  <span>J'accepte que NEXURA DATA utilise les renseignements transmis dans ce formulaire afin d'ouvrir
-                    et de gérer ma demande, de communiquer avec moi au sujet de ce dossier et d'assurer le suivi
-                    opérationnel du service, conformément à la <a href="politique-confidentialite.html">Politique de
-                      confidentialité</a>.</span>
+                  <span>J'autorise NEXURADATA à utiliser ces renseignements pour ouvrir mon dossier et communiquer avec
+                    moi à son sujet. Aucune sollicitation. Détails&nbsp;: <a
+                      href="politique-confidentialite.html">Politique de confidentialité</a>.</span>
                 </label>
 
                 <label class="field field-honeypot" aria-hidden="true">
@@ -601,11 +608,6 @@
                   class="button button-secondary">Urgence par courriel</a>
               </div>
 
-              <p class="form-note">En soumettant ce formulaire, vous autorisez NEXURA DATA à utiliser les renseignements
-                fournis pour traiter votre demande, ouvrir un dossier initial, communiquer avec vous au sujet de
-                l'évaluation et du suivi, et transmettre, au besoin, des communications opérationnelles liées à ce
-                dossier. Ce consentement ne constitue pas un consentement à recevoir des communications promotionnelles.
-              </p>
               <p class="form-status" data-form-status aria-live="polite"></p>
             </form>
 
@@ -686,6 +688,7 @@
       </section>
     </div>
   </footer>
+  <script src="/assets/js/cookie-consent.js" defer></script>
 </body>
 
 </html>

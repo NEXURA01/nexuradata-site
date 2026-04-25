@@ -1,7 +1,6 @@
 /* NEXURADATA — Cookie consent (Loi 25 / Quebec) ----------------------------
- * Affiche un bandeau au premier chargement.
- * Stocke le choix dans localStorage ("nxd_cookie_consent" = "accept" | "reject").
- * Bilingue selon <html lang>. Aucune dépendance, aucun tracking par défaut.
+ * Bilingual notice (FR + EN side-by-side). Stores choice in localStorage
+ * ("nxd_cookie_consent" = "accept" | "reject"). No third-party tracking.
  * --------------------------------------------------------------------------*/
 (function () {
     "use strict";
@@ -12,50 +11,69 @@
         return;
     }
 
-    var lang = (document.documentElement.lang || "fr").toLowerCase().slice(0, 2);
-    var isFR = lang === "fr";
+    var fr = {
+        label: "FR",
+        title: "Témoins essentiels uniquement",
+        body: "Sécurité, formulaire de dossier, préférence linguistique. Aucun témoin publicitaire, aucun traceur tiers. Conformément à la Loi 25 du Québec, vous gardez le contrôle.",
+        link: "Politique de confidentialité",
+        href: "/politique-confidentialite.html"
+    };
+    var en = {
+        label: "EN",
+        title: "Essential cookies only",
+        body: "Security, case form, language preference. No advertising cookies, no third-party trackers. Under Quebec's Law 25, the choice remains yours.",
+        link: "Privacy policy",
+        href: "/en/politique-confidentialite.html"
+    };
 
-    var t = isFR
-        ? {
-            prompt: "~/privacy",
-            title: "Témoins essentiels uniquement",
-            body:
-                "Sécurité, formulaire de dossier, préférence linguistique. Aucun pixel publicitaire, aucun traceur tiers. Conformément à la Loi 25 du Québec, vous gardez le contrôle.",
-            accept: "Accepter",
-            reject: "Refuser",
-            link: "Politique de confidentialité",
-            href: "/politique-confidentialite.html"
-        }
-        : {
-            prompt: "~/privacy",
-            title: "Essential cookies only",
-            body:
-                "Security, case form, language preference. No advertising pixels, no third-party trackers. Under Quebec's Law 25, the choice is yours.",
-            link: "Privacy policy",
-            href: "/en/politique-confidentialite.html"
-        };
-
-    function el(tag, props, children) {
-        var node = document.createElement(tag);
-        if (props) for (var k in props) {
-            if (k === "class") node.className = props[k];
-            else if (k === "html") node.innerHTML = props[k];
-            else node.setAttribute(k, props[k]);
-        }
-        if (children) children.forEach(function (c) { node.appendChild(c); });
-        return node;
+    function column(t, langCode) {
+        var col = document.createElement("div");
+        col.className = "nxd-consent-col";
+        col.setAttribute("lang", langCode);
+        col.innerHTML =
+            '<p class="nxd-consent-lang">' + t.label + '</p>' +
+            '<p class="nxd-consent-title">' + t.title + '</p>' +
+            '<p class="nxd-consent-body">' + t.body + ' <a href="' + t.href + '">' + t.link + '</a>.</p>';
+        return col;
     }
 
     function mount() {
-        var banner = el("div", { class: "nxd-consent", role: "dialog", "aria-labelledby": "nxd-consent-title", "aria-describedby": "nxd-consent-body" });
-        var inner = el("div", { class: "nxd-consent-inner" });
-        var eyebrow = el("p", { class: "nxd-consent-eyebrow", id: "nxd-consent-title" });
-        eyebrow.innerHTML = '<span class="nxd-consent-dot" aria-hidden="true"></span><span class="nxd-consent-prompt">' + t.prompt + '</span><span class="nxd-consent-title">' + t.title + '</span>';
-        inner.appendChild(eyebrow);
+        var banner = document.createElement("div");
+        banner.className = "nxd-consent";
+        banner.setAttribute("role", "dialog");
+        banner.setAttribute("aria-labelledby", "nxd-consent-head");
 
-        var actions = el("div", { class: "nxd-consent-actions" });
-        var reject = el("button", { type: "button", class: "nxd-consent-btn nxd-consent-btn--ghost", html: t.reject });
-        var accept = el("button", { type: "button", class: "nxd-consent-btn nxd-consent-btn--primary", html: t.accept });
+        var inner = document.createElement("div");
+        inner.className = "nxd-consent-inner";
+
+        var head = document.createElement("p");
+        head.className = "nxd-consent-eyebrow";
+        head.id = "nxd-consent-head";
+        head.innerHTML =
+            '<span class="nxd-consent-dot" aria-hidden="true"></span>' +
+            '<span class="nxd-consent-prompt">~/privacy</span>' +
+            '<span class="nxd-consent-headline">Témoins · Cookies</span>';
+        inner.appendChild(head);
+
+        var cols = document.createElement("div");
+        cols.className = "nxd-consent-cols";
+        cols.appendChild(column(fr, "fr"));
+        cols.appendChild(column(en, "en"));
+        inner.appendChild(cols);
+
+        var actions = document.createElement("div");
+        actions.className = "nxd-consent-actions";
+
+        var reject = document.createElement("button");
+        reject.type = "button";
+        reject.className = "nxd-consent-btn nxd-consent-btn--ghost";
+        reject.innerHTML = '<span lang="fr">Refuser</span><span class="nxd-consent-btn-sep" aria-hidden="true">·</span><span lang="en">Decline</span>';
+
+        var accept = document.createElement("button");
+        accept.type = "button";
+        accept.className = "nxd-consent-btn nxd-consent-btn--primary";
+        accept.innerHTML = '<span lang="fr">Accepter</span><span class="nxd-consent-btn-sep" aria-hidden="true">·</span><span lang="en">Accept</span>';
+
         actions.appendChild(reject);
         actions.appendChild(accept);
         inner.appendChild(actions);

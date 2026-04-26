@@ -52,6 +52,9 @@ html {
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
   font-family: var(--serif);
   color: var(--os);
   background: var(--noir);
@@ -2598,6 +2601,18 @@ select {
 @media (max-width: 720px) {
   html {
     scroll-padding-top: 6rem;
+  }
+
+  .page-shell {
+    padding: 3rem 0 4rem;
+  }
+
+  .page-card {
+    padding: 1.25rem 1.1rem;
+  }
+
+  .page-content ul {
+    padding-left: 1rem;
   }
 
   .navbar {

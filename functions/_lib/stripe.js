@@ -1,5 +1,5 @@
 const STRIPE_API_BASE = "https://api.stripe.com/v1";
-const STRIPE_API_VERSION = "2026-02-25.clover";
+const STRIPE_API_VERSION = "2026-04-22.dahlia";
 
 const normalizeString = (value, maxLength = 500) => {
   if (typeof value !== "string") {

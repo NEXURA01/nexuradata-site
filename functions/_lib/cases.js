@@ -17,7 +17,7 @@ const allowedUrgencies = new Set([
 ]);
 
 const allowedStepStates = new Set(["pending", "active", "complete"]);
-const allowedPaymentKinds = new Set(["deposit", "final", "custom"]);
+const allowedPaymentKinds = new Set(["deposit", "final", "custom", "evaluation"]);
 const allowedQuoteStatuses = new Set(["none", "draft", "sent", "approved", "expired", "declined"]);
 const allowedReminderTypes = new Set(["quote_follow_up", "payment_follow_up", "missing_information", "general_follow_up"]);
 const accessCodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";

@@ -144,8 +144,9 @@ select {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
+  gap: clamp(14px, 1.6vw, 24px);
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .nav-links a,
@@ -168,7 +169,7 @@ select {
 .nav-links .lang-switch {
   opacity: 0.55;
   border-left: var(--rule);
-  padding-left: 24px;
+  padding-left: clamp(14px, 1.6vw, 24px);
 }
 
 /* Legacy .navbar support for operations pages */

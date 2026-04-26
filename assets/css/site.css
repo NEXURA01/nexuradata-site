@@ -3738,7 +3738,7 @@ body.nxd-consent-open .sticky-bar {
   font-size: 1.05rem;
   line-height: 1.7;
   margin-bottom: 1.5rem;
-  color: var(--ink, #1a1a18);
+  color: var(--os);
 }
 
 .trust-bullets {
@@ -3766,7 +3766,7 @@ body.nxd-consent-open .sticky-bar {
 
 .trust-bullets strong {
   font-weight: 600;
-  color: var(--ink, #1a1a18);
+  color: var(--os);
 }
 
 .trust-credentials {
@@ -3844,7 +3844,7 @@ body.nxd-consent-open .sticky-bar {
 }
 
 .trust-testimonial {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-top: 1.25rem;
   position: relative;
   counter-increment: tst;
@@ -3855,7 +3855,7 @@ body.nxd-consent-open .sticky-bar {
   position: absolute;
   top: -0.6rem;
   left: 0;
-  background: #fbf7ee;
+  background: #11151c;
   padding: 0 0.5rem 0 0;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.72rem;
@@ -3868,22 +3868,22 @@ body.nxd-consent-open .sticky-bar {
   font-family: var(--serif, Georgia, serif);
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--ink, #1a1a18);
+  color: var(--os);
   font-style: italic;
 }
 
 .trust-testimonial-meta {
   font-size: 0.82rem;
-  color: rgba(26, 26, 24, 0.65);
+  color: rgba(232, 228, 220, 0.65);
   margin: 0;
   font-family: 'IBM Plex Sans', sans-serif;
 }
 
 .trust-footnote {
   font-size: 0.78rem;
-  color: rgba(26, 26, 24, 0.55);
+  color: rgba(232, 228, 220, 0.55);
   font-style: italic;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 1rem;
   margin: 0;
   line-height: 1.55;

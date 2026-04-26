@@ -111,7 +111,13 @@ select {
 }
 
 /* ── Locked branding: header/nav ─────────────────────────────── */
-.brand-logo,
+.brand-logo {
+  display: block;
+  height: 36px;
+  width: auto;
+  max-width: none;
+}
+
 .footer-logo {
   display: block;
   width: 100%;
@@ -135,7 +141,7 @@ select {
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  padding: 28px 0;
+  padding: 16px 0;
 }
 
 .brand {
@@ -2892,7 +2898,7 @@ select {
 
 @media (max-width: 640px) {
   .brand-logo {
-    height: 32px;
+    height: 28px;
   }
 
   .footer-logo {

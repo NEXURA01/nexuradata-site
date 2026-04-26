@@ -7,161 +7,161 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const cities = [
-  {
-    slug: "saint-hubert",
-    fr: {
-      name: "Saint-Hubert",
-      title: "Récupération de données à Saint-Hubert",
-      eyebrow: "Saint-Hubert · Longueuil / Rive-Sud",
-      meta: "PME industrielles près de l'aéroport, familles du Vieux-Saint-Hubert, écoles du secteur Laflèche — Saint-Hubert dépose chaque semaine ses dossiers au laboratoire NEXURA DATA.",
-      hoods: ["Vieux-Saint-Hubert", "Laflèche", "Iberville", "Aéroport Saint-Hubert", "Boulevard Cousineau", "Chambly Est"],
-      distance: "5 km",
-      drive: "10 minutes",
-      cases: [
-        "NAS Synology de PME aéronautique près de l'aéroport — RAID 5 reconstruit après coupure électrique.",
-        "Disque externe Western Digital d'un photographe de Laflèche — fichiers RAW récupérés en 3 jours.",
-        "MacBook Pro tombé sur le boulevard Cousineau — dossiers de cours universitaires extraits."
-      ]
+    {
+        slug: "saint-hubert",
+        fr: {
+            name: "Saint-Hubert",
+            title: "Récupération de données à Saint-Hubert",
+            eyebrow: "Saint-Hubert · Longueuil / Rive-Sud",
+            meta: "PME industrielles près de l'aéroport, familles du Vieux-Saint-Hubert, écoles du secteur Laflèche — Saint-Hubert dépose chaque semaine ses dossiers au laboratoire NEXURA DATA.",
+            hoods: ["Vieux-Saint-Hubert", "Laflèche", "Iberville", "Aéroport Saint-Hubert", "Boulevard Cousineau", "Chambly Est"],
+            distance: "5 km",
+            drive: "10 minutes",
+            cases: [
+                "NAS Synology de PME aéronautique près de l'aéroport — RAID 5 reconstruit après coupure électrique.",
+                "Disque externe Western Digital d'un photographe de Laflèche — fichiers RAW récupérés en 3 jours.",
+                "MacBook Pro tombé sur le boulevard Cousineau — dossiers de cours universitaires extraits."
+            ]
+        },
+        en: {
+            name: "Saint-Hubert",
+            title: "Data recovery in Saint-Hubert",
+            eyebrow: "Saint-Hubert · Longueuil / South Shore",
+            meta: "Industrial businesses near the airport, families in Old Saint-Hubert, schools in the Laflèche area — Saint-Hubert sends recovery cases to the NEXURA DATA lab every week.",
+            hoods: ["Old Saint-Hubert", "Laflèche", "Iberville", "Saint-Hubert Airport", "Cousineau Boulevard", "Chambly East"],
+            distance: "5 km",
+            drive: "10 minutes",
+            cases: [
+                "Synology NAS at an aerospace SMB near the airport — RAID 5 rebuilt after a power outage.",
+                "Western Digital external drive from a Laflèche photographer — RAW files recovered in 3 days.",
+                "MacBook Pro dropped on Cousineau Boulevard — university coursework extracted."
+            ]
+        }
     },
-    en: {
-      name: "Saint-Hubert",
-      title: "Data recovery in Saint-Hubert",
-      eyebrow: "Saint-Hubert · Longueuil / South Shore",
-      meta: "Industrial businesses near the airport, families in Old Saint-Hubert, schools in the Laflèche area — Saint-Hubert sends recovery cases to the NEXURA DATA lab every week.",
-      hoods: ["Old Saint-Hubert", "Laflèche", "Iberville", "Saint-Hubert Airport", "Cousineau Boulevard", "Chambly East"],
-      distance: "5 km",
-      drive: "10 minutes",
-      cases: [
-        "Synology NAS at an aerospace SMB near the airport — RAID 5 rebuilt after a power outage.",
-        "Western Digital external drive from a Laflèche photographer — RAW files recovered in 3 days.",
-        "MacBook Pro dropped on Cousineau Boulevard — university coursework extracted."
-      ]
-    }
-  },
-  {
-    slug: "boucherville",
-    fr: {
-      name: "Boucherville",
-      title: "Récupération de données à Boucherville",
-      eyebrow: "Boucherville · Rive-Sud de Montréal",
-      meta: "Sièges sociaux et PME du parc industriel, familles du Vieux-Boucherville, professionnels de Du Fort-Saint-Louis — Boucherville confie ses dossiers de récupération au laboratoire NEXURA DATA.",
-      hoods: ["Vieux-Boucherville", "Du Fort-Saint-Louis", "Parc industriel Boucherville", "Harmonie", "Rivière-aux-Pins", "Îles-Percées"],
-      distance: "12 km",
-      drive: "15 minutes",
-      cases: [
-        "Serveur Dell PowerEdge d'une firme comptable du parc industriel — base SQL Server restaurée après corruption.",
-        "Disque interne d'un poste graphiste à Harmonie — projets InDesign et Illustrator récupérés.",
-        "Clé USB chiffrée BitLocker d'un consultant — données extraites avec phrase de récupération."
-      ]
+    {
+        slug: "boucherville",
+        fr: {
+            name: "Boucherville",
+            title: "Récupération de données à Boucherville",
+            eyebrow: "Boucherville · Rive-Sud de Montréal",
+            meta: "Sièges sociaux et PME du parc industriel, familles du Vieux-Boucherville, professionnels de Du Fort-Saint-Louis — Boucherville confie ses dossiers de récupération au laboratoire NEXURA DATA.",
+            hoods: ["Vieux-Boucherville", "Du Fort-Saint-Louis", "Parc industriel Boucherville", "Harmonie", "Rivière-aux-Pins", "Îles-Percées"],
+            distance: "12 km",
+            drive: "15 minutes",
+            cases: [
+                "Serveur Dell PowerEdge d'une firme comptable du parc industriel — base SQL Server restaurée après corruption.",
+                "Disque interne d'un poste graphiste à Harmonie — projets InDesign et Illustrator récupérés.",
+                "Clé USB chiffrée BitLocker d'un consultant — données extraites avec phrase de récupération."
+            ]
+        },
+        en: {
+            name: "Boucherville",
+            title: "Data recovery in Boucherville",
+            eyebrow: "Boucherville · Montreal South Shore",
+            meta: "Headquarters and SMBs in the industrial park, families in Old Boucherville, professionals in Du Fort-Saint-Louis — Boucherville trusts the NEXURA DATA lab with recovery cases.",
+            hoods: ["Old Boucherville", "Du Fort-Saint-Louis", "Boucherville industrial park", "Harmonie", "Rivière-aux-Pins", "Îles-Percées"],
+            distance: "12 km",
+            drive: "15 minutes",
+            cases: [
+                "Dell PowerEdge server at an accounting firm in the industrial park — SQL Server database restored after corruption.",
+                "Internal drive from a designer's workstation in Harmonie — InDesign and Illustrator projects recovered.",
+                "BitLocker-encrypted USB key from a consultant — data extracted using the recovery phrase."
+            ]
+        }
     },
-    en: {
-      name: "Boucherville",
-      title: "Data recovery in Boucherville",
-      eyebrow: "Boucherville · Montreal South Shore",
-      meta: "Headquarters and SMBs in the industrial park, families in Old Boucherville, professionals in Du Fort-Saint-Louis — Boucherville trusts the NEXURA DATA lab with recovery cases.",
-      hoods: ["Old Boucherville", "Du Fort-Saint-Louis", "Boucherville industrial park", "Harmonie", "Rivière-aux-Pins", "Îles-Percées"],
-      distance: "12 km",
-      drive: "15 minutes",
-      cases: [
-        "Dell PowerEdge server at an accounting firm in the industrial park — SQL Server database restored after corruption.",
-        "Internal drive from a designer's workstation in Harmonie — InDesign and Illustrator projects recovered.",
-        "BitLocker-encrypted USB key from a consultant — data extracted using the recovery phrase."
-      ]
-    }
-  },
-  {
-    slug: "saint-leonard",
-    fr: {
-      name: "Saint-Léonard",
-      title: "Récupération de données à Saint-Léonard",
-      eyebrow: "Saint-Léonard · Est de Montréal",
-      meta: "Commerces de la rue Jean-Talon, professionnels de Pie-IX, familles du quartier Domaine-Renaissance — Saint-Léonard envoie chaque semaine ses dossiers au laboratoire NEXURA DATA.",
-      hoods: ["Jean-Talon Est", "Domaine-Renaissance", "Boulevard Pie-IX", "Boulevard Lacordaire", "Métro Viau", "Boulevard Langelier"],
-      distance: "20 km",
-      drive: "25 minutes",
-      cases: [
-        "Disque externe Seagate d'un commerce sur Jean-Talon — registres de ventes Excel récupérés.",
-        "iPhone 14 Pro tombé d'un balcon sur Pie-IX — photos et messages WhatsApp extraits.",
-        "NAS Synology DS220 d'un cabinet médical — radiographies DICOM récupérées après crash double-disque."
-      ]
+    {
+        slug: "saint-leonard",
+        fr: {
+            name: "Saint-Léonard",
+            title: "Récupération de données à Saint-Léonard",
+            eyebrow: "Saint-Léonard · Est de Montréal",
+            meta: "Commerces de la rue Jean-Talon, professionnels de Pie-IX, familles du quartier Domaine-Renaissance — Saint-Léonard envoie chaque semaine ses dossiers au laboratoire NEXURA DATA.",
+            hoods: ["Jean-Talon Est", "Domaine-Renaissance", "Boulevard Pie-IX", "Boulevard Lacordaire", "Métro Viau", "Boulevard Langelier"],
+            distance: "20 km",
+            drive: "25 minutes",
+            cases: [
+                "Disque externe Seagate d'un commerce sur Jean-Talon — registres de ventes Excel récupérés.",
+                "iPhone 14 Pro tombé d'un balcon sur Pie-IX — photos et messages WhatsApp extraits.",
+                "NAS Synology DS220 d'un cabinet médical — radiographies DICOM récupérées après crash double-disque."
+            ]
+        },
+        en: {
+            name: "Saint-Léonard",
+            title: "Data recovery in Saint-Léonard",
+            eyebrow: "Saint-Léonard · East Montreal",
+            meta: "Businesses on Jean-Talon Street, professionals near Pie-IX, families in the Domaine-Renaissance neighborhood — Saint-Léonard sends recovery cases to the NEXURA DATA lab every week.",
+            hoods: ["Jean-Talon East", "Domaine-Renaissance", "Pie-IX Boulevard", "Lacordaire Boulevard", "Viau Metro", "Langelier Boulevard"],
+            distance: "20 km",
+            drive: "25 minutes",
+            cases: [
+                "Seagate external drive from a shop on Jean-Talon — Excel sales registers recovered.",
+                "iPhone 14 Pro dropped from a balcony on Pie-IX — photos and WhatsApp messages extracted.",
+                "Synology DS220 NAS at a medical clinic — DICOM x-rays recovered after dual-disk failure."
+            ]
+        }
     },
-    en: {
-      name: "Saint-Léonard",
-      title: "Data recovery in Saint-Léonard",
-      eyebrow: "Saint-Léonard · East Montreal",
-      meta: "Businesses on Jean-Talon Street, professionals near Pie-IX, families in the Domaine-Renaissance neighborhood — Saint-Léonard sends recovery cases to the NEXURA DATA lab every week.",
-      hoods: ["Jean-Talon East", "Domaine-Renaissance", "Pie-IX Boulevard", "Lacordaire Boulevard", "Viau Metro", "Langelier Boulevard"],
-      distance: "20 km",
-      drive: "25 minutes",
-      cases: [
-        "Seagate external drive from a shop on Jean-Talon — Excel sales registers recovered.",
-        "iPhone 14 Pro dropped from a balcony on Pie-IX — photos and WhatsApp messages extracted.",
-        "Synology DS220 NAS at a medical clinic — DICOM x-rays recovered after dual-disk failure."
-      ]
-    }
-  },
-  {
-    slug: "pointe-claire",
-    fr: {
-      name: "Pointe-Claire",
-      title: "Récupération de données à Pointe-Claire",
-      eyebrow: "Pointe-Claire · Ouest-de-l'Île de Montréal",
-      meta: "Sièges sociaux du parc industriel, familles du Village de Pointe-Claire, professionnels du Fairview — Pointe-Claire confie ses dossiers de récupération au laboratoire NEXURA DATA.",
-      hoods: ["Village de Pointe-Claire", "Fairview", "Cedar Park", "Valois", "Lakeside", "Boulevard des Sources"],
-      distance: "35 km",
-      drive: "40 minutes",
-      cases: [
-        "Serveur HP ProLiant d'une firme d'ingénierie du parc industriel — données CAD/AutoCAD récupérées.",
-        "Disque dur Toshiba externe d'une famille du Village — albums photo numériques restaurés.",
-        "MacBook Air d'un étudiant universitaire à Valois — mémoire de maîtrise extraite après corruption APFS."
-      ]
+    {
+        slug: "pointe-claire",
+        fr: {
+            name: "Pointe-Claire",
+            title: "Récupération de données à Pointe-Claire",
+            eyebrow: "Pointe-Claire · Ouest-de-l'Île de Montréal",
+            meta: "Sièges sociaux du parc industriel, familles du Village de Pointe-Claire, professionnels du Fairview — Pointe-Claire confie ses dossiers de récupération au laboratoire NEXURA DATA.",
+            hoods: ["Village de Pointe-Claire", "Fairview", "Cedar Park", "Valois", "Lakeside", "Boulevard des Sources"],
+            distance: "35 km",
+            drive: "40 minutes",
+            cases: [
+                "Serveur HP ProLiant d'une firme d'ingénierie du parc industriel — données CAD/AutoCAD récupérées.",
+                "Disque dur Toshiba externe d'une famille du Village — albums photo numériques restaurés.",
+                "MacBook Air d'un étudiant universitaire à Valois — mémoire de maîtrise extraite après corruption APFS."
+            ]
+        },
+        en: {
+            name: "Pointe-Claire",
+            title: "Data recovery in Pointe-Claire",
+            eyebrow: "Pointe-Claire · West Island of Montreal",
+            meta: "Headquarters in the industrial park, families in the Pointe-Claire Village, professionals near Fairview — Pointe-Claire trusts the NEXURA DATA lab with recovery cases.",
+            hoods: ["Pointe-Claire Village", "Fairview", "Cedar Park", "Valois", "Lakeside", "Sources Boulevard"],
+            distance: "35 km",
+            drive: "40 minutes",
+            cases: [
+                "HP ProLiant server at an engineering firm in the industrial park — CAD/AutoCAD data recovered.",
+                "Toshiba external hard drive from a Village family — digital photo albums restored.",
+                "MacBook Air from a graduate student in Valois — master's thesis extracted after APFS corruption."
+            ]
+        }
     },
-    en: {
-      name: "Pointe-Claire",
-      title: "Data recovery in Pointe-Claire",
-      eyebrow: "Pointe-Claire · West Island of Montreal",
-      meta: "Headquarters in the industrial park, families in the Pointe-Claire Village, professionals near Fairview — Pointe-Claire trusts the NEXURA DATA lab with recovery cases.",
-      hoods: ["Pointe-Claire Village", "Fairview", "Cedar Park", "Valois", "Lakeside", "Sources Boulevard"],
-      distance: "35 km",
-      drive: "40 minutes",
-      cases: [
-        "HP ProLiant server at an engineering firm in the industrial park — CAD/AutoCAD data recovered.",
-        "Toshiba external hard drive from a Village family — digital photo albums restored.",
-        "MacBook Air from a graduate student in Valois — master's thesis extracted after APFS corruption."
-      ]
+    {
+        slug: "mascouche",
+        fr: {
+            name: "Mascouche",
+            title: "Récupération de données à Mascouche",
+            eyebrow: "Mascouche · Couronne Nord / Lanaudière",
+            meta: "PME du parc industriel, familles du Vieux-Mascouche, commerces de la montée Masson — Mascouche dépose chaque semaine ses dossiers au laboratoire NEXURA DATA.",
+            hoods: ["Vieux-Mascouche", "Montée Masson", "Le Gardeur", "Domaine du Repos", "Plateau Mascouche", "La Plaine"],
+            distance: "45 km",
+            drive: "50 minutes",
+            cases: [
+                "NAS QNAP d'un atelier mécanique sur la montée Masson — base de données client SQL récupérée.",
+                "Disque externe LaCie d'une famille du Vieux-Mascouche — vidéos de mariage 4K restaurées.",
+                "Téléphone Samsung Galaxy noyé dans la rivière des Mille Îles — contacts et SMS extraits."
+            ]
+        },
+        en: {
+            name: "Mascouche",
+            title: "Data recovery in Mascouche",
+            eyebrow: "Mascouche · North Shore / Lanaudière",
+            meta: "SMBs in the industrial park, families in Old Mascouche, businesses on Montée Masson — Mascouche sends recovery cases to the NEXURA DATA lab every week.",
+            hoods: ["Old Mascouche", "Montée Masson", "Le Gardeur", "Domaine du Repos", "Plateau Mascouche", "La Plaine"],
+            distance: "45 km",
+            drive: "50 minutes",
+            cases: [
+                "QNAP NAS at a mechanical workshop on Montée Masson — SQL customer database recovered.",
+                "LaCie external drive from an Old Mascouche family — 4K wedding videos restored.",
+                "Samsung Galaxy phone submerged in the Mille Îles River — contacts and SMS extracted."
+            ]
+        }
     }
-  },
-  {
-    slug: "mascouche",
-    fr: {
-      name: "Mascouche",
-      title: "Récupération de données à Mascouche",
-      eyebrow: "Mascouche · Couronne Nord / Lanaudière",
-      meta: "PME du parc industriel, familles du Vieux-Mascouche, commerces de la montée Masson — Mascouche dépose chaque semaine ses dossiers au laboratoire NEXURA DATA.",
-      hoods: ["Vieux-Mascouche", "Montée Masson", "Le Gardeur", "Domaine du Repos", "Plateau Mascouche", "La Plaine"],
-      distance: "45 km",
-      drive: "50 minutes",
-      cases: [
-        "NAS QNAP d'un atelier mécanique sur la montée Masson — base de données client SQL récupérée.",
-        "Disque externe LaCie d'une famille du Vieux-Mascouche — vidéos de mariage 4K restaurées.",
-        "Téléphone Samsung Galaxy noyé dans la rivière des Mille Îles — contacts et SMS extraits."
-      ]
-    },
-    en: {
-      name: "Mascouche",
-      title: "Data recovery in Mascouche",
-      eyebrow: "Mascouche · North Shore / Lanaudière",
-      meta: "SMBs in the industrial park, families in Old Mascouche, businesses on Montée Masson — Mascouche sends recovery cases to the NEXURA DATA lab every week.",
-      hoods: ["Old Mascouche", "Montée Masson", "Le Gardeur", "Domaine du Repos", "Plateau Mascouche", "La Plaine"],
-      distance: "45 km",
-      drive: "50 minutes",
-      cases: [
-        "QNAP NAS at a mechanical workshop on Montée Masson — SQL customer database recovered.",
-        "LaCie external drive from an Old Mascouche family — 4K wedding videos restored.",
-        "Samsung Galaxy phone submerged in the Mille Îles River — contacts and SMS extracted."
-      ]
-    }
-  }
 ];
 
 const buildFr = (c) => `<!DOCTYPE html>
@@ -465,8 +465,8 @@ ${c.en.cases.map(x => `            <li>${x}</li>`).join("\n")}
 
 let count = 0;
 for (const c of cities) {
-  writeFileSync(join(root, `recuperation-donnees-${c.slug}.html`), buildFr(c), "utf8");
-  writeFileSync(join(root, "en", `recuperation-donnees-${c.slug}.html`), buildEn(c), "utf8");
-  count += 2;
+    writeFileSync(join(root, `recuperation-donnees-${c.slug}.html`), buildFr(c), "utf8");
+    writeFileSync(join(root, "en", `recuperation-donnees-${c.slug}.html`), buildEn(c), "utf8");
+    count += 2;
 }
 console.log(`Generated ${count} city pages (${cities.length} cities × 2 languages).`);

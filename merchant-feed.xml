@@ -11,7 +11,7 @@
       <g:description>Accidental deletion, emptied recycle bin, missing folder. Simple recovery with no apparent physical damage. Free initial assessment.</g:description>
       <g:link>https://nexuradata.ca/en/tarifs-recuperation-donnees-montreal.html</g:link>
       <g:image_link>https://nexuradata.ca/assets/icons/og-default.png</g:image_link>
-      <g:price>79.00 CAD</g:price>
+      <g:price>149.00 CAD</g:price>
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>NEXURADATA</g:brand>
@@ -22,10 +22,10 @@
     <item>
       <g:id>svc-external-usb-card</g:id>
       <g:title>External Drive, USB &amp; Memory Card Recovery — Montreal</g:title>
-      <g:description>Media still detected or partly readable, unstable access, recovery of photos, videos or common documents. Free initial assessment.</g:description>
+      <g:description>Media still detected or partly readable, logical or controller failure, recovery of photos, videos or common documents. Free initial assessment.</g:description>
       <g:link>https://nexuradata.ca/en/tarifs-recuperation-donnees-montreal.html</g:link>
       <g:image_link>https://nexuradata.ca/assets/icons/og-default.png</g:image_link>
-      <g:price>129.00 CAD</g:price>
+      <g:price>249.00 CAD</g:price>
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>NEXURADATA</g:brand>
@@ -36,10 +36,10 @@
     <item>
       <g:id>svc-phone-mobile</g:id>
       <g:title>Phone &amp; Mobile Data Recovery — Montreal</g:title>
-      <g:description>Photos, videos, messages or files on a mobile device. Cases not requiring board-level micro-soldering. Free initial assessment.</g:description>
+      <g:description>Logical recovery on a working device or board-level repair on damaged, water-exposed or non-booting phones. Free initial assessment.</g:description>
       <g:link>https://nexuradata.ca/en/recuperation-telephone-montreal.html</g:link>
       <g:image_link>https://nexuradata.ca/assets/icons/og-default.png</g:image_link>
-      <g:price>149.00 CAD</g:price>
+      <g:price>249.00 CAD</g:price>
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>NEXURADATA</g:brand>
@@ -50,10 +50,10 @@
     <item>
       <g:id>svc-hdd-ssd-intermediate</g:id>
       <g:title>HDD &amp; SSD Data Recovery — Montreal</g:title>
-      <g:description>Drive or SSD not accessible, damaged logical structure, specialized work without confirmed heavy mechanical repair. Free initial assessment.</g:description>
+      <g:description>Drive not detected, clicking, short-circuit, failed SSD controller. Cleanroom intervention with donor parts or full re-imaging. Free initial assessment.</g:description>
       <g:link>https://nexuradata.ca/en/recuperation-donnees-montreal.html</g:link>
       <g:image_link>https://nexuradata.ca/assets/icons/og-default.png</g:image_link>
-      <g:price>350.00 CAD</g:price>
+      <g:price>549.00 CAD</g:price>
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>NEXURADATA</g:brand>
@@ -67,7 +67,7 @@
       <g:description>RAID arrays, NAS systems and servers. Price depends on drive count, failure type, urgency and prior attempts. Free initial assessment. Contact for quote.</g:description>
       <g:link>https://nexuradata.ca/en/recuperation-raid-ssd-montreal.html</g:link>
       <g:image_link>https://nexuradata.ca/assets/icons/og-default.png</g:image_link>
-      <g:price>650.00 CAD</g:price>
+      <g:price>899.00 CAD</g:price>
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>NEXURADATA</g:brand>
@@ -81,7 +81,7 @@
       <g:description>Preservation, incident analysis, timeline documentation and sensitive case handling. For HR, legal, insurance and cybersecurity contexts. Contact for quote.</g:description>
       <g:link>https://nexuradata.ca/en/forensique-numerique-montreal.html</g:link>
       <g:image_link>https://nexuradata.ca/assets/icons/og-default.png</g:image_link>
-      <g:price>500.00 CAD</g:price>
+      <g:price>1500.00 CAD</g:price>
       <g:availability>in_stock</g:availability>
       <g:condition>new</g:condition>
       <g:brand>NEXURADATA</g:brand>

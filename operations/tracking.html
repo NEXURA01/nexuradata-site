@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Analytics conversions — Console NEXURADATA</title>
+    <meta name="description" content="Tableau de bord analytics conversions NEXURA DATA — events D1 en direct.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#141618">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <script src="../assets/js/site.js" defer></script>
+    <script src="../assets/js/ops-tracking.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Navigation opérateur">
+            <a class="brand" href="../index.html" aria-label="NEXURA DATA, retour à l'accueil">
+                <img src="../assets/icons/logo-petit.svg" alt="NEXURA DATA" width="200" height="24">
+            </a>
+            <div class="nav-links">
+                <a href="dashboard.html">Tableau de bord</a>
+                <a href="index.html">Dossiers</a>
+                <a href="quotes.html">Soumissions</a>
+                <a href="payments.html">Paiements</a>
+                <a href="follow-up.html">Relances</a>
+                <a href="tracking.html" aria-current="page">Analytics</a>
+                <a href="tools.html">Outils</a>
+                <a href="../index.html" class="button button-outline button-small">Site public</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="contenu" class="page-shell">
+        <div class="container">
+            <header class="page-hero ops-hero">
+                <p class="eyebrow">Console interne · Analytics conversions</p>
+                <h1>Trafic &amp; conversions</h1>
+                <p class="page-intro">
+                    Données 1ʳᵉ partie collectées via <code>/api/track</code> (zéro cookie, IP &amp; UA hashés SHA-256).
+                    Pas de Google Analytics, pas de Meta pixel. Conforme Loi&nbsp;25 par défaut.
+                </p>
+            </header>
+
+            <section class="ops-dash-live" aria-label="Analytics en direct" data-track-live>
+                <header class="ops-dash-live-head">
+                    <div>
+                        <p class="eyebrow">Live · D1 tracking_events</p>
+                        <h2>Vue d'ensemble</h2>
+                    </div>
+                    <div class="ops-dash-live-controls">
+                        <label>Fenêtre
+                            <select data-track-days>
+                                <option value="1">24 h</option>
+                                <option value="7" selected>7 jours</option>
+                                <option value="14">14 jours</option>
+                                <option value="30">30 jours</option>
+                                <option value="90">90 jours</option>
+                            </select>
+                        </label>
+                        <button type="button" class="button button-outline button-small"
+                            data-track-refresh>Rafraîchir</button>
+                        <span class="ops-dash-live-status" data-track-status>Chargement…</span>
+                    </div>
+                </header>
+                <div class="ops-dash-live-kpis">
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Events · fenêtre</p>
+                        <p class="ops-kpi-value" data-t="events">—</p>
+                        <p class="ops-kpi-sub">interactions captées</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Events · 24 h</p>
+                        <p class="ops-kpi-value" data-t="events_24h">—</p>
+                        <p class="ops-kpi-sub">dernières 24 heures</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Visiteurs uniques</p>
+                        <p class="ops-kpi-value" data-t="unique_visitors">—</p>
+                        <p class="ops-kpi-sub">par hash IP (fenêtre)</p>
+                    </article>
+                    <article class="ops-kpi">
+                        <p class="ops-kpi-label">Clics téléphone</p>
+                        <p class="ops-kpi-value" data-t="call_clicks">—</p>
+                        <p class="ops-kpi-sub">conversions chaudes</p>
+                    </article>
+                </div>
+
+                <div class="ops-dash-live-grid">
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Top events</h3>
+                            <p>Répartition par type d'interaction.</p>
+                        </header>
+                        <ul class="ops-pipeline" data-t-list="by_event" role="list">
+                            <li class="ops-pipeline-empty">—</li>
+                        </ul>
+                    </article>
+
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Top pages</h3>
+                            <p>URLs qui génèrent le plus d'events.</p>
+                        </header>
+                        <ul class="ops-pipeline" data-t-list="by_path" role="list">
+                            <li class="ops-pipeline-empty">—</li>
+                        </ul>
+                    </article>
+
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Locales</h3>
+                            <p>FR vs EN.</p>
+                        </header>
+                        <ul class="ops-pipeline" data-t-list="by_locale" role="list">
+                            <li class="ops-pipeline-empty">—</li>
+                        </ul>
+                    </article>
+
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Pays (top 10)</h3>
+                            <p>Géolocalisation Cloudflare.</p>
+                        </header>
+                        <ul class="ops-pipeline" data-t-list="by_country" role="list">
+                            <li class="ops-pipeline-empty">—</li>
+                        </ul>
+                    </article>
+
+                    <article class="ops-dash-card">
+                        <header>
+                            <h3>Référents (top 10)</h3>
+                            <p>D'où viennent les visiteurs.</p>
+                        </header>
+                        <ul class="ops-pipeline" data-t-list="by_referrer" role="list">
+                            <li class="ops-pipeline-empty">—</li>
+                        </ul>
+                    </article>
+
+                    <article class="ops-dash-card ops-dash-card--wide">
+                        <header>
+                            <h3>Activité 24 h</h3>
+                            <p>Events par heure (UTC).</p>
+                        </header>
+                        <div class="ops-spark-bars" data-t-spark aria-hidden="true"></div>
+                    </article>
+
+                    <article class="ops-dash-card ops-dash-card--wide">
+                        <header>
+                            <h3>Derniers events</h3>
+                            <p>25 plus récents (toutes fenêtres).</p>
+                        </header>
+                        <table class="ops-out-rows ops-recent-table">
+                            <thead>
+                                <tr>
+                                    <th>Quand (UTC)</th>
+                                    <th>Event</th>
+                                    <th>Page</th>
+                                    <th>Label</th>
+                                    <th>Pays</th>
+                                </tr>
+                            </thead>
+                            <tbody data-t-recent>
+                                <tr>
+                                    <td colspan="5" class="ops-out-empty">—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+
+</html>

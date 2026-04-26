@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="fr-CA">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Console interne | NEXURADATA</title>
-  <meta name="description" content="Console interne NEXURADATA pour l'exploitation des dossiers, le suivi client et les actions opérateur.">
+  <meta name="description"
+    content="Console interne NEXURADATA pour l'exploitation des dossiers, le suivi client et les actions opérateur.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#141618">
   <meta name="author" content="NEXURADATA">
@@ -12,10 +14,13 @@
   <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/site.css">
   <script src="../assets/js/site.js" defer></script>
 </head>
+
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
@@ -25,11 +30,14 @@
         <img src="../assets/icons/logo-petit.svg" alt="NEXURADATA" width="200" height="24">
       </a>
       <div class="nav-links">
+        <a href="dashboard.html">Tableau de bord</a>
+        <a href="index.html" aria-current="page">Dossiers</a>
         <a href="quotes.html">Soumissions</a>
         <a href="payments.html">Paiements</a>
         <a href="follow-up.html">Relances</a>
-        <a href="../suivi-dossier-client-montreal.html">Portail client</a>
-        <a href="../index.html" class="button button-outline button-small">Retour au site</a>
+        <a href="tracking.html">Analytics</a>
+        <a href="tools.html">Outils</a>
+        <a href="../index.html" class="button button-outline button-small">Site public</a>
       </div>
     </nav>
   </header>
@@ -48,7 +56,8 @@
       <div class="ops-layout">
         <aside class="page-card ops-sidebar">
           <h2>Rechercher un dossier</h2>
-          <p class="form-note">Charge les dossiers récents au démarrage, puis affine par numéro, nom client, courriel ou type de support.</p>
+          <p class="form-note">Charge les dossiers récents au démarrage, puis affine par numéro, nom client, courriel ou
+            type de support.</p>
           <form class="ops-search-form" data-ops-search-form>
             <label class="field">
               <span>Numéro, client ou courriel</span>
@@ -198,14 +207,16 @@
 
             <div class="ops-steps-head">
               <h3>Timeline visible côté client</h3>
-              <button type="button" class="button button-secondary button-small" data-ops-add-step>Ajouter une étape</button>
+              <button type="button" class="button button-secondary button-small" data-ops-add-step>Ajouter une
+                étape</button>
             </div>
 
             <div class="ops-steps" data-ops-steps></div>
 
             <div class="form-actions">
               <button type="submit" class="button button-primary">Enregistrer le dossier</button>
-              <button type="button" class="button button-secondary" data-ops-send-update>Envoyer une mise à jour</button>
+              <button type="button" class="button button-secondary" data-ops-send-update>Envoyer une mise à
+                jour</button>
             </div>
 
             <p class="form-status" data-ops-case-status aria-live="polite"></p>
@@ -213,7 +224,8 @@
 
           <section class="ops-access-card">
             <h3>Accès client</h3>
-            <p class="form-note">Le code client n'est jamais exposé publiquement. Vous pouvez renvoyer le code actuel ou en générer un nouveau.</p>
+            <p class="form-note">Le code client n'est jamais exposé publiquement. Vous pouvez renvoyer le code actuel ou
+              en générer un nouveau.</p>
             <div class="form-actions">
               <button type="button" class="button button-secondary" data-ops-send-access>Renvoyer le code</button>
               <button type="button" class="button button-primary" data-ops-regenerate-access>Régénérer le code</button>
@@ -265,7 +277,8 @@
 
           <section class="ops-payments-card">
             <h3>Paiements</h3>
-            <p class="form-note">Créez un acompte, un solde ou une demande de paiement ponctuelle, puis envoyez le lien sécurisé au client.</p>
+            <p class="form-note">Créez un acompte, un solde ou une demande de paiement ponctuelle, puis envoyez le lien
+              sécurisé au client.</p>
 
             <form class="ops-payment-form" data-ops-payment-form>
               <div class="form-grid">
@@ -290,7 +303,8 @@
 
                 <label class="field field-full">
                   <span>Description</span>
-                  <textarea name="description" rows="3" required placeholder="Exemple : acompte initial pour lancer le traitement autorisé du dossier."></textarea>
+                  <textarea name="description" rows="3" required
+                    placeholder="Exemple : acompte initial pour lancer le traitement autorisé du dossier."></textarea>
                 </label>
 
                 <label class="consent-check field-full">
@@ -325,4 +339,5 @@
   </footer>
   <script src="/assets/js/cookie-consent.js" defer></script>
 </body>
+
 </html>

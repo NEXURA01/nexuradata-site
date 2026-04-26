@@ -79,11 +79,13 @@
         inner.appendChild(actions);
         banner.appendChild(inner);
         document.body.appendChild(banner);
+        document.body.classList.add("nxd-consent-open");
         requestAnimationFrame(function () { banner.classList.add("is-visible"); });
 
         function close(choice) {
             try { localStorage.setItem(KEY, choice); } catch (e) { }
             banner.classList.remove("is-visible");
+            document.body.classList.remove("nxd-consent-open");
             setTimeout(function () { banner.remove(); }, 250);
         }
         accept.addEventListener("click", function () { close("accept"); });

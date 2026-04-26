@@ -1,0 +1,14 @@
+{
+    "extends": [
+        "development"
+    ],
+    "hints": {
+        "meta-theme-color": "off",
+        "compat-api/css": "off",
+        "compat-api/html": "off",
+        "no-inline-styles": "warning",
+        "apple-touch-icons": "off",
+        "highest-available-document-mode": "off",
+        "no-vulnerable-javascript-libraries": "warning"
+    }
+}

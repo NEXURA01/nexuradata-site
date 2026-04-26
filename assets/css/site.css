@@ -6692,17 +6692,17 @@ body.nxd-consent-open .sticky-bar {
 
 /* ── BRUTALIST DATA BAND — concentric circle rhythm ─────────── */
 .brutalist-band {
-  height: 96px;
+  height: 140px;
   width: 100%;
   background-color: var(--color-bg-soft);
   background-image:
     /* outer ring */
-    radial-gradient(circle, transparent 18px, var(--color-text) 18px, var(--color-text) 19px, transparent 20px),
+    radial-gradient(circle, transparent 26px, var(--color-text) 26px, var(--color-text) 28px, transparent 29px),
     /* inner solid disc */
-    radial-gradient(circle, var(--color-text) 6px, transparent 7px),
+    radial-gradient(circle, var(--color-text) 9px, transparent 10px),
     /* mid ring */
-    radial-gradient(circle, transparent 11px, var(--color-text-muted) 11px, var(--color-text-muted) 12px, transparent 13px);
-  background-size: 56px 56px, 56px 56px, 56px 56px;
+    radial-gradient(circle, transparent 16px, var(--color-text-muted) 16px, var(--color-text-muted) 17px, transparent 18px);
+  background-size: 80px 80px, 80px 80px, 80px 80px;
   background-position: center, center, center;
   border-top: 1px solid var(--color-line-strong);
   border-bottom: 1px solid var(--color-line-strong);

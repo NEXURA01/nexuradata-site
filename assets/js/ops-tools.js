@@ -289,7 +289,7 @@
                             "documentée; (d) détruit ou retourne les supports et copies à la fin du mandat selon les instructions du Client.\n\n" +
                             "3. Durée — Les obligations de confidentialité demeurent en vigueur sans limitation de temps.\n\n" +
                             "4. Droit applicable — La présente entente est régie par les lois du Québec et du Canada.\n\n" +
-                            "Pour le Laboratoire : Olivier Blanchet, examinateur forensique\n" +
+                            "Pour le Laboratoire : NEXURADATA — examinateur forensique\n" +
                             "Pour le Client : ____________________________";
                     } else {
                         text =
@@ -304,7 +304,7 @@
                             "(d) destroy or return media and copies at mandate completion per the Client's instructions.\n\n" +
                             "3. Term — Confidentiality obligations remain in effect without time limit.\n\n" +
                             "4. Governing law — This agreement is governed by the laws of Quebec and Canada.\n\n" +
-                            "For the Lab: Olivier Blanchet, Forensic Examiner\n" +
+                            "For the Lab: NEXURADATA — Forensic Examiner\n" +
                             "For the Client: ____________________________";
                     }
                     node.querySelector("[data-n-out]").textContent = text;
@@ -443,7 +443,7 @@
                         "Date : " + new Date().toLocaleString("fr-CA") + "\n" +
                         "------------------------------------------------------------\n" +
                         listText + "\n\n" +
-                        "Examinateur : Olivier Blanchet, NEXURA DATA";
+                        "Examinateur : NEXURADATA";
                     node.querySelector("[data-pb-out]").innerHTML =
                         '<dl class="ops-out-table">' +
                         '<div><dt>Scénario</dt><dd>' + p.label + '</dd></div>' +
@@ -690,9 +690,9 @@
                         '<div><dt>Observations</dt><dd>' + v("obs").replace(/\n/g, "<br>") + '</dd></div>' +
                         '</dl>' +
                         '<table class="ops-cu-log"><thead><tr><th>Date / heure</th><th>Action</th><th>Personne</th><th>Signature</th></tr></thead><tbody>' +
-                        '<tr><td>' + v("date") + '</td><td>Réception de la pièce, sceau intact, étiquette apposée</td><td>Olivier Blanchet</td><td>&nbsp;</td></tr>' +
-                        '<tr><td>&nbsp;</td><td>Imagerie forensique, SHA-256 calculé</td><td>Olivier Blanchet</td><td>&nbsp;</td></tr>' +
-                        '<tr><td>&nbsp;</td><td>Stockage en coffre-fort, accès journalisé</td><td>Olivier Blanchet</td><td>&nbsp;</td></tr>' +
+                        '<tr><td>' + v("date") + '</td><td>Réception de la pièce, sceau intact, étiquette apposée</td><td>NEXURADATA</td><td>&nbsp;</td></tr>' +
+                        '<tr><td>&nbsp;</td><td>Imagerie forensique, SHA-256 calculé</td><td>NEXURADATA</td><td>&nbsp;</td></tr>' +
+                        '<tr><td>&nbsp;</td><td>Stockage en coffre-fort, accès journalisé</td><td>NEXURADATA</td><td>&nbsp;</td></tr>' +
                         '<tr><td>&nbsp;</td><td>Restitution / destruction</td><td>&nbsp;</td><td>&nbsp;</td></tr>' +
                         '</tbody></table>' +
                         '<div class="ops-cu-sign"><div><span class="ops-cu-line"></span><p>Signature — examinateur</p></div><div><span class="ops-cu-line"></span><p>Signature — mandant / témoin</p></div></div>' +
@@ -1007,7 +1007,7 @@
                         "Paiement sécurisé en un clic :\n" +
                         link + "\n\n" +
                         "Le travail démarre dès la confirmation du paiement. Une facture officielle vous sera transmise.\n\n" +
-                        "Merci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)";
+                        "Merci,\nNEXURADATA\nNEXURA DATA — Examinateur forensique certifié (CFE)";
                     node.querySelector("[data-fx-out]").innerHTML =
                         '<dl class="ops-out-table">' +
                         '<div><dt>Sous-total</dt><dd>' + fmtCAD(subTotal) + '</dd></div>' +
@@ -1067,7 +1067,7 @@
                             "Petit suivi amical : la facture " + invoice.ref + " (" + fmtCAD(invoice.amount) + ") émise le " + invoice.date + " est en attente.\n\n" +
                             "Vous pouvez régler en un clic ici :\n" + (invoice.link || "[lien Stripe à insérer]") + "\n\n" +
                             "Si le paiement est déjà parti, ignorez ce message — Stripe peut prendre 24-48 h à confirmer.\n\n" +
-                            "Merci,\nOlivier";
+                            "Merci,\nNEXURADATA";
                     }
                     if (daysOverdue < 14) {
                         return "Objet : Facture " + invoice.ref + " — paiement requis\n\n" +
@@ -1076,7 +1076,7 @@
                             "Lien de paiement direct :\n" + (invoice.link || "[lien Stripe à insérer]") + "\n\n" +
                             "Si vous rencontrez une difficulté, répondez à ce courriel — j\'accepte aussi Interac, BTC, USDC.\n" +
                             "Sans nouvelles d\'ici 7 jours, le dossier sera transmis aux étapes formelles de recouvrement.\n\n" +
-                            "Cordialement,\nOlivier Blanchet\nNEXURA DATA";
+                            "Cordialement,\nNEXURADATA\nNEXURA DATA";
                     }
                     return "Objet : Mise en demeure — facture " + invoice.ref + "\n\n" +
                         "Madame, Monsieur " + invoice.client + ",\n\n" +
@@ -1084,7 +1084,7 @@
                         "Je vous accorde un dernier délai de 10 jours, à compter de la réception du présent avis, pour acquitter intégralement cette somme :\n" + (invoice.link || "[lien Stripe à insérer]") + "\n\n" +
                         "À défaut de paiement dans ce délai, je transmettrai le dossier à la Cour des petites créances du Québec et je facturerai des intérêts au taux légal applicable, en plus de tous frais légaux.\n\n" +
                         "Veuillez prendre cet avis au sérieux.\n\n" +
-                        "Olivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)";
+                        "NEXURADATA\nNEXURA DATA — Examinateur forensique certifié (CFE)";
                 }
                 function render() {
                     var list = getList();
@@ -1219,7 +1219,7 @@
                             "  conteneur chiffré, sur un volume hors ligne. Passé ce délai, destruction\n" +
                             "  cryptographique automatique. Sur demande écrite, vous pouvez exiger une\n" +
                             "  destruction immédiate avec attestation signée.\n\n" +
-                            "Merci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)\n438 813-0592";
+                            "Merci,\nNEXURADATA\nNEXURA DATA — Examinateur forensique certifié (CFE)\n438 813-0592";
                     } else {
                         text =
                             "Subject: Secure delivery — case " + ref + "\n\n" +
@@ -1252,7 +1252,7 @@
                             "  container, on an offline volume. After that, automatic cryptographic\n" +
                             "  destruction. On written request, you may demand immediate destruction\n" +
                             "  with a signed attestation.\n\n" +
-                            "Thank you,\nOlivier Blanchet\nNEXURA DATA — Certified Forensic Examiner (CFE)\n438 813-0592";
+                            "Thank you,\nNEXURADATA\nNEXURA DATA — Certified Forensic Examiner (CFE)\n438 813-0592";
                     }
                     node.querySelector("[data-d-out]").textContent = text;
                 }
@@ -1305,7 +1305,7 @@
                         "SHA-256   : " + s256 + "\n" +
                         "SHA-1     : " + s1 + "\n" +
                         "Calculé   : " + stamp + "\n" +
-                        "Examinateur : Olivier Blanchet, NEXURA DATA";
+                        "Examinateur : NEXURADATA";
                     out.innerHTML =
                         '<dl class="ops-out-table">' +
                         '<div><dt>Fichier</dt><dd><code>' + file.name + '</code></dd></div>' +
@@ -1378,7 +1378,7 @@
                         '<p class="ops-out-note">Le client confirme la remise de l\'appareil ci-dessus à NEXURA DATA aux fins d\'évaluation et, le cas échéant, de récupération de données. Aucun travail facturable n\'est entrepris avant approbation écrite d\'une soumission.</p>' +
                         '<div class="ops-pv-sign">' +
                         '<div><span>Signature client</span><div class="ops-pv-line"></div><small>' + v.client + '</small></div>' +
-                        '<div><span>Signature examinateur</span><div class="ops-pv-line"></div><small>Olivier Blanchet, CFE</small></div>' +
+                        '<div><span>Signature examinateur</span><div class="ops-pv-line"></div><small>NEXURADATA, CFE</small></div>' +
                         '</div>' +
                         '</article>';
                     var out = node.querySelector("[data-i-out]");
@@ -1432,8 +1432,8 @@
                         ? "\n\nVous pouvez consulter l'état de votre dossier en tout temps : https://nexuradata.ca/suivi-dossier-client-montreal.html?ref=" + ref
                         : "\n\nYou can check the status of your case at any time: https://nexuradata.ca/en/suivi-dossier-client-montreal.html?ref=" + ref;
                     var sign = lang === "fr"
-                        ? "\n\nMerci,\nOlivier Blanchet\nNEXURA DATA — Examinateur forensique certifié (CFE)\n438 813-0592"
-                        : "\n\nThank you,\nOlivier Blanchet\nNEXURA DATA — Certified Forensic Examiner (CFE)\n438 813-0592";
+                        ? "\n\nMerci,\nNEXURADATA\nNEXURA DATA — Examinateur forensique certifié (CFE)\n438 813-0592"
+                        : "\n\nThank you,\nNEXURADATA\nNEXURA DATA — Certified Forensic Examiner (CFE)\n438 813-0592";
                     node.querySelector("[data-s-out]").textContent = "Objet : " + subject + "\n\n" + greet + body + portal + sign;
                 }
                 node.addEventListener("input", build);
@@ -1528,7 +1528,7 @@
                         "  TVQ (9,975 %)  : " + fmtCAD(TVQ) + "\n" +
                         "  Total TTC      : " + fmtCAD(total) + "\n\n" +
                         "Le paiement est traité par Stripe (PCI-DSS). Le reçu officiel est généré automatiquement.\n\n" +
-                        "Merci,\nOlivier Blanchet\nNEXURA DATA";
+                        "Merci,\nNEXURADATA\nNEXURA DATA";
                     node.querySelector("[data-p-out]").innerHTML =
                         '<dl class="ops-out-table">' +
                         '<div><dt>URL</dt><dd><code style="word-break:break-all;">' + url + '</code> <button type="button" class="ops-tool-copy" data-copy="' + url + '">Copier</button></dd></div>' +

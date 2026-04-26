@@ -506,7 +506,7 @@ select {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(1100px 520px at 18% -10%, rgba(94, 234, 212, 0.12), transparent 60%),
+    radial-gradient(1100px 520px at 18% -10%, rgba(232, 228, 220, 0.05), transparent 60%),
     radial-gradient(800px 400px at 90% 110%, rgba(125, 211, 252, 0.07), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(10, 13, 18, 0));
   pointer-events: none;
@@ -543,7 +543,7 @@ select {
   bottom: 0.16em;
   z-index: -1;
   height: 0.24em;
-  background: rgba(94, 234, 212, 0.25);
+  background: rgba(232, 228, 220, 0.18);
   transform: skewX(-16deg);
 }
 
@@ -3191,9 +3191,7 @@ select {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--os);
-  box-shadow: 0 0 0 0 rgba(111, 207, 140, 0.6);
-  animation: nxd-pulse 2.4s ease-out infinite;
+  background: var(--color-text-muted);
   flex: 0 0 auto;
 }
 
@@ -3913,12 +3911,11 @@ body.nxd-consent-open .sticky-bar {
 }
 
 .sticky-call-dot {
-  width: 0.55rem;
-  height: 0.55rem;
-  background: var(--os);
+  width: 0.4rem;
+  height: 0.4rem;
+  background: var(--color-text-muted);
   border-radius: 50%;
   flex-shrink: 0;
-  animation: stickyPulse 2.2s ease-in-out infinite;
 }
 
 @keyframes stickyPulse {
@@ -5526,7 +5523,7 @@ body.nxd-consent-open .sticky-bar {
   background: var(--color-accent);
   color: var(--color-accent-ink);
   border-color: var(--color-accent);
-  box-shadow: 0 8px 24px rgba(94, 234, 212, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 .sticky-bar-item--wa {

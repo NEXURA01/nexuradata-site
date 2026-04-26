@@ -28,6 +28,10 @@ const shouldCopyRootEntry = (entry) => {
     return true;
   }
 
+  if (entry === "dossier") {
+    return true;
+  }
+
   if (entry === "operations") {
     return true;
   }

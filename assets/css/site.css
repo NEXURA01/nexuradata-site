@@ -4866,44 +4866,6 @@ body.nxd-consent-open .sticky-bar {
   }
 }
 
-/* Trust bar (sous le hero) */
-.trust-bar {
-  background: rgba(10, 13, 18, 0.92);
-  border-block: 1px solid rgba(238, 241, 244, 0.08);
-  padding: 1.1rem 0;
-}
-
-.trust-bar-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.trust-stat {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.trust-stat strong {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--os);
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
-
-.trust-stat span {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(238, 241, 244, 0.65);
-}
-
 @media (max-width: 900px) {
   .trust-bar-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -5174,42 +5136,75 @@ body.nxd-consent-open .sticky-bar {
   width: 100%;
 }
 
-/* Trust bar (sous le hero) */
+/* Trust bar (sous le hero) — instrument readout */
 .trust-bar {
-  background: rgba(10, 13, 18, 0.92);
-  border-block: 1px solid rgba(238, 241, 244, 0.08);
-  padding: 1.1rem 0;
+  background: #06080c;
+  border-block: 1px solid var(--color-line-strong);
+  padding: 2.4rem 0 1.8rem;
+  position: relative;
 }
+.trust-bar::before {
+  content: '[ § 01 — INDICATEURS LABORATOIRE ]';
+  position: absolute;
+  top: 0.7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'IBM Plex Mono', 'Consolas', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  color: rgba(232, 228, 220, 0.32);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
 
 .trust-bar-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 1.5rem;
-  align-items: center;
+  gap: 0;
+  align-items: stretch;
+  margin-top: 1.4rem;
+  counter-reset: stat;
 }
 
 .trust-stat {
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.65rem;
+  padding: 1.4rem 1.1rem 0.4rem;
+  border-left: 1px solid rgba(232, 228, 220, 0.08);
+  position: relative;
+}
+.trust-stat:first-child { border-left: 0; }
+.trust-stat::before {
+  content: counter(stat, decimal-leading-zero);
+  counter-increment: stat;
+  position: absolute;
+  top: 0.35rem;
+  left: 1.1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  color: rgba(232, 228, 220, 0.32);
 }
 
 .trust-stat strong {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(1.9rem, 3.4vw, 2.7rem);
+  font-weight: 400;
   color: var(--os);
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .trust-stat span {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(238, 241, 244, 0.65);
+  color: rgba(232, 228, 220, 0.55);
 }
 
 @media (max-width: 900px) {
@@ -6723,6 +6718,38 @@ body.nxd-consent-open .sticky-bar {
   border-bottom: 1px solid var(--color-line-strong);
   mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+}
+
+/* ── BRUTALIST CROSSHAIR GRID — engineering plate ──────────────── */
+.brutalist-crosshair {
+  height: 120px;
+  width: 100%;
+  background-color: var(--color-bg-soft);
+  background-image:
+    linear-gradient(to right, var(--color-text-muted) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-text-muted) 1px, transparent 1px),
+    radial-gradient(circle at center, var(--color-text) 1.5px, transparent 2px);
+  background-size: 60px 60px, 60px 60px, 60px 60px;
+  background-position: center;
+  border-top: 1px solid var(--color-line-strong);
+  border-bottom: 1px solid var(--color-line-strong);
+  position: relative;
+  overflow: hidden;
+  mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
+}
+.brutalist-crosshair::before,
+.brutalist-crosshair::after {
+  content: '';
+  position: absolute;
+  background: var(--color-text);
+  opacity: 0.35;
+}
+.brutalist-crosshair::before {
+  top: 50%; left: 0; right: 0; height: 1px;
+}
+.brutalist-crosshair::after {
+  left: 50%; top: 0; bottom: 0; width: 1px;
 }
 
 /* ── BRUTALIST FRAME — concentric circles seal (Bauhaus / forensic) */

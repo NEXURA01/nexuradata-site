@@ -1,6 +1,12 @@
-# NEXURADATA
+# NEXURA DATA — Montréal
 
-Site marketing et plateforme de lancement pour un laboratoire de recuperation de donnees et forensique numerique.
+**Laboratoire indépendant de récupération de données et de forensique numérique.**  
+Basé à Longueuil, à une station de métro de Montréal.  
+Bilingue FR/EN · Certifié CFE · Ouvert 7 jours sur 7.
+
+Récupération de données sur disques durs, SSD, RAID, NAS, téléphones et médias critiques.  
+Forensique numérique certifiée pour incidents, litiges et mandats légaux.  
+Rapports structurés admissibles devant les tribunaux fédéraux et provinciaux du Québec.
 
 Le depot couvre maintenant:
 

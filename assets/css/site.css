@@ -6630,11 +6630,11 @@ body.nxd-consent-open .sticky-bar {
 }
 
 /* ============================================================
-   ABSTRACT FORENSIC SHAPES — geometric SVG backgrounds
-   Subtle data-lab patterns: grid, scan-lines, corner ticks.
+   ABSTRACT FORENSIC SHAPES — bold brutalist geometric patterns
+   Black/cream monochrome, repetitive, intentional, visible.
    ============================================================ */
 
-/* Grid pattern — applied to hero + section dividers */
+/* Visible 48px grid on hero — 6% opacity (brutalist, not whisper) */
 .page-hero,
 .section-surface {
   position: relative;
@@ -6646,13 +6646,13 @@ body.nxd-consent-open .sticky-bar {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(232,228,220,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232,228,220,0.025) 1px, transparent 1px);
-  background-size: 64px 64px;
+    linear-gradient(rgba(232,228,220,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,228,220,0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
   pointer-events: none;
   z-index: 0;
-  mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.6), transparent 75%);
-  -webkit-mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.6), transparent 75%);
+  mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.85), transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.85), transparent 80%);
 }
 .page-hero > *,
 .section-surface > * {
@@ -6660,54 +6660,129 @@ body.nxd-consent-open .sticky-bar {
   z-index: 1;
 }
 
-/* Corner brackets — frame key cards like a forensic photograph */
+/* Corner brackets on key cards (forensic photo framing) */
 .pricing-card,
 .audience-card {
   background-image:
     linear-gradient(to right, var(--color-line-strong) 16px, transparent 16px),
-    linear-gradient(to bottom, var(--color-line-strong) 16px, transparent 16px),
-    linear-gradient(to left, var(--color-line-strong) 16px, transparent 16px),
-    linear-gradient(to top, var(--color-line-strong) 16px, transparent 16px);
-  background-position: top left, top left, top right, top right;
-  background-size: 1px 1px, 1px 1px, 1px 1px, 1px 1px;
+    linear-gradient(to bottom, var(--color-line-strong) 16px, transparent 16px);
+  background-position: top left, top left;
+  background-size: 1px 1px;
   background-repeat: no-repeat;
 }
 
-/* Diagonal scan-line pattern for accent strips */
-.section-lined {
-  position: relative;
-}
-.section-lined::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--color-line-strong) 0,
-    var(--color-line-strong) 8px,
-    transparent 8px,
-    transparent 14px
-  );
-  opacity: 0.5;
-}
-
-/* Hero typographic mark — large faint NXD watermark */
+/* Hero typographic watermark — big serif NXD, bumped to readable opacity */
 .page-hero::before {
   content: 'NXD';
   position: absolute;
   top: 50%;
-  right: -2vw;
+  right: -3vw;
   transform: translateY(-50%);
   font-family: var(--serif);
-  font-size: clamp(180px, 28vw, 420px);
+  font-size: clamp(220px, 32vw, 520px);
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.04em;
-  color: rgba(232, 228, 220, 0.018);
+  color: rgba(232, 228, 220, 0.04);
   pointer-events: none;
   z-index: 0;
   user-select: none;
+  text-transform: uppercase;
+}
+
+/* ── BRUTALIST DATA BAND — concentric circle rhythm ─────────── */
+.brutalist-band {
+  height: 96px;
+  width: 100%;
+  background-color: var(--color-bg-soft);
+  background-image:
+    /* outer ring */
+    radial-gradient(circle, transparent 18px, var(--color-text) 18px, var(--color-text) 19px, transparent 20px),
+    /* inner solid disc */
+    radial-gradient(circle, var(--color-text) 6px, transparent 7px),
+    /* mid ring */
+    radial-gradient(circle, transparent 11px, var(--color-text-muted) 11px, var(--color-text-muted) 12px, transparent 13px);
+  background-size: 56px 56px, 56px 56px, 56px 56px;
+  background-position: center, center, center;
+  border-top: 1px solid var(--color-line-strong);
+  border-bottom: 1px solid var(--color-line-strong);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── BRUTALIST CIRCLE GRID — dot field, fades at edges ───────── */
+.brutalist-dots {
+  height: 88px;
+  width: 100%;
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(circle, var(--color-text-soft) 4px, transparent 5px);
+  background-size: 32px 32px;
+  background-position: center;
+  border-top: 1px solid var(--color-line-strong);
+  border-bottom: 1px solid var(--color-line-strong);
+  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+}
+
+/* ── BRUTALIST FRAME — concentric circles seal (Bauhaus / forensic) */
+.brutalist-frame {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+  position: relative;
+  border: 2px solid var(--color-text);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.brutalist-frame::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid var(--color-text-soft);
+  border-radius: 50%;
+}
+.brutalist-frame::after {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  background: var(--color-text);
+  border-radius: 50%;
+}
+
+/* ── BRUTALIST TARGET — large decorative circle (hero corner / aside) */
+.brutalist-target {
+  width: clamp(120px, 18vw, 220px);
+  aspect-ratio: 1;
+  position: relative;
+  border: 2px solid var(--color-text);
+  border-radius: 50%;
+  display: inline-block;
+}
+.brutalist-target::before,
+.brutalist-target::after {
+  content: '';
+  position: absolute;
+  border: 1px solid var(--color-text-muted);
+  border-radius: 50%;
+}
+.brutalist-target::before { inset: 14%; }
+.brutalist-target::after { inset: 32%; border-color: var(--color-text); background: var(--color-bg-soft); }
+
+/* Crosshair lines through the target */
+.brutalist-target {
+  background-image:
+    linear-gradient(to right, transparent calc(50% - 0.5px), var(--color-text-muted) calc(50% - 0.5px), var(--color-text-muted) calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+    linear-gradient(to bottom, transparent calc(50% - 0.5px), var(--color-text-muted) calc(50% - 0.5px), var(--color-text-muted) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+}
+
+/* ── DIAGONAL HATCH STRIP ─────────────────────────────────────── */
+.brutalist-hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-text) 0,
+    var(--color-text) 1px,
+    transparent 1px,
+    transparent 6px
+  );
 }

@@ -6567,3 +6567,64 @@ body.nxd-consent-open .sticky-bar {
   font-family: var(--font-mono, monospace);
   font-size: 0.78rem;
 }
+/* ============================================================
+   AESTHETIC SHAPES — geometric clipped corners + vertical markers
+   Forensic / brutalist layer added 2026-04-26.
+   ============================================================ */
+.button-primary,
+.pricing-card,
+.audience-card,
+.hero-panel-signature {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+
+.button-primary {
+  position: relative;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.pricing-card,
+.audience-card {
+  position: relative;
+}
+.pricing-card::before,
+.audience-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 36px;
+  background: var(--color-accent);
+  opacity: 0.6;
+}
+
+.eyebrow {
+  position: relative;
+  padding-left: 14px;
+  display: inline-block;
+}
+.eyebrow::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+.section-heading-center .eyebrow {
+  padding-left: 0;
+}
+.section-heading-center .eyebrow::before {
+  display: none;
+}
+
+.hero-panel-signature {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1rem;
+}

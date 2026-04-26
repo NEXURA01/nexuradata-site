@@ -193,7 +193,7 @@ select {
 /* ── Locked branding: header/nav ─────────────────────────────── */
 .brand-logo {
   display: block;
-  height: 56px;
+  height: 38px;
   width: auto;
   max-width: none;
 }
@@ -233,9 +233,19 @@ select {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: clamp(14px, 1.6vw, 24px);
+  gap: clamp(12px, 1.4vw, 22px);
   flex-wrap: nowrap;
   white-space: nowrap;
+}
+
+/* Hide secondary legal links in tight headers — they stay reachable in the footer. */
+@media (max-width: 1180px) {
+  .nav-links a[href*="confidentialite"],
+  .nav-links a[href*="privacy"],
+  .nav-links a[href*="conditions"],
+  .nav-links a[href*="terms"] {
+    display: none;
+  }
 }
 
 .nav-links a,
@@ -308,7 +318,7 @@ select {
 
 .brand img {
   display: block;
-  height: 56px;
+  height: 38px;
   width: auto;
 }
 
@@ -2774,7 +2784,7 @@ select {
   }
 
   .brand img {
-    height: clamp(36px, 9vw, 44px);
+    height: clamp(28px, 8vw, 36px);
   }
 
   .nav-toggle {
@@ -3028,7 +3038,7 @@ select {
 
 @media (max-width: 640px) {
   .brand-logo {
-    height: 44px;
+    height: 30px;
   }
 
   .footer-logo {

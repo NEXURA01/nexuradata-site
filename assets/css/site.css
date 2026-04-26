@@ -1,10 +1,10 @@
-/* ── Brand tokens — refreshed 2026 (cool dark + mint-teal accent) ─ */
+/* ── Brand tokens — refreshed 2026 (clinical / forensic monochrome) ─ */
 :root {
   --noir: #0a0d12;
-  --os: #eef1f4;
-  --os-dim: rgba(238, 241, 244, 0.24);
-  --os-ghost: rgba(238, 241, 244, 0.07);
-  --rule: 0.5px solid rgba(238, 241, 244, 0.1);
+  --os: #e8e4dc;
+  --os-dim: rgba(232, 228, 220, 0.24);
+  --os-ghost: rgba(232, 228, 220, 0.07);
+  --rule: 0.5px solid rgba(232, 228, 220, 0.1);
   --serif: 'Georgia', 'Times New Roman', serif;
   --sans: 'Inter', 'Helvetica Neue', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --tracking-wide: 0.32em;
@@ -18,16 +18,17 @@
   --color-surface-elevated: rgba(20, 24, 32, 0.98);
   --color-panel: #10141b;
   --color-panel-soft: #161b24;
-  --color-line: rgba(238, 241, 244, 0.08);
-  --color-line-strong: rgba(238, 241, 244, 0.22);
+  --color-line: rgba(232, 228, 220, 0.08);
+  --color-line-strong: rgba(232, 228, 220, 0.22);
   --color-text: var(--os);
-  --color-text-soft: rgba(238, 241, 244, 0.78);
-  --color-text-muted: rgba(238, 241, 244, 0.55);
-  --color-accent: #5eead4;
-  --color-accent-strong: #2dd4bf;
-  --color-accent-soft: rgba(94, 234, 212, 0.14);
-  --color-accent-ink: #06251f;
-  --color-highlight: #5eead4;
+  --color-text-soft: rgba(232, 228, 220, 0.78);
+  --color-text-muted: rgba(232, 228, 220, 0.55);
+  /* Monochrome accent — parchment cream instead of mint. Used sparingly. */
+  --color-accent: #c9c4b8;
+  --color-accent-strong: #e8e4dc;
+  --color-accent-soft: rgba(232, 228, 220, 0.08);
+  --color-accent-ink: #0a0d12;
+  --color-highlight: #e8e4dc;
   --color-error: #f87171;
   --color-warning: #fbbf24;
   --color-info: #7dd3fc;
@@ -275,30 +276,30 @@ select {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.4rem 0.85rem;
-  border: 1px solid var(--color-accent);
+  padding: 0.4rem 0.95rem;
+  border: 1px solid var(--color-line-strong);
   border-radius: 999px;
-  color: var(--color-accent);
-  font-weight: 600;
+  color: var(--color-text);
+  font-weight: 500;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   opacity: 1;
-  transition: background 0.18s ease, color 0.18s ease;
+  transition: border-color 0.18s ease, color 0.18s ease;
 }
 
 .nav-links .nav-tel::before {
   content: "";
-  width: 0.45rem;
-  height: 0.45rem;
+  width: 0.35rem;
+  height: 0.35rem;
   border-radius: 50%;
-  background: var(--color-accent);
-  box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.18);
+  background: var(--color-text-muted);
 }
 
 .nav-links .nav-tel:hover,
 .nav-links .nav-tel:focus-visible {
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-text);
 }
 
 @media (max-width: 720px) {
@@ -5762,25 +5763,11 @@ body.nxd-consent-open .sticky-bar {
 
 /* ============================================================
    AI CHAT WIDGET
+   Hidden by default — relaunchable from a footer link
+   (clinical aesthetic: no floating attention-grabbers).
    ============================================================ */
 .chat-launcher {
-  position: fixed;
-  right: 1.4rem;
-  bottom: 1.4rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.85rem 1.1rem;
-  background: var(--os);
-  color: var(--noir);
-  border: 1px solid var(--os);
-  border-radius: 1rem 1rem 1rem 0.35rem;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-  z-index: 91;
+  display: none !important;
 }
 
 .chat-launcher-dot {

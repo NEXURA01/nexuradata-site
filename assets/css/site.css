@@ -292,7 +292,7 @@ select {
   content: "";
   width: 0.35rem;
   height: 0.35rem;
-  border-radius:2px;
+  border-radius: 2px;
   background: var(--color-text-muted);
 }
 
@@ -3191,7 +3191,7 @@ select {
 .nxd-consent-dot {
   width: 7px;
   height: 7px;
-  border-radius:2px;
+  border-radius: 2px;
   background: var(--color-text-muted);
   flex: 0 0 auto;
 }
@@ -3915,7 +3915,7 @@ body.nxd-consent-open .sticky-bar {
   width: 0.4rem;
   height: 0.4rem;
   background: var(--color-text-muted);
-  border-radius:2px;
+  border-radius: 2px;
   flex-shrink: 0;
 }
 
@@ -5143,6 +5143,7 @@ body.nxd-consent-open .sticky-bar {
   padding: 2.4rem 0 1.8rem;
   position: relative;
 }
+
 .trust-bar::before {
   content: '[ § 01 — INDICATEURS LABORATOIRE ]';
   position: absolute;
@@ -5156,7 +5157,10 @@ body.nxd-consent-open .sticky-bar {
   text-transform: uppercase;
   white-space: nowrap;
 }
-html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
+
+html[lang^='en'] .trust-bar::before {
+  content: '[ § 01 — LAB READOUT ]';
+}
 
 .trust-bar-grid {
   display: grid;
@@ -5176,7 +5180,11 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   border-left: 1px solid rgba(232, 228, 220, 0.08);
   position: relative;
 }
-.trust-stat:first-child { border-left: 0; }
+
+.trust-stat:first-child {
+  border-left: 0;
+}
+
 .trust-stat::before {
   content: counter(stat, decimal-leading-zero);
   counter-increment: stat;
@@ -5766,7 +5774,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
 .chat-launcher-dot {
   width: 0.5rem;
   height: 0.5rem;
-  border-radius:2px;
+  border-radius: 2px;
   background: var(--noir);
   animation: chatPulse 2.4s ease-in-out infinite;
 }
@@ -5852,7 +5860,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   color: var(--os);
   width: 2rem;
   height: 2rem;
-  border-radius:2px;
+  border-radius: 2px;
   cursor: pointer;
   font-size: 1.1rem;
   line-height: 1;
@@ -5912,7 +5920,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   width: 0.4rem;
   height: 0.4rem;
   background: rgba(238, 241, 244, 0.55);
-  border-radius:2px;
+  border-radius: 2px;
   animation: chatDot 1.2s infinite ease-in-out;
 }
 
@@ -6562,6 +6570,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   font-family: var(--font-mono, monospace);
   font-size: 0.78rem;
 }
+
 /* ============================================================
    AESTHETIC SHAPES — geometric clipped corners + vertical markers
    Forensic / brutalist layer added 2026-04-26.
@@ -6584,6 +6593,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
 .audience-card {
   position: relative;
 }
+
 .pricing-card::before,
 .audience-card::before {
   content: '';
@@ -6601,6 +6611,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   padding-left: 14px;
   display: inline-block;
 }
+
 .eyebrow::before {
   content: '';
   position: absolute;
@@ -6615,6 +6626,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
 .section-heading-center .eyebrow {
   padding-left: 0;
 }
+
 .section-heading-center .eyebrow::before {
   display: none;
 }
@@ -6635,22 +6647,24 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   position: relative;
   overflow: hidden;
 }
+
 .page-hero::after,
 .section-surface::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(232,228,220,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232,228,220,0.06) 1px, transparent 1px);
+    linear-gradient(rgba(232, 228, 220, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 228, 220, 0.06) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
   z-index: 0;
-  mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.85), transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.85), transparent 80%);
+  mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
 }
-.page-hero > *,
-.section-surface > * {
+
+.page-hero>*,
+.section-surface>* {
   position: relative;
   z-index: 1;
 }
@@ -6738,6 +6752,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
 }
+
 .brutalist-crosshair::before,
 .brutalist-crosshair::after {
   content: '';
@@ -6745,11 +6760,19 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   background: var(--color-text);
   opacity: 0.35;
 }
+
 .brutalist-crosshair::before {
-  top: 50%; left: 0; right: 0; height: 1px;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
 }
+
 .brutalist-crosshair::after {
-  left: 50%; top: 0; bottom: 0; width: 1px;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
 }
 
 /* ── BRUTALIST FRAME — concentric circles seal (Bauhaus / forensic) */
@@ -6762,6 +6785,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   border-radius: 50%;
   flex-shrink: 0;
 }
+
 .brutalist-frame::before {
   content: '';
   position: absolute;
@@ -6769,6 +6793,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   border: 1px solid var(--color-text-soft);
   border-radius: 50%;
 }
+
 .brutalist-frame::after {
   content: '';
   position: absolute;
@@ -6786,6 +6811,7 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   border-radius: 50%;
   display: inline-block;
 }
+
 .brutalist-target::before,
 .brutalist-target::after {
   content: '';
@@ -6793,8 +6819,16 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
   border: 1px solid var(--color-text-muted);
   border-radius: 50%;
 }
-.brutalist-target::before { inset: 14%; }
-.brutalist-target::after { inset: 32%; border-color: var(--color-text); background: var(--color-bg-soft); }
+
+.brutalist-target::before {
+  inset: 14%;
+}
+
+.brutalist-target::after {
+  inset: 32%;
+  border-color: var(--color-text);
+  background: var(--color-bg-soft);
+}
 
 /* Crosshair lines through the target */
 .brutalist-target {
@@ -6805,11 +6839,152 @@ html[lang^='en'] .trust-bar::before { content: '[ § 01 — LAB READOUT ]'; }
 
 /* ── DIAGONAL HATCH STRIP ─────────────────────────────────────── */
 .brutalist-hatch {
-  background-image: repeating-linear-gradient(
-    -45deg,
-    var(--color-text) 0,
-    var(--color-text) 1px,
-    transparent 1px,
-    transparent 6px
-  );
+  background-image: repeating-linear-gradient(-45deg,
+      var(--color-text) 0,
+      var(--color-text) 1px,
+      transparent 1px,
+      transparent 6px);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FORENSIC INSTRUMENT LAYER — bracket corners, file ribbon, NXD watermark
+   ════════════════════════════════════════════════════════════════ */
+
+.hero {
+  position: relative;
+}
+
+/* Giant NXD watermark behind hero copy */
+.hero::before {
+  content: "NXD";
+  position: absolute;
+  top: 50%;
+  right: -2vw;
+  transform: translateY(-50%);
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: clamp(220px, 38vw, 560px);
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: rgba(232, 228, 220, 0.025);
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* File ribbon top-right of hero */
+.hero::after {
+  content: "FILE / NXD-2026-LIVE · MTL · LAB · 01";
+  position: absolute;
+  top: 6.2rem;
+  right: 1.5rem;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.32em;
+  color: rgba(232, 228, 220, 0.38);
+  text-transform: uppercase;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(232, 228, 220, 0.14);
+  z-index: 2;
+  pointer-events: none;
+}
+html[lang^="en"] .hero::after {
+  content: "FILE / NXD-2026-LIVE · MTL · LAB · 01";
+}
+
+/* Bracket corners around hero container */
+.hero .container {
+  position: relative;
+}
+.hero .container::before,
+.hero .container::after {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: rgba(232, 228, 220, 0.55);
+  border-style: solid;
+  pointer-events: none;
+  z-index: 2;
+}
+.hero .container::before {
+  top: -8px;
+  left: -8px;
+  border-width: 1px 0 0 1px;
+}
+.hero .container::after {
+  bottom: -8px;
+  right: -8px;
+  border-width: 0 1px 1px 0;
+}
+
+/* Eyebrow indexed treatment */
+.hero-copy .eyebrow {
+  position: relative;
+  padding-left: 4.5rem;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  color: rgba(232, 228, 220, 0.62);
+  text-transform: uppercase;
+}
+.hero-copy .eyebrow::before {
+  content: "§ 00 ——";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: rgba(232, 228, 220, 0.42);
+  letter-spacing: 0.2em;
+}
+
+/* Primary button gets leading mono prefix and signal underline */
+.hero-actions .button-primary {
+  position: relative;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  padding-left: 1.6rem;
+}
+.hero-actions .button-primary::before {
+  content: "▸";
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+.hero-actions .button-secondary {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+/* Section eyebrow indexed system — auto-numbered via counter */
+main { counter-reset: section-idx; }
+.section > .container > h2,
+.section > .container > .section-heading {
+  counter-increment: section-idx;
+}
+.section > .container > .section-heading::before {
+  content: "§ " counter(section-idx, decimal-leading-zero) " ——";
+  display: block;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.28em;
+  color: rgba(232, 228, 220, 0.42);
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+}
+
+/* Z-index lift hero content above watermark */
+.hero-grid { position: relative; z-index: 1; }
+
+/* Mobile: kill bracket noise */
+@media (max-width: 720px) {
+  .hero::after { display: none; }
+  .hero .container::before,
+  .hero .container::after { display: none; }
+  .hero-copy .eyebrow { padding-left: 0; }
+  .hero-copy .eyebrow::before { position: static; display: block; margin-bottom: 0.5rem; }
 }

@@ -194,7 +194,7 @@ select {
 /* ── Locked branding: header/nav ─────────────────────────────── */
 .brand-logo {
   display: block;
-  height: 38px;
+  height: 56px;
   width: auto;
   max-width: none;
 }
@@ -320,7 +320,7 @@ select {
 
 .brand img {
   display: block;
-  height: 38px;
+  height: 56px;
   width: auto;
 }
 
@@ -2786,7 +2786,7 @@ select {
   }
 
   .brand img {
-    height: clamp(28px, 8vw, 36px);
+    height: clamp(40px, 11vw, 52px);
   }
 
   .nav-toggle {
@@ -3040,7 +3040,7 @@ select {
 
 @media (max-width: 640px) {
   .brand-logo {
-    height: 30px;
+    height: 44px;
   }
 
   .footer-logo {

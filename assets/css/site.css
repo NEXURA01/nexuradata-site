@@ -198,6 +198,42 @@ select {
   padding-left: clamp(14px, 1.6vw, 24px);
 }
 
+.nav-links .nav-tel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  opacity: 1;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.nav-links .nav-tel::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(94, 234, 212, 0.18);
+}
+
+.nav-links .nav-tel:hover,
+.nav-links .nav-tel:focus-visible {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
+@media (max-width: 720px) {
+  .nav-links .nav-tel {
+    display: none;
+  }
+}
+
 /* Legacy .navbar support for operations pages */
 .navbar {
   display: flex;
@@ -5382,32 +5418,39 @@ body.nxd-consent-open .sticky-bar {
   justify-content: center;
   gap: 0.35rem;
   padding: 0.55rem 0.85rem;
-  background: var(--noir);
+  background: var(--color-bg-soft);
   color: var(--os);
-  border: 1px solid var(--os);
+  border: 1px solid var(--color-line-strong);
   border-radius: 999px;
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: var(--sans);
   font-size: 0.78rem;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.55);
   white-space: nowrap;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sticky-bar-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6);
 }
 
 .sticky-bar-item--call {
-  background: var(--os);
-  color: var(--noir);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 24px rgba(94, 234, 212, 0.35);
 }
 
 .sticky-bar-item--wa {
-  background: var(--noir);
+  background: var(--color-bg-soft);
   color: var(--os);
-  border-color: var(--os);
 }
 
 .sticky-bar-item--bot {
-  background: var(--noir);
+  background: var(--color-bg-soft);
   color: var(--os);
 }
 

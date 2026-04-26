@@ -298,6 +298,43 @@ const ensureStickyBar = () => {
 
 ensureStickyBar();
 
+/* ── Conversion tracking (lightweight, no third-party) ───────────── */
+const trackConversion = (event, data = {}) => {
+  try {
+    const payload = { event, ts: Date.now(), path: location.pathname, ...data };
+    // Send to gtag/plausible if present, else just console for now (audit ready)
+    if (typeof window.gtag === "function") {
+      window.gtag("event", event, data);
+    }
+    if (typeof window.plausible === "function") {
+      window.plausible(event, { props: data });
+    }
+    // Best-effort beacon to own endpoint (silent fail if not deployed yet)
+    if ("sendBeacon" in navigator) {
+      try {
+        navigator.sendBeacon("/api/track", new Blob([JSON.stringify(payload)], { type: "application/json" }));
+      } catch (_) { /* noop */ }
+    }
+  } catch (_) { /* never break the page */ }
+};
+
+document.addEventListener("click", (e) => {
+  const tap = e.target.closest("[data-track], a[href^='tel:'], a[href*='wa.me']");
+  if (!tap) return;
+  const label = tap.dataset.track
+    || (tap.getAttribute("href")?.startsWith("tel:") ? "call-link" : "whatsapp-link");
+  trackConversion(label, { label });
+}, { passive: true });
+
+document.addEventListener("submit", (e) => {
+  const form = e.target;
+  if (!(form instanceof HTMLFormElement)) return;
+  const name = form.dataset.intakeForm !== undefined ? "intake-submit"
+    : form.dataset.newsletter !== undefined ? "newsletter-submit"
+      : form.id || "form-submit";
+  trackConversion(name);
+}, { passive: true, capture: true });
+
 const showAllReveals = () => {
   revealElements.forEach((element) => element.classList.add("is-visible"));
 };

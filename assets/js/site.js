@@ -267,6 +267,37 @@ const initializeMobileNav = () => {
 
 initializeMobileNav();
 
+// Inject the sticky contact bar on every page that doesn't already have one.
+// Provides one-tap call / WhatsApp / chat from anywhere on the site.
+const ensureStickyBar = () => {
+  if (document.querySelector(".sticky-bar")) return;
+  if (document.body.dataset.noStickyBar === "true") return;
+  const labels = isEnglishDocument
+    ? { call: "Call", wa: "WhatsApp", bot: "AI assistant", aria: "Quick contacts", callAria: "Call the lab", waAria: "Chat on WhatsApp", botAria: "Open the AI assistant" }
+    : { call: "Appeler", wa: "WhatsApp", bot: "Assistant IA", aria: "Contacts rapides", callAria: "Appeler le laboratoire", waAria: "Discuter sur WhatsApp", botAria: "Ouvrir l'assistant IA" };
+  const waText = isEnglishDocument
+    ? "Hi%2C%20I%20need%20an%20assessment%20for%20"
+    : "Bonjour%2C%20j%27ai%20besoin%20d%27une%20%C3%A9valuation%20pour%20";
+  const bar = document.createElement("div");
+  bar.className = "sticky-bar";
+  bar.setAttribute("role", "group");
+  bar.setAttribute("aria-label", labels.aria);
+  bar.innerHTML = `
+    <a class="sticky-bar-item sticky-bar-item--call" href="tel:+14388130592" aria-label="${labels.callAria}">
+      <span class="sticky-call-dot" aria-hidden="true"></span>
+      <span class="sticky-bar-label">${labels.call}</span>
+    </a>
+    <a class="sticky-bar-item sticky-bar-item--wa" href="https://wa.me/14388130592?text=${waText}" target="_blank" rel="noopener" aria-label="${labels.waAria}">
+      <span class="sticky-bar-label">${labels.wa}</span>
+    </a>
+    <button type="button" class="sticky-bar-item sticky-bar-item--bot" data-open-chat aria-label="${labels.botAria}">
+      <span class="sticky-bar-label">${labels.bot}</span>
+    </button>`;
+  document.body.appendChild(bar);
+};
+
+ensureStickyBar();
+
 const showAllReveals = () => {
   revealElements.forEach((element) => element.classList.add("is-visible"));
 };

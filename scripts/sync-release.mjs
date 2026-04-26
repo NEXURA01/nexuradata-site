@@ -13,7 +13,6 @@ const rootFiles = new Set([
   "_headers",
   "_redirects",
   ".nojekyll",
-  "pgp.txt",
   "robots.txt",
   "site.webmanifest",
   "sitemap.xml"
@@ -41,6 +40,10 @@ const shouldCopyRootEntry = (entry) => {
   }
 
   if (entry === ".well-known") {
+    return true;
+  }
+
+  if (entry === "pages") {
     return true;
   }
 

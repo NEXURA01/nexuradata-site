@@ -6628,3 +6628,86 @@ body.nxd-consent-open .sticky-bar {
   border-left: 2px solid var(--color-accent);
   padding-left: 1rem;
 }
+
+/* ============================================================
+   ABSTRACT FORENSIC SHAPES — geometric SVG backgrounds
+   Subtle data-lab patterns: grid, scan-lines, corner ticks.
+   ============================================================ */
+
+/* Grid pattern — applied to hero + section dividers */
+.page-hero,
+.section-surface {
+  position: relative;
+  overflow: hidden;
+}
+.page-hero::after,
+.section-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(232,228,220,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,228,220,0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.6), transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at top, rgba(0,0,0,0.6), transparent 75%);
+}
+.page-hero > *,
+.section-surface > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Corner brackets — frame key cards like a forensic photograph */
+.pricing-card,
+.audience-card {
+  background-image:
+    linear-gradient(to right, var(--color-line-strong) 16px, transparent 16px),
+    linear-gradient(to bottom, var(--color-line-strong) 16px, transparent 16px),
+    linear-gradient(to left, var(--color-line-strong) 16px, transparent 16px),
+    linear-gradient(to top, var(--color-line-strong) 16px, transparent 16px);
+  background-position: top left, top left, top right, top right;
+  background-size: 1px 1px, 1px 1px, 1px 1px, 1px 1px;
+  background-repeat: no-repeat;
+}
+
+/* Diagonal scan-line pattern for accent strips */
+.section-lined {
+  position: relative;
+}
+.section-lined::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-line-strong) 0,
+    var(--color-line-strong) 8px,
+    transparent 8px,
+    transparent 14px
+  );
+  opacity: 0.5;
+}
+
+/* Hero typographic mark — large faint NXD watermark */
+.page-hero::before {
+  content: 'NXD';
+  position: absolute;
+  top: 50%;
+  right: -2vw;
+  transform: translateY(-50%);
+  font-family: var(--serif);
+  font-size: clamp(180px, 28vw, 420px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: rgba(232, 228, 220, 0.018);
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}

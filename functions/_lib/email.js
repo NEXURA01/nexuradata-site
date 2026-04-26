@@ -124,7 +124,7 @@ export const sendLabNotificationEmail = async (env, intakeRecord, requestUrl) =>
 };
 
 export const sendClientAccessEmail = async (env, record, requestUrl, reason = "initial") => {
-  const statusUrl = `${getPublicOrigin(env, requestUrl)}/suivi-dossier-client-montreal.html`;
+  const statusUrl = `${getPublicOrigin(env, requestUrl)}/pages/services/suivi-dossier-client-montreal.html`;
   const subject =
     reason === "regenerated"
       ? `Nouveau code d'accès pour votre dossier ${record.caseId}`
@@ -196,7 +196,7 @@ export const sendClientStatusEmail = async (env, caseId, requestUrl, actor = "op
     throw new Error("Dossier introuvable.");
   }
 
-  const statusUrl = `${getPublicOrigin(env, requestUrl)}/suivi-dossier-client-montreal.html`;
+  const statusUrl = `${getPublicOrigin(env, requestUrl)}/pages/services/suivi-dossier-client-montreal.html`;
   const text = formatTextLines([
     `Bonjour ${detail.name},`,
     "",
@@ -247,7 +247,7 @@ export const sendClientPaymentLinkEmail = async (env, payment, requestUrl, actor
     throw new Error("Demande de paiement incomplète.");
   }
 
-  const statusUrl = `${getPublicOrigin(env, requestUrl)}/suivi-dossier-client-montreal.html`;
+  const statusUrl = `${getPublicOrigin(env, requestUrl)}/pages/services/suivi-dossier-client-montreal.html`;
   const amount = formatCurrency(payment.amountCents, payment.currency);
   const subject = `${payment.label} - ${amount} - ${payment.caseId}`;
   const text = formatTextLines([

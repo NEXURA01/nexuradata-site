@@ -65,7 +65,7 @@ export const onRequestPost = async (context) => {
         support: payload.support || "Je ne sais pas",
         urgence: payload.urgence || payload.urgency || "Standard",
         message: payload.message ?? payload.problem ?? payload.description,
-        sourcePath: payload.sourcePath || payload.source_path || "/tarifs-recuperation-donnees-montreal.html",
+        sourcePath: payload.sourcePath || payload.source_path || "/pages/services/tarifs-recuperation-donnees-montreal.html",
         consentement: payload.consentement === true || payload.consentement === "true" || payload.consentement === "on" || payload.consent === true,
         website: payload.website
     };

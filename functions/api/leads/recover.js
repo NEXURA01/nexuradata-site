@@ -22,7 +22,7 @@ function buildEmail(env, lead) {
     const offer = isFr
         ? `Notre laboratoire à Longueuil propose une <strong>évaluation gratuite sans engagement</strong>. Vous nous remettez le support, on vous envoie un diagnostic chiffré sous 24-72 h, et c'est vous qui décidez ensuite si la récupération vaut la peine.`
         : `Our Longueuil lab offers a <strong>free no-obligation assessment</strong>. Drop off the device, we send you a quoted diagnosis within 24-72 h, and you then decide whether recovery is worth it.`;
-    const cta1Url = `${origin}${isFr ? "" : "/en"}/reserver-creneau-laboratoire.html`;
+    const cta1Url = `${origin}${isFr ? "" : "/en"}/pages/services/reserver-creneau-laboratoire.html`;
     const cta1Label = isFr ? "Réserver un créneau de dépôt" : "Book a drop-off slot";
     const cta2Url = `${origin}${isFr ? "" : "/en"}/#contact`;
     const cta2Label = isFr ? "Ouvrir un dossier" : "Open a case";

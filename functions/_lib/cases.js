@@ -1001,8 +1001,8 @@ export const createCasePaymentRequest = async (env, payload, actor, requestUrl) 
 
   const paymentRequestId = generatePaymentRequestId();
   const createdAt = nowIso();
-  const successUrl = `${getPublicOrigin(env, requestUrl)}/paiement-reussi.html?caseId=${encodeURIComponent(input.caseId)}&paymentRequestId=${encodeURIComponent(paymentRequestId)}`;
-  const cancelUrl = `${getPublicOrigin(env, requestUrl)}/paiement-annule.html?caseId=${encodeURIComponent(input.caseId)}&paymentRequestId=${encodeURIComponent(paymentRequestId)}`;
+  const successUrl = `${getPublicOrigin(env, requestUrl)}/pages/paiement/paiement-reussi.html?caseId=${encodeURIComponent(input.caseId)}&paymentRequestId=${encodeURIComponent(paymentRequestId)}`;
+  const cancelUrl = `${getPublicOrigin(env, requestUrl)}/pages/paiement/paiement-annule.html?caseId=${encodeURIComponent(input.caseId)}&paymentRequestId=${encodeURIComponent(paymentRequestId)}`;
   const session = await createHostedCheckoutSession(env, {
     caseId: input.caseId,
     paymentRequestId,

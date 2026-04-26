@@ -42,16 +42,23 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ProfessionalService",
+      "@type": ["ProfessionalService", "LocalBusiness"],
+      "@id": "https://nexuradata.ca/#business",
       "name": "NEXURADATA",
       "description": "Laboratoire de récupération de données, supports critiques et forensique numérique à Montréal. Dirigé par un examinateur certifié CFE.",
       "url": "https://nexuradata.ca/",
+      "telephone": "+1-438-813-0592",
       "email": "mailto:contact@nexuradata.ca",
       "image": "https://nexuradata.ca/assets/icons/og-default.png",
       "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
       "priceRange": "$$",
       "currenciesAccepted": "CAD",
       "paymentAccepted": "Credit Card, Interac, Bank Transfer",
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 45.5371,
+        "longitude": -73.5106
+      },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -187,6 +194,8 @@
           <a href="/politique-confidentialite.html">Confidentialité</a>
           <a href="/conditions-intervention-paiement.html">Conditions</a>
           <a href="/#contact">Contact</a>
+          <a class="nav-tel" href="tel:+14388130592" data-track="call-header" aria-label="Appeler le laboratoire">438
+            813-0592</a>
           <a href="/en/" class="lang-switch" lang="en">EN</a>
         </div>
       </nav>

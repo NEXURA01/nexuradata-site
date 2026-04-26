@@ -44,6 +44,7 @@
         {"@type": "HowToStep", "name": "First contact", "text": "Describe the device, observed symptoms, actions already attempted and urgency level to avoid a wrong direction."},
         {"@type": "HowToStep", "name": "Drop-off, pickup or shipping", "text": "The device is brought to the lab, entrusted via secure transport or handled according to the case requirements."},
         {"@type": "HowToStep", "name": "Triage and technical assessment", "text": "The device is identified, qualified and examined to distinguish a simple deletion, a logical failure, physical failure or a sensitive RAID environment."},
+        {"@type": "HowToStep", "name": "Chain of custody and imaging", "text": "The media is logged, sealed, then bit-for-bit copied with a hardware write-blocker and SHA-256 hash signed."},
         {"@type": "HowToStep", "name": "Direction and quote", "text": "The treatment path is clarified with urgency level, known risks, case limitations and the chosen intervention framework."},
         {"@type": "HowToStep", "name": "Recovery or specialized treatment", "text": "Direct intervention, technical treatment on SSD, RAID or server, or controlled approach if the context involves device integrity."},
         {"@type": "HowToStep", "name": "Result verification", "text": "Recovered data is reviewed and structured to confirm it matches the expressed need."},
@@ -121,35 +122,46 @@
         </section>
 
         <section class="page-card page-content">
-          <h2>4. Direction and quote</h2>
+          <h2>4. Chain of custody and write-blocked imaging</h2>
+          <p>
+            Before any handling, the media is logged, photographed and sealed. A bit-for-bit image is
+            captured through a hardware write-blocker (Tableau, Atola), with a signed cryptographic
+            hash (SHA-256). The original media is no longer touched — all subsequent work runs on the image.
+          </p>
+        </section>
+
+        <section class="page-card page-content">
+          <h2>5. Direction and quote</h2>
           <p>
             Once the initial assessment is complete, the treatment path is clarified with urgency level,
             known risks, case limitations and the chosen intervention framework.
+            <strong>No billable work starts without written approval.</strong>
           </p>
         </section>
 
         <section class="page-card page-content">
-          <h2>5. Recovery or specialized treatment</h2>
+          <h2>6. Recovery or specialized treatment</h2>
           <p>
-            The intervention may involve direct recovery, a more technical treatment on SSD, RAID or
-            server, or a more controlled approach if the context also involves device integrity and
-            traceability.
+            Logical recovery on the image, cleanroom intervention for mechanical HDDs, NAND chip-off
+            read for SSDs / mobile, offline RAID reconstruction. The method is logged in the technical
+            file — useful for insurance, audit, litigation.
           </p>
         </section>
 
         <section class="page-card page-content">
-          <h2>6. Result verification</h2>
+          <h2>7. Verification and integrity</h2>
           <p>
-            Recovered data is reviewed and structured to confirm it matches the expressed need. The
-            client must understand what was found, in what form and with what possible limitations.
+            Recovered data is hash-validated, organized to mirror the original tree where possible, and
+            counted: file count, recovered volume, success rate, known limits. You receive a summary
+            before delivery.
           </p>
         </section>
 
         <section class="page-card page-content">
-          <h2>7. Return</h2>
+          <h2>8. Encrypted return and destruction</h2>
           <p>
-            Data is delivered according to the agreed method, with a clear file on next steps when
-            there is still a need to restore, migrate, archive or secure the environment involved.
+            Delivery on a new AES-256 encrypted media or secure transfer. On request, certified
+            destruction of working copies after the agreed retention period. Law 25 compliance.
           </p>
         </section>
 

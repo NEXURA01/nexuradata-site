@@ -7298,3 +7298,26 @@ main { counter-reset: section-idx; }
   }
   .case-file:first-child { border-top: 0; }
 }
+
+/* Lab page intro card — elevated, framed */
+.page-content-strong {
+  border-color: rgba(232, 228, 220, 0.4) !important;
+  background: rgba(232, 228, 220, 0.03) !important;
+  position: relative;
+}
+.page-content-strong::before {
+  content: "[ \00a7  00 ]";
+  position: absolute;
+  top: 0.85rem;
+  right: 1.2rem;
+  font-family: "IBM Plex Mono", "Consolas", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.28em;
+  color: rgba(232, 228, 220, 0.42);
+}
+.page-content-strong h2 {
+  font-family: "Georgia", "Times New Roman", serif !important;
+  font-size: clamp(1.6rem, 2.6vw, 2rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.005em !important;
+}

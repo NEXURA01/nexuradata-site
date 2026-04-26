@@ -44,6 +44,7 @@
         {"@type": "HowToStep", "name": "Premier contact", "text": "Décrire le support, les symptômes observés, les manipulations déjà tentées et le niveau d'urgence pour éviter une mauvaise orientation."},
         {"@type": "HowToStep", "name": "Dépôt, collecte ou expédition", "text": "Le support est apporté au laboratoire, confié par transport sécurisé ou pris en charge selon les contraintes du mandat."},
         {"@type": "HowToStep", "name": "Triage et évaluation technique", "text": "Le support est identifié, qualifié et examiné pour distinguer une suppression simple, une panne logique, physique ou un environnement RAID sensible."},
+        {"@type": "HowToStep", "name": "Chaîne de possession et imagerie", "text": "Le support est journalisé, scellé, puis copié bit à bit avec bloqueur d'écriture matériel et empreinte SHA-256."},
         {"@type": "HowToStep", "name": "Orientation et devis", "text": "La voie de traitement est clarifiée avec le niveau d'urgence, les risques connus, les limites du dossier et le cadre d'intervention retenu."},
         {"@type": "HowToStep", "name": "Récupération ou traitement spécialisé", "text": "Intervention directe, traitement technique sur SSD, RAID ou serveur, ou approche contrôlée si le contexte touche l'intégrité du support."},
         {"@type": "HowToStep", "name": "Vérification des résultats", "text": "Les données récupérées sont relues et structurées pour confirmer qu'elles correspondent au besoin exprimé."},
@@ -123,36 +124,46 @@
         </section>
 
         <section class="page-card page-content">
-          <h2>4. Orientation et devis</h2>
+          <h2>4. Chaîne de possession et imagerie write-blocked</h2>
+          <p>
+            Avant toute manipulation, le support est journalisé, photographié et scellé. Une image bit à bit
+            est réalisée via bloqueur d’écriture matériel (Tableau, Atola), avec empreinte cryptographique
+            (SHA-256) signée. Le support original n’est plus touché — toute la suite se fait sur l’image.
+          </p>
+        </section>
+
+        <section class="page-card page-content">
+          <h2>5. Orientation et devis</h2>
           <p>
             Une fois l'évaluation initiale réalisée, la voie de traitement est clarifiée avec le niveau
             d'urgence, les risques connus, les limites du dossier et le cadre d'intervention retenu.
+            <strong>Aucun travail facturé ne démarre sans accord écrit.</strong>
           </p>
         </section>
 
         <section class="page-card page-content">
-          <h2>5. Récupération ou traitement spécialisé</h2>
+          <h2>6. Récupération ou traitement spécialisé</h2>
           <p>
-            L'intervention peut relever d'une récupération directe, d'un traitement plus technique sur
-            SSD, RAID ou serveur, ou d'une approche plus contrôlée si le contexte touche aussi l'intégrité
-            du support et la traçabilité.
+            Récupération logique sur image, intervention en salle blanche pour HDD mécanique, lecture
+            chip-off NAND pour SSD/mobile, reconstitution RAID hors-ligne. La méthode est tracée dans le
+            dossier technique — utile en assurance, audit, contentieux.
           </p>
         </section>
 
         <section class="page-card page-content">
-          <h2>6. Vérification des résultats</h2>
+          <h2>7. Vérification et intégrité</h2>
           <p>
-            Les données récupérées sont relues et structurées pour confirmer qu'elles correspondent au
-            besoin exprimé. Le client doit comprendre ce qui a été retrouvé, sous quelle forme et avec
-            quelles limites éventuelles.
+            Les données récupérées sont validées par hash, organisées selon l’arborescence d’origine
+            quand c’est possible, et comptées : nombre de fichiers, volume récupéré, taux de succès,
+            limites connues. Vous recevez un sommaire avant la livraison.
           </p>
         </section>
 
         <section class="page-card page-content">
-          <h2>7. Restitution</h2>
+          <h2>8. Restitution chiffrée et destruction</h2>
           <p>
-            Les données sont remises selon le mode convenu, avec un dossier clair sur la suite à donner
-            lorsqu'il faut encore restaurer, migrer, archiver ou sécuriser l'environnement concerné.
+            Livraison sur support neuf chiffré AES-256 ou transfert sécurisé. Sur demande, destruction
+            certifiée des copies de travail après délai de rétention convenu. Conformité Loi 25.
           </p>
         </section>
 

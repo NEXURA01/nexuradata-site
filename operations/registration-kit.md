@@ -267,4 +267,4 @@ Site : https://nexuradata.ca/
 > Une fois attribué, format final : `5184, boul. Cousineau, PMB [###], Longueuil (Québec) J3Y 7G5`.
 > Re-propager partout (script `scripts/update-address.mjs` réutilisable).
 
-**UPS Store contact (succursale 447) :** (450) 812-7877 · store447@theupsstore.ca
+**UPS Store contact (succursale 447) :** (450) 812-7877 · <store447@theupsstore.ca>

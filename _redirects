@@ -3,3 +3,8 @@
 /index2.html / 301
 /services.html /services-recuperation-forensique-montreal.html 301
 /en/services.html /en/ 301
+
+# Trailing-slash normalization for client portal
+
+/dossier /dossier/ 301
+/en/dossier /en/dossier/ 301

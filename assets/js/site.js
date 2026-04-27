@@ -362,6 +362,70 @@ if (!("IntersectionObserver" in window) || prefersReducedMotion.matches) {
   revealElements.forEach((element) => observer.observe(element));
 }
 
+/* ── Trust-bar stats: count-up on first viewport entry ─────────────
+   Reads the existing strong text (e.g. "2 847", "96,4 %", "4,2 j"),
+   animates 0 → final, preserves separators and any trailing unit.
+   Skipped when reduced-motion is preferred or IO is missing. */
+const animateCountUp = (el, finalText) => {
+  const match = finalText.match(/^([\d \u00a0,.]+)(.*)$/);
+  if (!match) {
+    el.classList.add("is-counted");
+    return;
+  }
+  const [, numPart, suffix] = match;
+  const decimalSep = numPart.includes(",") ? "," : (numPart.includes(".") ? "." : "");
+  const cleanNum = parseFloat(numPart.replace(/[ \u00a0]/g, "").replace(",", "."));
+  if (!Number.isFinite(cleanNum)) {
+    el.classList.add("is-counted");
+    return;
+  }
+  const decimals = decimalSep && numPart.split(decimalSep)[1] ? numPart.split(decimalSep)[1].length : 0;
+  const duration = 1100;
+  const start = performance.now();
+  const format = (value) => {
+    const fixed = value.toFixed(decimals);
+    const [intPart, decPart] = fixed.split(".");
+    const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
+    return decimals > 0 ? `${grouped}${decimalSep}${decPart}${suffix}` : `${grouped}${suffix}`;
+  };
+  el.classList.add("is-counted");
+  const step = (now) => {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = format(cleanNum * eased);
+    if (t < 1) requestAnimationFrame(step);
+    else el.textContent = finalText;
+  };
+  requestAnimationFrame(step);
+};
+
+const trustStats = document.querySelectorAll(".trust-stat");
+if (trustStats.length > 0) {
+  if (!("IntersectionObserver" in window) || prefersReducedMotion.matches) {
+    trustStats.forEach((stat) => stat.classList.add("is-counted"));
+  } else {
+    const statObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const stat = entry.target;
+        const strong = stat.querySelector("strong");
+        if (strong) {
+          const finalText = strong.textContent.trim();
+          // Only count purely numeric stats; non-numeric ones (e.g. "CFE") just fade in.
+          if (/^[\d]/.test(finalText)) {
+            strong.textContent = "0";
+            requestAnimationFrame(() => animateCountUp(strong, finalText));
+          } else {
+            stat.classList.add("is-counted");
+          }
+        }
+        obs.unobserve(stat);
+      });
+    }, { threshold: 0.4 });
+    trustStats.forEach((stat) => statObserver.observe(stat));
+  }
+}
+
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (event) => {
     const href = anchor.getAttribute("href");

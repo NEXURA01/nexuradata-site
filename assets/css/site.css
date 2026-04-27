@@ -7529,12 +7529,23 @@ main {
 }
 
 @keyframes nxd-hero-pulse {
-  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
-  50%      { opacity: 0.85; transform: translateX(-50%) scale(1.06); }
+
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 0.85;
+    transform: translateX(-50%) scale(1.06);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero::after { animation: none; }
+  .hero::after {
+    animation: none;
+  }
 }
 
 /* Primary button — soft accent glow + lift on hover. Keeps the sober brand. */
@@ -7581,13 +7592,22 @@ main {
 }
 
 @keyframes nxd-cta-shine {
-  to { background-position: -220% 0; }
+  to {
+    background-position: -220% 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .button-primary,
-  .button-primary:hover { transform: none; transition: none; }
-  .button--xl:hover::after { animation: none; }
+  .button-primary:hover {
+    transform: none;
+    transition: none;
+  }
+
+  .button--xl:hover::after {
+    animation: none;
+  }
 }
 
 /* Trust-bar stats — reveal & subtle count-up support. JS toggles .is-counted */
@@ -7604,5 +7624,9 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .trust-stat strong { transform: none; opacity: 1; transition: none; }
+  .trust-stat strong {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
 }

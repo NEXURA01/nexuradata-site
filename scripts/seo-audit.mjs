@@ -38,9 +38,9 @@ const issues = {
 
 for (const f of files) {
     const c = fs.readFileSync(f, 'utf8');
-// Match content with either double or single quotes; capture lazily up to closing quote.
-  const desc = c.match(/<meta\s+name=["']description["']\s+content="([^"]+)"|<meta\s+name=["']description["']\s+content='([^']+)'/i);
-  const descText = desc ? (desc[1] || desc[2]) : null;
+    // Capture description value inside either double or single quotes.
+    const desc = c.match(/<meta\s+name=["']description["']\s+content=(["'])([\s\S]*?)\1/i);
+    const descText = desc ? desc[2] : null;
     const title = c.match(/<title>([^<]+)<\/title>/i);
 
     if (!descText) issues.missingDesc.push(f);

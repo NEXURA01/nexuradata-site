@@ -2588,10 +2588,6 @@ select {
   background: rgba(238, 241, 244, 0.55);
 }
 
-.hero-payments {
-  display: none;
-}
-
 /* Motion explainer — animated SVG process */
 .motion-explainer {
   margin: 2.5rem auto 1.5rem;

@@ -2,388 +2,457 @@
 <html lang="fr-CA">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Chaîne de possession — NEXURADATA</title>
-  <meta name="description" content="Registre forensique chaîne de possession (chain of custody) NEXURADATA — saisie, journalisation, export PDF.">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#141618">
-  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/site.css">
-  <style>
-    .coc-load {
-      display: flex;
-      gap: 0.75rem;
-      align-items: end;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-    .coc-status {
-      font-family: var(--mono, "IBM Plex Mono", monospace);
-      font-size: 0.85rem;
-      color: rgba(238, 241, 244, 0.7);
-      margin: 0.5rem 0 0;
-    }
-    .coc-form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0.75rem;
-      margin-top: 1rem;
-      padding: 1rem;
-      border: 1px solid rgba(238, 241, 244, 0.18);
-      border-radius: 8px;
-      background: rgba(238, 241, 244, 0.03);
-    }
-    .coc-form label {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      font-size: 0.85rem;
-    }
-    .coc-form label.full { grid-column: 1 / -1; }
-    .coc-form input,
-    .coc-form select,
-    .coc-form textarea {
-      background: rgba(0, 0, 0, 0.25);
-      color: #eef1f4;
-      border: 1px solid rgba(238, 241, 244, 0.18);
-      border-radius: 4px;
-      padding: 0.45rem 0.6rem;
-      font-family: var(--mono, "IBM Plex Mono", monospace);
-      font-size: 0.85rem;
-    }
-    .coc-form textarea { min-height: 80px; }
-    .coc-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1.5rem;
-      font-size: 0.82rem;
-    }
-    .coc-table th,
-    .coc-table td {
-      padding: 0.55rem 0.5rem;
-      border-bottom: 1px solid rgba(238, 241, 244, 0.14);
-      text-align: left;
-      vertical-align: top;
-    }
-    .coc-table th {
-      font-family: var(--mono, "IBM Plex Mono", monospace);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: rgba(238, 241, 244, 0.6);
-    }
-    .coc-table td.mono {
-      font-family: var(--mono, "IBM Plex Mono", monospace);
-      font-size: 0.74rem;
-      word-break: break-all;
-    }
-    .coc-actions { margin-top: 1rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .coc-signatures {
-      margin-top: 2rem;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-    .coc-signatures .sig {
-      border-top: 1px solid rgba(238, 241, 244, 0.4);
-      padding-top: 0.4rem;
-      font-size: 0.78rem;
-      color: rgba(238, 241, 244, 0.7);
-    }
-    @media print {
-      body { background: #fff !important; color: #000 !important; }
-      .site-header, .coc-form, .coc-actions, .coc-load, form[data-coc-load], .skip-link { display: none !important; }
-      .page-card { background: #fff !important; box-shadow: none !important; border: none !important; }
-      .coc-table th, .coc-table td { border-color: #000 !important; color: #000 !important; }
-      .coc-signatures .sig { border-color: #000 !important; color: #000 !important; }
-      .page-hero, h1, h2, h3, p, strong, span { color: #000 !important; }
-      a { color: #000 !important; text-decoration: none !important; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Chaîne de possession — NEXURADATA</title>
+    <meta name="description"
+        content="Registre forensique chaîne de possession (chain of custody) NEXURADATA — saisie, journalisation, export PDF.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#141618">
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <style>
+        .coc-load {
+            display: flex;
+            gap: 0.75rem;
+            align-items: end;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .coc-status {
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.85rem;
+            color: rgba(238, 241, 244, 0.7);
+            margin: 0.5rem 0 0;
+        }
+
+        .coc-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid rgba(238, 241, 244, 0.18);
+            border-radius: 8px;
+            background: rgba(238, 241, 244, 0.03);
+        }
+
+        .coc-form label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+        }
+
+        .coc-form label.full {
+            grid-column: 1 / -1;
+        }
+
+        .coc-form input,
+        .coc-form select,
+        .coc-form textarea {
+            background: rgba(0, 0, 0, 0.25);
+            color: #eef1f4;
+            border: 1px solid rgba(238, 241, 244, 0.18);
+            border-radius: 4px;
+            padding: 0.45rem 0.6rem;
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.85rem;
+        }
+
+        .coc-form textarea {
+            min-height: 80px;
+        }
+
+        .coc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            font-size: 0.82rem;
+        }
+
+        .coc-table th,
+        .coc-table td {
+            padding: 0.55rem 0.5rem;
+            border-bottom: 1px solid rgba(238, 241, 244, 0.14);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .coc-table th {
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: rgba(238, 241, 244, 0.6);
+        }
+
+        .coc-table td.mono {
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.74rem;
+            word-break: break-all;
+        }
+
+        .coc-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .coc-signatures {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .coc-signatures .sig {
+            border-top: 1px solid rgba(238, 241, 244, 0.4);
+            padding-top: 0.4rem;
+            font-size: 0.78rem;
+            color: rgba(238, 241, 244, 0.7);
+        }
+
+        @media print {
+            body {
+                background: #fff !important;
+                color: #000 !important;
+            }
+
+            .site-header,
+            .coc-form,
+            .coc-actions,
+            .coc-load,
+            form[data-coc-load],
+            .skip-link {
+                display: none !important;
+            }
+
+            .page-card {
+                background: #fff !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            .coc-table th,
+            .coc-table td {
+                border-color: #000 !important;
+                color: #000 !important;
+            }
+
+            .coc-signatures .sig {
+                border-color: #000 !important;
+                color: #000 !important;
+            }
+
+            .page-hero,
+            h1,
+            h2,
+            h3,
+            p,
+            strong,
+            span {
+                color: #000 !important;
+            }
+
+            a {
+                color: #000 !important;
+                text-decoration: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
 
-  <header class="site-header">
-    <nav class="navbar container" aria-label="Navigation chaîne de possession">
-      <a class="brand" href="../index.html" aria-label="NEXURADATA, retour à l'accueil">
-        <img src="../assets/icons/logo-petit.svg" alt="NEXURADATA" width="200" height="24">
-      </a>
-      <div class="nav-links">
-        <a href="dashboard.html">Tableau de bord</a>
-        <a href="index.html">Dossiers</a>
-        <a href="workflow.html">Atelier</a>
-        <a href="chain-of-custody.html" aria-current="page">Chaîne</a>
-        <a href="quotes.html">Soumissions</a>
-        <a href="payments.html">Paiements</a>
-        <a href="../index.html" class="button button-outline button-small">Site public</a>
-      </div>
-    </nav>
-  </header>
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Navigation chaîne de possession">
+            <a class="brand" href="../index.html" aria-label="NEXURADATA, retour à l'accueil">
+                <img src="../assets/icons/logo-petit.svg" alt="NEXURADATA" width="200" height="24">
+            </a>
+            <div class="nav-links">
+                <a href="dashboard.html">Tableau de bord</a>
+                <a href="index.html">Dossiers</a>
+                <a href="workflow.html">Atelier</a>
+                <a href="chain-of-custody.html" aria-current="page">Chaîne</a>
+                <a href="quotes.html">Soumissions</a>
+                <a href="payments.html">Paiements</a>
+                <a href="../index.html" class="button button-outline button-small">Site public</a>
+            </div>
+        </nav>
+    </header>
 
-  <main id="contenu" class="page-shell">
-    <div class="container">
-      <header class="page-hero">
-        <p class="eyebrow">Forensique</p>
-        <h1>Chaîne de possession</h1>
-        <p class="page-intro">
-          Journal forensique horodaté de chaque transfert, imageur et scellé.
-          Conforme aux exigences de preuve (intégrité SHA-256/MD5, témoin, signature).
-          Imprimable en PDF pour dossier client ou expert.
-        </p>
-      </header>
+    <main id="contenu" class="page-shell">
+        <div class="container">
+            <header class="page-hero">
+                <p class="eyebrow">Forensique</p>
+                <h1>Chaîne de possession</h1>
+                <p class="page-intro">
+                    Journal forensique horodaté de chaque transfert, imageur et scellé.
+                    Conforme aux exigences de preuve (intégrité SHA-256/MD5, témoin, signature).
+                    Imprimable en PDF pour dossier client ou expert.
+                </p>
+            </header>
 
-      <section class="page-card">
-        <form class="coc-load" data-coc-load>
-          <label class="field" style="flex:1;min-width:240px;">
-            <span>Numéro de dossier</span>
-            <input type="text" name="caseId" placeholder="NX-2026-XXXX" autocomplete="off" required>
-          </label>
-          <button type="submit" class="button button-primary">Charger</button>
-        </form>
-        <p class="coc-status" data-coc-status></p>
+            <section class="page-card">
+                <form class="coc-load" data-coc-load>
+                    <label class="field" style="flex:1;min-width:240px;">
+                        <span>Numéro de dossier</span>
+                        <input type="text" name="caseId" placeholder="NX-2026-XXXX" autocomplete="off" required>
+                    </label>
+                    <button type="submit" class="button button-primary">Charger</button>
+                </form>
+                <p class="coc-status" data-coc-status></p>
 
-        <div data-coc-summary hidden style="margin-top:1rem;">
-          <strong data-coc-client></strong>
-          <span style="font-family:var(--mono,monospace);font-size:0.78rem;color:rgba(238,241,244,0.6);"> · <span data-coc-support></span> · urgence <span data-coc-urgency></span></span>
+                <div data-coc-summary hidden style="margin-top:1rem;">
+                    <strong data-coc-client></strong>
+                    <span style="font-family:var(--mono,monospace);font-size:0.78rem;color:rgba(238,241,244,0.6);"> ·
+                        <span data-coc-support></span> · urgence <span data-coc-urgency></span></span>
+                </div>
+
+                <form class="coc-form" data-coc-form hidden>
+                    <label>
+                        <span>Type d'événement</span>
+                        <select name="eventType" required>
+                            <option value="reception">Réception (client → labo)</option>
+                            <option value="internal_transfer">Transfert interne</option>
+                            <option value="imaging_started">Imageur démarré</option>
+                            <option value="imaging_complete">Imageur terminé</option>
+                            <option value="sealing">Mise sous scellé</option>
+                            <option value="external_transfer">Transfert externe</option>
+                            <option value="return">Retour au client</option>
+                            <option value="destruction">Destruction certifiée</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Date/heure (ISO)</span>
+                        <input type="datetime-local" name="occurredAt">
+                    </label>
+                    <label>
+                        <span>Lieu</span>
+                        <input type="text" name="location" placeholder="Labo Montréal, salle 2">
+                    </label>
+                    <label>
+                        <span>De (partie)</span>
+                        <input type="text" name="fromParty" placeholder="Client / Olivier / coursier">
+                    </label>
+                    <label>
+                        <span>Vers (partie)</span>
+                        <input type="text" name="toParty" placeholder="Olivier / Client / archive">
+                    </label>
+                    <label>
+                        <span>Étiquette appareil</span>
+                        <input type="text" name="deviceLabel" placeholder="HDD WD Red 4TB">
+                    </label>
+                    <label>
+                        <span>Numéro de série</span>
+                        <input type="text" name="deviceSerial" placeholder="WX..., S/N">
+                    </label>
+                    <label>
+                        <span>ID scellé</span>
+                        <input type="text" name="sealId" placeholder="NX-SEAL-001234">
+                    </label>
+                    <label class="full">
+                        <span>Hash SHA-256 (image, 64 hex)</span>
+                        <input type="text" name="hashSha256" pattern="[0-9a-fA-F]{64}" maxlength="64"
+                            placeholder="optionnel">
+                    </label>
+                    <label class="full">
+                        <span>Hash MD5 (32 hex)</span>
+                        <input type="text" name="hashMd5" pattern="[0-9a-fA-F]{32}" maxlength="32"
+                            placeholder="optionnel">
+                    </label>
+                    <label>
+                        <span>Témoin</span>
+                        <input type="text" name="witness" placeholder="Nom témoin">
+                    </label>
+                    <label>
+                        <span>Référence signature</span>
+                        <input type="text" name="signatureRef" placeholder="ID document signé">
+                    </label>
+                    <label class="full">
+                        <span>Notes</span>
+                        <textarea name="notes" placeholder="Observations, état du scellé, anomalies..."></textarea>
+                    </label>
+                    <div class="coc-actions full">
+                        <button type="submit" class="button button-primary">Ajouter événement</button>
+                        <button type="button" class="button button-outline" data-coc-print>Imprimer / PDF</button>
+                        <span class="coc-status" data-coc-feedback></span>
+                    </div>
+                </form>
+
+                <h2 style="margin-top:2rem;font-size:1.1rem;text-transform:uppercase;letter-spacing:0.06em;">Registre
+                </h2>
+                <div style="overflow-x:auto;">
+                    <table class="coc-table" data-coc-table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Quand</th>
+                                <th>Type</th>
+                                <th>De → Vers</th>
+                                <th>Appareil / Scellé</th>
+                                <th>Hash</th>
+                                <th>Opérateur / Témoin</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody data-coc-tbody>
+                            <tr>
+                                <td colspan="8" style="text-align:center;color:rgba(238,241,244,0.5);">Charger un
+                                    dossier pour voir le registre.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="coc-signatures">
+                    <div class="sig">Signature opérateur · date</div>
+                    <div class="sig">Signature témoin · date</div>
+                    <div class="sig">Signature client / huissier · date</div>
+                </div>
+            </section>
         </div>
+    </main>
 
-        <form class="coc-form" data-coc-form hidden>
-          <label>
-            <span>Type d'événement</span>
-            <select name="eventType" required>
-              <option value="reception">Réception (client → labo)</option>
-              <option value="internal_transfer">Transfert interne</option>
-              <option value="imaging_started">Imageur démarré</option>
-              <option value="imaging_complete">Imageur terminé</option>
-              <option value="sealing">Mise sous scellé</option>
-              <option value="external_transfer">Transfert externe</option>
-              <option value="return">Retour au client</option>
-              <option value="destruction">Destruction certifiée</option>
-            </select>
-          </label>
-          <label>
-            <span>Date/heure (ISO)</span>
-            <input type="datetime-local" name="occurredAt">
-          </label>
-          <label>
-            <span>Lieu</span>
-            <input type="text" name="location" placeholder="Labo Montréal, salle 2">
-          </label>
-          <label>
-            <span>De (partie)</span>
-            <input type="text" name="fromParty" placeholder="Client / Olivier / coursier">
-          </label>
-          <label>
-            <span>Vers (partie)</span>
-            <input type="text" name="toParty" placeholder="Olivier / Client / archive">
-          </label>
-          <label>
-            <span>Étiquette appareil</span>
-            <input type="text" name="deviceLabel" placeholder="HDD WD Red 4TB">
-          </label>
-          <label>
-            <span>Numéro de série</span>
-            <input type="text" name="deviceSerial" placeholder="WX..., S/N">
-          </label>
-          <label>
-            <span>ID scellé</span>
-            <input type="text" name="sealId" placeholder="NX-SEAL-001234">
-          </label>
-          <label class="full">
-            <span>Hash SHA-256 (image, 64 hex)</span>
-            <input type="text" name="hashSha256" pattern="[0-9a-fA-F]{64}" maxlength="64" placeholder="optionnel">
-          </label>
-          <label class="full">
-            <span>Hash MD5 (32 hex)</span>
-            <input type="text" name="hashMd5" pattern="[0-9a-fA-F]{32}" maxlength="32" placeholder="optionnel">
-          </label>
-          <label>
-            <span>Témoin</span>
-            <input type="text" name="witness" placeholder="Nom témoin">
-          </label>
-          <label>
-            <span>Référence signature</span>
-            <input type="text" name="signatureRef" placeholder="ID document signé">
-          </label>
-          <label class="full">
-            <span>Notes</span>
-            <textarea name="notes" placeholder="Observations, état du scellé, anomalies..."></textarea>
-          </label>
-          <div class="coc-actions full">
-            <button type="submit" class="button button-primary">Ajouter événement</button>
-            <button type="button" class="button button-outline" data-coc-print>Imprimer / PDF</button>
-            <span class="coc-status" data-coc-feedback></span>
-          </div>
-        </form>
+    <script>
+        (function () {
+            const EVENT_LABELS = {
+                reception: "Réception",
+                internal_transfer: "Transfert interne",
+                imaging_started: "Imageur démarré",
+                imaging_complete: "Imageur terminé",
+                sealing: "Mise sous scellé",
+                external_transfer: "Transfert externe",
+                return: "Retour client",
+                destruction: "Destruction"
+            };
 
-        <h2 style="margin-top:2rem;font-size:1.1rem;text-transform:uppercase;letter-spacing:0.06em;">Registre</h2>
-        <div style="overflow-x:auto;">
-          <table class="coc-table" data-coc-table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Quand</th>
-                <th>Type</th>
-                <th>De → Vers</th>
-                <th>Appareil / Scellé</th>
-                <th>Hash</th>
-                <th>Opérateur / Témoin</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody data-coc-tbody>
-              <tr><td colspan="8" style="text-align:center;color:rgba(238,241,244,0.5);">Charger un dossier pour voir le registre.</td></tr>
-            </tbody>
-          </table>
-        </div>
+            const loadForm = document.querySelector("[data-coc-load]");
+            const statusEl = document.querySelector("[data-coc-status]");
+            const summaryEl = document.querySelector("[data-coc-summary]");
+            const clientEl = document.querySelector("[data-coc-client]");
+            const supportEl = document.querySelector("[data-coc-support]");
+            const urgencyEl = document.querySelector("[data-coc-urgency]");
+            const eventForm = document.querySelector("[data-coc-form]");
+            const feedbackEl = document.querySelector("[data-coc-feedback]");
+            const tbodyEl = document.querySelector("[data-coc-tbody]");
+            const printBtn = document.querySelector("[data-coc-print]");
 
-        <div class="coc-signatures">
-          <div class="sig">Signature opérateur · date</div>
-          <div class="sig">Signature témoin · date</div>
-          <div class="sig">Signature client / huissier · date</div>
-        </div>
-      </section>
-    </div>
-  </main>
+            let currentCaseId = "";
 
-  <script>
-    (function () {
-      const EVENT_LABELS = {
-        reception: "Réception",
-        internal_transfer: "Transfert interne",
-        imaging_started: "Imageur démarré",
-        imaging_complete: "Imageur terminé",
-        sealing: "Mise sous scellé",
-        external_transfer: "Transfert externe",
-        return: "Retour client",
-        destruction: "Destruction"
-      };
+            function setStatus(msg, isError) {
+                statusEl.textContent = msg || "";
+                statusEl.style.color = isError ? "#e74c3c" : "rgba(238,241,244,0.7)";
+            }
 
-      const loadForm = document.querySelector("[data-coc-load]");
-      const statusEl = document.querySelector("[data-coc-status]");
-      const summaryEl = document.querySelector("[data-coc-summary]");
-      const clientEl = document.querySelector("[data-coc-client]");
-      const supportEl = document.querySelector("[data-coc-support]");
-      const urgencyEl = document.querySelector("[data-coc-urgency]");
-      const eventForm = document.querySelector("[data-coc-form]");
-      const feedbackEl = document.querySelector("[data-coc-feedback]");
-      const tbodyEl = document.querySelector("[data-coc-tbody]");
-      const printBtn = document.querySelector("[data-coc-print]");
+            function escape(s) {
+                return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" }[c]));
+            }
 
-      let currentCaseId = "";
+            function renderEvents(events) {
+                if (!events || !events.length) {
+                    tbodyEl.innerHTML = '<tr><td colspan="8" style="text-align:center;color:rgba(238,241,244,0.5);">Aucun événement enregistré.</td></tr>';
+                    return;
+                }
+                tbodyEl.innerHTML = events.map((e) => {
+                    const hash = [];
+                    if (e.hashSha256) hash.push("SHA-256: " + e.hashSha256.slice(0, 16) + "…");
+                    if (e.hashMd5) hash.push("MD5: " + e.hashMd5);
+                    return "<tr>" +
+                        "<td class=\"mono\">" + e.sequence + "</td>" +
+                        "<td class=\"mono\">" + escape((e.occurredAt || "").replace("T", " ").slice(0, 16)) + "<br><span style=\"opacity:0.5;font-size:0.7rem;\">" + escape(e.location) + "</span></td>" +
+                        "<td>" + escape(EVENT_LABELS[e.eventType] || e.eventType) + "</td>" +
+                        "<td>" + escape(e.fromParty || "—") + " → " + escape(e.toParty || "—") + "</td>" +
+                        "<td>" + escape(e.deviceLabel) + (e.deviceSerial ? "<br><span class=\"mono\" style=\"opacity:0.6;\">S/N " + escape(e.deviceSerial) + "</span>" : "") + (e.sealId ? "<br><span class=\"mono\" style=\"opacity:0.7;\">Scellé " + escape(e.sealId) + "</span>" : "") + "</td>" +
+                        "<td class=\"mono\">" + escape(hash.join(" / ")) + "</td>" +
+                        "<td>" + escape(e.operator || "—") + (e.witness ? "<br><span style=\"opacity:0.6;\">Témoin: " + escape(e.witness) + "</span>" : "") + "</td>" +
+                        "<td>" + escape(e.notes || "") + "</td>" +
+                        "</tr>";
+                }).join("");
+            }
 
-      function setStatus(msg, isError) {
-        statusEl.textContent = msg || "";
-        statusEl.style.color = isError ? "#e74c3c" : "rgba(238,241,244,0.7)";
-      }
+            async function reload() {
+                if (!currentCaseId) return;
+                const res = await fetch("/api/ops/chain-of-custody?caseId=" + encodeURIComponent(currentCaseId));
+                const json = await res.json();
+                if (json.ok) renderEvents(json.events);
+            }
 
-      function escape(s) {
-        return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
-      }
+            loadForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const caseId = (loadForm.elements.caseId.value || "").trim().toUpperCase();
+                if (!caseId) return;
+                setStatus("Chargement…");
+                eventForm.hidden = true;
+                summaryEl.hidden = true;
+                try {
+                    const res = await fetch("/api/ops/chain-of-custody?caseId=" + encodeURIComponent(caseId));
+                    const json = await res.json();
+                    if (!res.ok || !json.ok) {
+                        setStatus(json.message || "Erreur de chargement", true);
+                        return;
+                    }
+                    currentCaseId = json.caseId;
+                    clientEl.textContent = json.caseSummary.clientName || "(sans nom)";
+                    supportEl.textContent = json.caseSummary.supportType || "—";
+                    urgencyEl.textContent = json.caseSummary.urgency || "—";
+                    summaryEl.hidden = false;
+                    eventForm.hidden = false;
+                    renderEvents(json.events);
+                    setStatus("Dossier " + currentCaseId + " chargé.");
+                } catch (err) {
+                    setStatus("Erreur réseau", true);
+                }
+            });
 
-      function renderEvents(events) {
-        if (!events || !events.length) {
-          tbodyEl.innerHTML = '<tr><td colspan="8" style="text-align:center;color:rgba(238,241,244,0.5);">Aucun événement enregistré.</td></tr>';
-          return;
-        }
-        tbodyEl.innerHTML = events.map((e) => {
-          const hash = [];
-          if (e.hashSha256) hash.push("SHA-256: " + e.hashSha256.slice(0, 16) + "…");
-          if (e.hashMd5) hash.push("MD5: " + e.hashMd5);
-          return "<tr>" +
-            "<td class=\"mono\">" + e.sequence + "</td>" +
-            "<td class=\"mono\">" + escape((e.occurredAt || "").replace("T", " ").slice(0, 16)) + "<br><span style=\"opacity:0.5;font-size:0.7rem;\">" + escape(e.location) + "</span></td>" +
-            "<td>" + escape(EVENT_LABELS[e.eventType] || e.eventType) + "</td>" +
-            "<td>" + escape(e.fromParty || "—") + " → " + escape(e.toParty || "—") + "</td>" +
-            "<td>" + escape(e.deviceLabel) + (e.deviceSerial ? "<br><span class=\"mono\" style=\"opacity:0.6;\">S/N " + escape(e.deviceSerial) + "</span>" : "") + (e.sealId ? "<br><span class=\"mono\" style=\"opacity:0.7;\">Scellé " + escape(e.sealId) + "</span>" : "") + "</td>" +
-            "<td class=\"mono\">" + escape(hash.join(" / ")) + "</td>" +
-            "<td>" + escape(e.operator || "—") + (e.witness ? "<br><span style=\"opacity:0.6;\">Témoin: " + escape(e.witness) + "</span>" : "") + "</td>" +
-            "<td>" + escape(e.notes || "") + "</td>" +
-          "</tr>";
-        }).join("");
-      }
+            eventForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                if (!currentCaseId) return;
+                const fd = new FormData(eventForm);
+                const payload = { caseId: currentCaseId };
+                fd.forEach((value, key) => { payload[key] = value; });
+                if (payload.occurredAt) {
+                    // datetime-local lacks tz; treat as local then ISO
+                    const d = new Date(payload.occurredAt);
+                    if (!Number.isNaN(d.getTime())) payload.occurredAt = d.toISOString();
+                }
+                feedbackEl.textContent = "Enregistrement…";
+                feedbackEl.style.color = "rgba(238,241,244,0.7)";
+                try {
+                    const res = await fetch("/api/ops/chain-of-custody", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    const json = await res.json();
+                    if (!res.ok || !json.ok) {
+                        feedbackEl.textContent = "✗ " + (json.message || "Erreur");
+                        feedbackEl.style.color = "#e74c3c";
+                        return;
+                    }
+                    feedbackEl.textContent = "✓ Événement #" + json.sequence + " enregistré";
+                    feedbackEl.style.color = "#2ecc71";
+                    renderEvents(json.events);
+                    eventForm.reset();
+                    setTimeout(() => { feedbackEl.textContent = ""; }, 3000);
+                } catch (err) {
+                    feedbackEl.textContent = "✗ Réseau";
+                    feedbackEl.style.color = "#e74c3c";
+                }
+            });
 
-      async function reload() {
-        if (!currentCaseId) return;
-        const res = await fetch("/api/ops/chain-of-custody?caseId=" + encodeURIComponent(currentCaseId));
-        const json = await res.json();
-        if (json.ok) renderEvents(json.events);
-      }
-
-      loadForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const caseId = (loadForm.elements.caseId.value || "").trim().toUpperCase();
-        if (!caseId) return;
-        setStatus("Chargement…");
-        eventForm.hidden = true;
-        summaryEl.hidden = true;
-        try {
-          const res = await fetch("/api/ops/chain-of-custody?caseId=" + encodeURIComponent(caseId));
-          const json = await res.json();
-          if (!res.ok || !json.ok) {
-            setStatus(json.message || "Erreur de chargement", true);
-            return;
-          }
-          currentCaseId = json.caseId;
-          clientEl.textContent = json.caseSummary.clientName || "(sans nom)";
-          supportEl.textContent = json.caseSummary.supportType || "—";
-          urgencyEl.textContent = json.caseSummary.urgency || "—";
-          summaryEl.hidden = false;
-          eventForm.hidden = false;
-          renderEvents(json.events);
-          setStatus("Dossier " + currentCaseId + " chargé.");
-        } catch (err) {
-          setStatus("Erreur réseau", true);
-        }
-      });
-
-      eventForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        if (!currentCaseId) return;
-        const fd = new FormData(eventForm);
-        const payload = { caseId: currentCaseId };
-        fd.forEach((value, key) => { payload[key] = value; });
-        if (payload.occurredAt) {
-          // datetime-local lacks tz; treat as local then ISO
-          const d = new Date(payload.occurredAt);
-          if (!Number.isNaN(d.getTime())) payload.occurredAt = d.toISOString();
-        }
-        feedbackEl.textContent = "Enregistrement…";
-        feedbackEl.style.color = "rgba(238,241,244,0.7)";
-        try {
-          const res = await fetch("/api/ops/chain-of-custody", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-          const json = await res.json();
-          if (!res.ok || !json.ok) {
-            feedbackEl.textContent = "✗ " + (json.message || "Erreur");
-            feedbackEl.style.color = "#e74c3c";
-            return;
-          }
-          feedbackEl.textContent = "✓ Événement #" + json.sequence + " enregistré";
-          feedbackEl.style.color = "#2ecc71";
-          renderEvents(json.events);
-          eventForm.reset();
-          setTimeout(() => { feedbackEl.textContent = ""; }, 3000);
-        } catch (err) {
-          feedbackEl.textContent = "✗ Réseau";
-          feedbackEl.style.color = "#e74c3c";
-        }
-      });
-
-      printBtn.addEventListener("click", () => window.print());
-    })();
-  </script>
+            printBtn.addEventListener("click", () => window.print());
+        })();
+    </script>
 </body>
 
 </html>

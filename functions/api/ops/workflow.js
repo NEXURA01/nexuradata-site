@@ -179,12 +179,13 @@ export const onRequestPost = async (context) => {
     .run();
 
   try {
-    await recordCaseEvent(context.env, caseId, {
-      type: "workflow_step",
-      label: `${stage} → ${status}`,
-      detail: notes ? notes.slice(0, 500) : "",
-      actor: operator
-    });
+    await recordCaseEvent(
+      context.env,
+      caseId,
+      operator || "ops",
+      `Workflow ${stage}`,
+      `Statut: ${status}${notes ? ` — ${notes.slice(0, 400)}` : ""}`
+    );
   } catch {
     // best-effort logging
   }

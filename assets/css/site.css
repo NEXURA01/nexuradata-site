@@ -2602,6 +2602,59 @@ select {
   color: rgba(238, 241, 244, 0.95);
 }
 
+/* Motion explainer — animated SVG process */
+.motion-explainer {
+  margin: 2.5rem auto 1.5rem;
+  max-width: 920px;
+  padding: 1.75rem;
+  border: 1px solid rgba(238, 241, 244, 0.14);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(238, 241, 244, 0.03) 0%, rgba(0, 0, 0, 0.18) 100%);
+}
+.motion-explainer__caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 1rem;
+  font-family: var(--mono, "IBM Plex Mono", monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(238, 241, 244, 0.6);
+}
+.motion-explainer__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.motion-stage circle.dot {
+  transform-origin: center;
+  animation: nx-pulse 4s ease-in-out infinite;
+}
+.motion-stage:nth-child(1) circle.dot { animation-delay: 0s; }
+.motion-stage:nth-child(2) circle.dot { animation-delay: 0.8s; }
+.motion-stage:nth-child(3) circle.dot { animation-delay: 1.6s; }
+.motion-stage:nth-child(4) circle.dot { animation-delay: 2.4s; }
+.motion-stage:nth-child(5) circle.dot { animation-delay: 3.2s; }
+
+@keyframes nx-pulse {
+  0%, 100% { r: 7; opacity: 0.5; }
+  50% { r: 11; opacity: 1; }
+}
+
+.motion-flow line.flow {
+  stroke-dasharray: 6 4;
+  animation: nx-flow 1.5s linear infinite;
+}
+@keyframes nx-flow {
+  to { stroke-dashoffset: -20; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-stage circle.dot,
+  .motion-flow line.flow { animation: none; }
+}
+
 .hero-panel {
   position: relative;
   align-self: stretch;

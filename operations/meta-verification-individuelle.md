@@ -7,11 +7,14 @@
 ## Ce que tu fais MAINTENANT dans Meta
 
 ### 1. Annule la vérification "Entreprise"
+
 Dans la modale qui demande un document fiscal :
+
 - clique **Précédent** jusqu'à sortir du flux entreprise
 - ou ferme la modale, ne téléverse rien
 
 ### 2. Bascule en vérification "Personne / Particulier"
+
 - Meta Business Suite → **Paramètres** → **Centre de comptes** → **Identité**
 - Choisis **"Vérifier votre identité personnelle"** (pas "vérifier l'entreprise")
 - Téléverse :
@@ -20,6 +23,7 @@ Dans la modale qui demande un document fiscal :
 - Validation auto en 5–30 minutes
 
 ### 3. Crée le compte publicitaire au nom NEXURADATA
+
 - Dans **Comptes publicitaires** → Créer
 - **Nom du compte** : `NEXURADATA - Récupération de données`
 - **Pays** : Canada
@@ -30,11 +34,13 @@ Dans la modale qui demande un document fiscal :
 Les pubs apparaîtront avec **NEXURADATA** comme annonceur (nom de la Page Facebook), pas ton nom personnel. Le nom personnel sert uniquement à Meta pour la vérification.
 
 ### 4. Vérifie le domaine nexuradata.ca
+
 - **Paramètres entreprise** → **Sécurité de la marque** → **Domaines** → Ajouter `nexuradata.ca`
 - Méthode **balise meta** : Meta te donne un `<meta name="facebook-domain-verification" content="xxxx">`
 - Donne-moi cette valeur, je l'ajoute dans le `<head>` de l'index FR + EN en 30 secondes
 
 ### 5. Connecte WhatsApp Business
+
 - Plus besoin de vérification fiscale en mode test
 - WhatsApp Cloud API gratuit jusqu'à 1000 conversations/mois
 - Ton numéro test Meta marche immédiatement
@@ -48,12 +54,14 @@ Les pubs apparaîtront avec **NEXURADATA** comme annonceur (nom de la Page Faceb
 - Click-to-WhatsApp ads : **OK**
 
 Ce que tu n'auras PAS sans REQ :
+
 - "Verified business" badge bleu (peu important pour récup données)
 - Certains crédits pub Meta réservés aux entreprises vérifiées
 
 ## Quand passer au REQ
 
 Déclencheurs honnêtes :
+
 - 1er client encaissé > 500 $
 - Premier client B2B (entreprise) qui demande facture officielle
 - Total annuel projeté > 30 000 $ (seuil TPS/TVQ)

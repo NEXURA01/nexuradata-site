@@ -1,10 +1,11 @@
 # NEXURADATA — Kit de publicités prêt à lancer
 
 **Cible :** Grand Montréal + Rive-Sud + Rive-Nord + Québec.
-**Site :** https://nexuradata.ca
+**Site :** <https://nexuradata.ca>
 **Téléphone :** 438-813-0592
-**Email :** contact@nexuradata.ca
+**Email :** <contact@nexuradata.ca>
 **Différenciateurs LOUD :**
+
 - 🎯 Étiquette Purolator pré-payée par nous
 - 💰 Diagnostic gratuit, prix ferme avant intervention
 - 🛡️ Si on ne récupère rien, vous ne payez rien
@@ -17,11 +18,13 @@
 ## 1. Google Ads — Search Campaigns
 
 ### Campagne A — « Récupération générale FR »
+
 **Budget conseillé :** 25 $/jour pour démarrer, monter à 75 $/jour après 14 jours d'optimisation.
 **Stratégie d'enchères :** Maximiser les conversions, puis cible CPA = 35 $.
 **Type de correspondance :** Phrase + exact uniquement (jamais broad).
 
 #### Mots-clés (FR)
+
 ```
 "récupération de données montréal"
 "recuperation donnees montreal"
@@ -44,6 +47,7 @@
 ```
 
 #### Mots-clés négatifs obligatoires
+
 ```
 gratuit gratuite -recovery -télécharger -logiciel -software -free -tutoriel -comment faire
 -mac os installer -windows reset -formater
@@ -53,6 +57,7 @@ gratuit gratuite -recovery -télécharger -logiciel -software -free -tutoriel -c
 #### Annonces texte (RSA — Responsive Search Ads)
 
 **Titres (15 max, 30 caractères chacun) :**
+
 ```
 1. Récupération données Montréal
 2. Diagnostic GRATUIT en 24 h
@@ -72,6 +77,7 @@ gratuit gratuite -recovery -télécharger -logiciel -software -free -tutoriel -c
 ```
 
 **Descriptions (4 max, 90 caractères chacun) :**
+
 ```
 1. Diagnostic gratuit. Prix ferme avant toute manipulation. Étiquette Purolator payée par nous.
 2. Si on ne récupère rien, vous ne payez rien. Réponse en 24 h. Visa, Interac, Bitcoin.
@@ -80,6 +86,7 @@ gratuit gratuite -recovery -télécharger -logiciel -software -free -tutoriel -c
 ```
 
 **Extensions :**
+
 - Sitelinks : `Tarifs` `Comment nous envoyer` `Le laboratoire` `Réserver un créneau`
 - Callouts : `Diagnostic gratuit` `Étiquette Purolator payée` `Conforme Loi 25` `Bitcoin accepté` `7j/7`
 - Snippets structurés : Services → `Récupération HDD, SSD, RAID, NAS, Téléphones, Forensique`
@@ -89,7 +96,9 @@ gratuit gratuite -recovery -télécharger -logiciel -software -free -tutoriel -c
 ---
 
 ### Campagne B — « English recovery »
+
 Même structure, mêmes budgets. Mots-clés EN :
+
 ```
 "data recovery montreal"
 "hard drive recovery quebec"
@@ -104,6 +113,7 @@ Même structure, mêmes budgets. Mots-clés EN :
 ```
 
 **Titres EN :**
+
 ```
 1. Data Recovery Montreal QC
 2. FREE Diagnosis in 24 h
@@ -120,8 +130,10 @@ Même structure, mêmes budgets. Mots-clés EN :
 ---
 
 ### Campagne C — « Urgences ransomware »
+
 **Budget :** 15 $/jour (faible volume mais haute valeur).
 **Mots-clés :**
+
 ```
 "ransomware quebec aide"
 "recuperation apres ransomware"
@@ -130,7 +142,9 @@ Même structure, mêmes budgets. Mots-clés EN :
 "victime ransomware entreprise"
 [ransomware help canada]
 ```
+
 **Annonce :**
+
 - Titre : `Victime de ransomware ? Appelez maintenant`
 - Description : `Triage spécialisé. Forensique inclus. Conformité Loi 25. Sans paiement à la rançon.`
 
@@ -139,6 +153,7 @@ Même structure, mêmes budgets. Mots-clés EN :
 ## 2. Google Local Services Ads (LSA)
 
 À activer après vérification Google Business Profile UPS Store #447.
+
 - Catégorie : `IT services and computer repair`
 - Sous-services : `Data recovery`
 - Zone : 25 km autour Longueuil J3Y 7G5
@@ -150,7 +165,9 @@ Même structure, mêmes budgets. Mots-clés EN :
 ## 3. Meta Ads (Facebook + Instagram)
 
 ### Audience cible
+
 **Audience 1 — Particuliers paniqués (B2C)**
+
 - Âge : 28-65
 - Localisation : Grand Montréal + Rive-Sud + Rive-Nord (rayon 50 km)
 - Intérêts : `Photographie`, `Voyages`, `Famille`, `Petites entreprises`
@@ -158,6 +175,7 @@ Même structure, mêmes budgets. Mots-clés EN :
 - Exclusions : Personnel IT (déjà couvert)
 
 **Audience 2 — PME (B2B)**
+
 - Postes : `Gérant`, `Propriétaire`, `Comptable`, `Directeur`
 - Industries : Cabinets d'avocats, comptables, médecins, designers, immobilier
 - Localisation : Grand Montréal
@@ -166,28 +184,33 @@ Même structure, mêmes budgets. Mots-clés EN :
 ### Créatifs (formats 1080×1080 + 1080×1350)
 
 **Pub #1 — « Le moment précis »**
+
 - Visuel : Disque dur externe avec voyant rouge clignotant. Mains floues qui paniquent.
 - Texte primaire : *« Votre disque externe ne s'allume plus. Vos photos de famille sont là-dedans. C'est exactement le moment où on entre en jeu. Diagnostic gratuit. Si on ne récupère rien, vous ne payez rien. »*
 - Titre : `Vos données ne sont pas perdues. Pas encore.`
 - CTA : `En savoir plus` → `/comment-nous-envoyer-vos-donnees.html`
 
 **Pub #2 — « L'étiquette payée »**
+
 - Visuel : Boîte Purolator + étiquette + iPhone affichant l'email avec étiquette PDF.
 - Texte primaire : *« Tu nous envoies ton disque. On te paye l'étiquette Purolator. Aucun autre laboratoire au Québec ne fait ça. Prouve-nous le contraire et on te récupère tes données gratuitement. »*
 - Titre : `Étiquette d'envoi. On paye.`
 - CTA : `Ouvrir un dossier`
 
 **Pub #3 — « Bitcoin & Loi 25 » (B2B)**
+
 - Visuel : Capture du logo Bitcoin + symbole Loi 25 sur fond labo.
 - Texte primaire : *« Récupération de données pour entreprises québécoises. Chaîne de possession signée. Conforme Loi 25. Bitcoin accepté pour la confidentialité financière. Forensique numérique disponible pour dossiers légaux. »*
 - Titre : `B2B · Forensique · Loi 25 · Bitcoin`
 - CTA : `Ouvrir un dossier d'entreprise`
 
 **Pub #4 — Témoignage (à filmer dès 1er client satisfait)**
+
 - Format : Vidéo verticale 30 secondes. Client parle à la caméra du résultat.
 - À tourner avec consentement écrit + flouter données sensibles.
 
 ### Budget Meta
+
 - Démarrage : 20 $/jour par audience (40 $/jour total)
 - Optimisation après 7 jours : tuer ce qui ne convertit pas
 - Cible : 5 $ par lead qualifié (formulaire rempli)
@@ -197,6 +220,7 @@ Même structure, mêmes budgets. Mots-clés EN :
 ## 4. LinkedIn Ads (B2B uniquement)
 
 ### Audience
+
 - Localisation : Quebec + Ontario
 - Industries : Legal Services, Accounting, Medical Practices, Real Estate, Architecture, Creative Agencies
 - Tailles d'entreprise : 2-200 employés
@@ -206,12 +230,14 @@ Même structure, mêmes budgets. Mots-clés EN :
 ### Format : Sponsored Content + Message Ads
 
 **Sponsored content #1**
+
 - Image : Photo professionnelle du laboratoire ou capture de chaîne de possession.
 - Headline : `Récupération de données conforme Loi 25 — pour cabinets et PME québécoises.`
 - Texte : *« Quand vos données critiques disparaissent, vous avez besoin d'un partenaire qui comprend la chaîne de possession, la conformité Loi 25, et la confidentialité absolue. Laboratoire à Longueuil. Bitcoin accepté. Forensique disponible pour dossiers légaux. »*
 - CTA : `Demander un mandat`
 
 **Message Ad** (envoi direct InMail)
+
 - Sujet : `Plan de continuité de données — devis gratuit`
 - Corps :
   > Bonjour [Prénom],
@@ -223,9 +249,10 @@ Même structure, mêmes budgets. Mots-clés EN :
   > Aucune obligation. Conforme Loi 25. Confidentialité absolue.
   >
   > Disponible cette semaine ?
-  > Olivier — 438-813-0592 — olivier@nexuradata.ca
+  > Olivier — 438-813-0592 — <olivier@nexuradata.ca>
 
 ### Budget LinkedIn
+
 - 30 $/jour, max bid 8-12 $ par clic
 - Cible : 1 lead qualifié par 50 $
 
@@ -234,6 +261,7 @@ Même structure, mêmes budgets. Mots-clés EN :
 ## 5. Reddit Ads (niche technique)
 
 **Subreddits cibles :**
+
 - r/MontrealQuebec
 - r/Quebec
 - r/montreal
@@ -249,6 +277,7 @@ Même structure, mêmes budgets. Mots-clés EN :
 > Salut Montréal. Je viens de lancer NEXURADATA, un labo spécialisé en récupération de données.
 >
 > Trois choses qui me différencient :
+>
 > 1. Diagnostic 100% gratuit, prix ferme avant toute manipulation
 > 2. **Je paye l'étiquette Purolator** pour que tu m'envoies ton disque (~15 $ que j'absorbe, pas une promo)
 > 3. Si je ne récupère rien, tu paies rien
@@ -264,6 +293,7 @@ Même structure, mêmes budgets. Mots-clés EN :
 ## 6. Programme de référencement
 
 À lancer dès le 5e client satisfait :
+
 - 50 $ de crédit à la personne qui réfère (sur leur prochain dossier ou virement)
 - 10 % de rabais au nouveau client
 - Code unique par référent (à générer côté ops)
@@ -273,18 +303,21 @@ Même structure, mêmes budgets. Mots-clés EN :
 ## 7. Suivi & analytics
 
 ### Conversions à tracker (obligatoire avant lancement)
+
 1. Soumission formulaire `/index.html#contact` → `lead_submit`
 2. Clic téléphone `tel:+14388130592` → `phone_click`
 3. Ouverture étiquette Purolator (page logistique CTA) → `shipping_intent`
 4. Réservation créneau labo → `appointment_booked`
 
 ### Outils
+
 - Google Analytics 4 (déjà installé ?)
 - Meta Pixel
 - LinkedIn Insight Tag
 - Microsoft Clarity (gratuit, voir où les gens cliquent)
 
 ### KPIs cibles 90 jours
+
 | Canal | Coût/lead cible | Conversions/mois |
 |-------|----------------|------------------|
 | Google Search | 25-40 $ | 15-30 |
@@ -299,29 +332,35 @@ Même structure, mêmes budgets. Mots-clés EN :
 ## 8. Ordre de lancement recommandé
 
 **Semaine 1**
+
 - ✅ Google Search Console + GA4 vérification
 - ✅ Google Business Profile (UPS Store #447) — claim + verify
 - ✅ Meta Pixel installé + événements personnalisés
 
 **Semaine 2**
+
 - 🚀 Google Ads campagne A (FR générale) → 25 $/jour
 - 🚀 Google Local Services Ads → application
 
 **Semaine 3**
+
 - 🚀 Meta Ads B2C → 20 $/jour
 - 🚀 Reddit organique (post communautaire)
 
 **Semaine 4**
+
 - 🚀 Google Ads campagne B (EN)
 - 🚀 LinkedIn Ads B2B
 - 🚀 Meta Ads B2B
 
 **Mois 2**
+
 - Optimisation : tuer ce qui ne convertit pas, doubler ce qui marche
 - Lancement Google Ads campagne C (ransomware)
 - Démarrage YouTube technique (vidéos « ouverture de disque dur »)
 
 **Mois 3**
+
 - Programme de référencement actif
 - Press release locale (La Presse, Journal de Montréal)
 - Premier témoignage vidéo
@@ -355,4 +394,4 @@ ROI cible mois 3 : **3× le budget pubs** (donc 12-18k$ de revenu attribué).
 ---
 
 **Dernière mise à jour :** 2026-04-27
-**Responsable :** Olivier — olivier@nexuradata.ca
+**Responsable :** Olivier — <olivier@nexuradata.ca>

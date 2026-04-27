@@ -5,10 +5,24 @@
 >
 > ⚠️ **À compléter avant inscription :**
 >
-> - ✅ **Raison sociale officielle : `Groupe Investissements B&C inc.`**
-> - ✅ **Nom commercial / DBA : `NEXURADATA`**
-> - ✅ **NEQ : `1172436702`**
-> - Adresse postale publique (siège social ou bureau virtuel — **pas le domicile**)
+> - ✅ **Holding (entité légale propriétaire) : `Groupe Investissements B&C inc.`**
+> - ✅ **Marque commerciale exploitée par le holding : `NEXURADATA`**
+> - ✅ **NEQ (du holding) : `1172436702`** — NEXURADATA opère sous ce NEQ comme nom commercial / DBA
+> - ✅ **Forme juridique du holding :** Société par actions (QC, _Loi sur les sociétés par actions_)
+> - ✅ **Date de constitution :** 2017-01-10
+> - ✅ **Adresse légale du holding (REQ) :** 50 ch. Rabastalière Est, app. 214, Saint-Bruno-de-Montarville (Québec) J3V 2A5, Canada
+>
+> 🚨 **Divergence NAP à résoudre avant les inscriptions :** le site et le JSON-LD
+> (`assets/data/business.json`, footer, mentions légales) indiquent **Longueuil**.
+> L'adresse légale au REQ est **Saint-Bruno-de-Montarville**. Choisir une seule
+> ville et l'utiliser partout (site + annuaires + Google Business). Voir § 9.
+>
+> 🚨 **Vérifier au REQ que `NEXURADATA` est déclaré comme « autre nom utilisé au
+> Québec » sous le NEQ 1172436702.** Au Québec, exploiter une entreprise sous un
+> nom autre que sa raison sociale exige une déclaration au REQ (frais ~36 $).
+> Sans cette déclaration, facturer ou contracter sous « NEXURADATA » est
+> techniquement non conforme. À faire via Mon bureau au Registraire des
+> entreprises avant de signer tout contrat ou ouvrir un compte Stripe.
 
 ---
 
@@ -19,12 +33,14 @@ utiliser ces formats exacts :
 
 | Champ | Valeur |
 |---|---|
-| Raison sociale (entité légale) | **Groupe Investissements B&C inc.** |
-| Nom commercial / DBA | **NEXURADATA** |
-| NEQ | **1172436702** |
+| Holding (entité légale) | **Groupe Investissements B&C inc.** |
+| Marque commerciale (DBA) | **NEXURADATA** |
+| NEQ (du holding) | **1172436702** |
+| Forme juridique | Société par actions (QC) — constituée 2017-01-10 |
 | Catégorie principale | Récupération de données / Data recovery service |
 | Catégories secondaires | Forensique numérique, Service informatique, Sécurité informatique |
-| Adresse | _(à compléter)_, Longueuil, QC, Canada |
+| Adresse légale (REQ) | 50 ch. Rabastalière Est, app. 214, Saint-Bruno-de-Montarville (QC) J3V 2A5 |
+| Adresse publique recommandée | ⚠️ **À décider** — voir § 9 (NE PAS publier le 214 si c'est une résidence) |
 | Téléphone | **+1 438-813-0592** |
 | Courriel public | **<contact@nexuradata.ca>** |
 | Site web | **<https://nexuradata.ca/>** |
@@ -40,9 +56,11 @@ utiliser ces formats exacts :
 
 > **Règle nom légal vs nom commercial :**
 >
-> - Champs **public-facing** (nom affiché, profil, marketing) → utiliser **NEXURADATA**.
-> - Champs **légaux / facturation / fiscaux / vérification** (BBB, Stripe, banques, contrats annuaires payants) → utiliser **Groupe Investissements B&C inc.** + NEQ **1172436702**.
-> - Si le formulaire offre un champ « DBA » ou « nom commercial », mettre **NEXURADATA**.
+> - Champs **public-facing** (nom affiché, profil, marketing, logo) → utiliser **NEXURADATA**.
+> - Champs **légaux / facturation / fiscaux / vérification / banques / Stripe / contrats** → utiliser **Groupe Investissements B&C inc.** + NEQ **1172436702**.
+> - Si le formulaire offre un champ séparé « DBA » / « Doing business as » / « nom commercial », mettre **NEXURADATA** dans ce champ et **Groupe Investissements B&C inc.** dans « Legal entity name ».
+> - Stripe Connect / paiements : compte ouvert au nom du **holding** (KYC sur le NEQ), `statement_descriptor: "NEXURADATA"` pour ce que les clients voient sur leur relevé.
+> - Marque de commerce : si tu veux protéger NEXURADATA, déposer au **CIPO** (Office de la propriété intellectuelle du Canada) au nom du holding.
 
 ---
 
@@ -180,3 +198,69 @@ Suggéré pour chaque profil acceptant photos :
 2. **Backlinks naturels** : annoncer sur LinkedIn perso, partager sur réseaux pros, demander aux fournisseurs (Geek Squad partenaires, etc.) un lien.
 3. **Schema.org** : déjà en place sur le site (`assets/data/business.json`). ✅
 4. **Cohérence NAP** : si tu changes téléphone/adresse, **mets à jour partout simultanément** (1-2 jours max). Désynchronisation = pénalité Google.
+
+---
+
+## 9. Stratégie d'adresse — DÉCISION : Bureau virtuel / case postale à Longueuil
+
+**Décision arrêtée (Option B) :** louer un bureau virtuel ou une case postale
+commerciale à **Longueuil**, l'utiliser comme adresse publique unique partout
+(site, annuaires, Google Business, REQ, WHOIS), et **ne plus exposer** le
+214-50 ch. Rabastalière (résidence privée).
+
+### Rationale
+
+- Garde le positionnement marketing « Rive-Sud / Grand Montréal » déjà déployé
+  dans tout le site et le JSON-LD.
+- Une seule adresse partout = NAP cohérent (facteur SEO local n°1).
+- Protège la vie privée du dirigeant.
+- Coût modeste (30-90 $/mois) déductible 100 % comme dépense d'affaires.
+
+### Fournisseurs recommandés à Longueuil (à comparer)
+
+| Fournisseur | Type | Coût indicatif/mois | Notes |
+|---|---|---|---|
+| **Regus — Place Longueuil** | Bureau virtuel + adresse + courrier | ~75-150 $ | Adresse prestigieuse, salles réunion à la carte |
+| **Stallion Workspace (Brossard)** | Bureau virtuel + réception courrier | ~50-90 $ | Rive-Sud, plus abordable |
+| **Bureau virtuel Quebec / iWorld** | Adresse + courrier scanné | ~30-60 $ | Le moins cher, suffit pour annuaires |
+| **UPS Store (succursale Longueuil)** | Case postale commerciale (pas une C.P. Postes Canada) | ~25-40 $ | Adresse de rue (pas « C.P. xxx »), accepte colis privés (UPS, FedEx, Purolator) |
+| **Postes Canada — Case postale Longueuil** | C.P. classique | ~15-25 $ | ⚠️ Format `C.P. 1234, Longueuil` — Google Business **refuse** les C.P. Postes Canada |
+
+**🥇 Recommandation : UPS Store Longueuil.** Adresse de rue valide pour Google
+Business, accepte **tous les transporteurs** (critique pour réception de
+disques durs envoyés par clients), coût bas, signature à la livraison
+disponible.
+
+### Checklist d'exécution (à faire après ouverture du bureau virtuel)
+
+```
+[ ] 1. Souscrire au service, obtenir l'adresse exacte (numéro, rue, suite, code postal)
+[ ] 2. Mettre à jour assets/data/business.json (FR + EN) — addressLocality: "Longueuil" déjà OK, mettre streetAddress, postalCode
+[ ] 3. Vérifier mentions-legales.html (FR + EN) — adresse de l'établissement
+[ ] 4. Vérifier politique-confidentialite.html (FR + EN) — adresse responsable Loi 25
+[ ] 5. Vérifier footer / page de contact si adresse y figure
+[ ] 6. Mettre à jour conditions-intervention-paiement.html si adresse de réception y figure
+[ ] 7. npm run build + deploy Cloudflare Pages
+[ ] 8. Déclaration de mise à jour au REQ (changer le domicile vers la nouvelle adresse) — frais ~37 $
+[ ] 9. Google Business Profile — édition adresse + (re)vérification carte postale
+[ ] 10. Bing Places, Apple Business Connect — édition adresse
+[ ] 11. WHOIS / registrar du domaine nexuradata.ca — adresse contact
+[ ] 12. Stripe Dashboard — adresse business
+[ ] 13. Compte bancaire d'affaires — mise à jour adresse de correspondance
+[ ] 14. Toutes les inscriptions Tier 2/3 du § 7 utilisent directement la nouvelle adresse
+```
+
+### Format NAP final (à utiliser partout après décision)
+
+```
+NEXURADATA
+[numéro] [rue], suite [#]
+Longueuil (Québec)  [code postal]
+Canada
+
+Tél : +1 438-813-0592
+Courriel : contact@nexuradata.ca
+Site : https://nexuradata.ca/
+```
+
+Une fois l'adresse réelle obtenue, mettre à jour ce bloc et la table NAP du § 1.

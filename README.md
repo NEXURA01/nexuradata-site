@@ -47,6 +47,7 @@ Le runbook detaille est dans `LAUNCH-RUNBOOK.md`.
 - `npm install`
 - `npm run build`
 - `npm test`
+- `node scripts/seo-audit.mjs`
 - `npm run cf:whoami`
 - `npm run cf:d1:migrate:local`
 - `npm run cf:d1:migrate:remote`

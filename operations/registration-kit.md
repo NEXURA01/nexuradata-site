@@ -40,7 +40,7 @@ utiliser ces formats exacts :
 | Catégorie principale | Récupération de données / Data recovery service |
 | Catégories secondaires | Forensique numérique, Service informatique, Sécurité informatique |
 | Adresse légale (REQ) | 50 ch. Rabastalière Est, app. 214, Saint-Bruno-de-Montarville (QC) J3V 2A5 |
-| Adresse publique recommandée | ⚠️ **À décider** — voir § 9 (NE PAS publier le 214 si c'est une résidence) |
+| Adresse publique (établissement) | **5184, boul. Cousineau, Longueuil (QC) J3Y 7G5** — UPS Store #447 |
 | Téléphone | **+1 438-813-0592** |
 | Courriel public | **<contact@nexuradata.ca>** |
 | Site web | **<https://nexuradata.ca/>** |
@@ -254,8 +254,8 @@ disponible.
 
 ```
 NEXURADATA
-[numéro] [rue], suite [#]
-Longueuil (Québec)  [code postal]
+5184, boulevard Cousineau
+Longueuil (Québec)  J3Y 7G5
 Canada
 
 Tél : +1 438-813-0592
@@ -263,4 +263,8 @@ Courriel : contact@nexuradata.ca
 Site : https://nexuradata.ca/
 ```
 
-Une fois l'adresse réelle obtenue, mettre à jour ce bloc et la table NAP du § 1.
+> ⚠️ **PMB / numéro de boîte UPS Store à obtenir lors de la souscription.**
+> Une fois attribué, format final : `5184, boul. Cousineau, PMB [###], Longueuil (Québec) J3Y 7G5`.
+> Re-propager partout (script `scripts/update-address.mjs` réutilisable).
+
+**UPS Store contact (succursale 447) :** (450) 812-7877 · store447@theupsstore.ca

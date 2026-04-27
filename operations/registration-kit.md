@@ -5,7 +5,8 @@
 >
 > ⚠️ **À compléter avant inscription :**
 >
-> - Raison sociale officielle (ex: `9XXX-XXXX Québec inc.`) — _à confirmer via le REQ_
+> - ✅ **Raison sociale officielle : `Groupe Investissements B&C inc.`**
+> - ✅ **Nom commercial / DBA : `NEXURADATA`**
 > - ✅ **NEQ : `1172436702`**
 > - Adresse postale publique (siège social ou bureau virtuel — **pas le domicile**)
 
@@ -18,23 +19,30 @@ utiliser ces formats exacts :
 
 | Champ | Valeur |
 |---|---|
-| Nom légal | **NEXURADATA** *(ajouter `inc.` ou raison sociale complète selon plateforme)* |
+| Raison sociale (entité légale) | **Groupe Investissements B&C inc.** |
+| Nom commercial / DBA | **NEXURADATA** |
 | NEQ | **1172436702** |
 | Catégorie principale | Récupération de données / Data recovery service |
 | Catégories secondaires | Forensique numérique, Service informatique, Sécurité informatique |
-| Adresse | *(à compléter)*, Longueuil, QC, Canada |
+| Adresse | _(à compléter)_, Longueuil, QC, Canada |
 | Téléphone | **+1 438-813-0592** |
 | Courriel public | **<contact@nexuradata.ca>** |
 | Site web | **<https://nexuradata.ca/>** |
 | Site EN | **<https://nexuradata.ca/en/>** |
 | Logo (PNG) | <https://nexuradata.ca/assets/icons/og-default.png> |
 | Logo (SVG) | <https://nexuradata.ca/assets/nexuradata-master.svg> |
-| Heures | *(à confirmer — suggéré : Lun–Ven 9h–17h, urgences 24/7)* |
+| Heures | _(à confirmer — suggéré : Lun–Ven 9h–17h, urgences 24/7)_ |
 | Zone desservie | Montréal, Laval, Longueuil, Rive-Sud, Rive-Nord, Québec |
 | Langues | Français, Anglais |
 | Paiements | Visa, Mastercard, Interac, virement bancaire |
 | Devise | CAD |
 | Fourchette de prix | $$ |
+
+> **Règle nom légal vs nom commercial :**
+>
+> - Champs **public-facing** (nom affiché, profil, marketing) → utiliser **NEXURADATA**.
+> - Champs **légaux / facturation / fiscaux / vérification** (BBB, Stripe, banques, contrats annuaires payants) → utiliser **Groupe Investissements B&C inc.** + NEQ **1172436702**.
+> - Si le formulaire offre un champ « DBA » ou « nom commercial », mettre **NEXURADATA**.
 
 ---
 
@@ -123,7 +131,7 @@ utiliser ces formats exacts :
 
 Suggéré pour chaque profil acceptant photos :
 
-- [ ] Logo carré (512×512 PNG) — `assets/icons/og-default.png` *(si dispo en carré)*
+- [ ] Logo carré (512×512 PNG) — `assets/icons/og-default.png` _(si dispo en carré)_
 - [ ] Logo bannière (1200×630) — `assets/icons/og-default.png`
 - [ ] 1 photo "lab" (poste de travail, environnement contrôlé)
 - [ ] 1 photo "réception sécurisée" (vue extérieure ou comptoir, neutre)

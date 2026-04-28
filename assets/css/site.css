@@ -7888,3 +7888,102 @@ main {
 .ops-block-spaced {
   margin-top: 1rem;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Visual polish 2026-04-28 — pricing cards lift, FAQ chevron,
+   smooth open animation. Respects prefers-reduced-motion.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Pricing cards — tactile hover, accent edge on featured tiers */
+.pricing-card {
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(232, 228, 220, 0.32);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 22px 44px -28px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(125, 211, 252, 0.06);
+}
+
+.pricing-card-strong {
+  position: relative;
+}
+
+.pricing-card-strong::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.55), transparent);
+  pointer-events: none;
+}
+
+.price-tag {
+  background: linear-gradient(180deg, var(--color-accent) 0%, rgba(232, 228, 220, 0.78) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-card,
+  .pricing-card:hover { transform: none; transition: none; }
+}
+
+/* FAQ — chevron indicator + smooth open. Uses native <details>. */
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-right: 1.4rem;
+  transition: background-color 180ms ease;
+}
+
+.faq-item summary::after {
+  content: "";
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid rgba(232, 228, 220, 0.55);
+  border-bottom: 2px solid rgba(232, 228, 220, 0.55);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 240ms ease;
+}
+
+.faq-item:hover summary::after,
+.faq-item[open] summary::after {
+  border-color: var(--color-accent);
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.faq-item:hover summary {
+  background: rgba(232, 228, 220, 0.025);
+}
+
+.faq-item[open] p {
+  animation: nxd-faq-fade 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes nxd-faq-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item summary,
+  .faq-item summary::after { transition: none; }
+  .faq-item[open] p { animation: none; }
+}

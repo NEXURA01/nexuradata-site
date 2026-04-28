@@ -1,11 +1,14 @@
 /* NEXURADATA — Cookie consent (Loi 25 / Quebec) ----------------------------
  * Granular consent: essentials (always on) + analytics (opt-in).
  *
- * Storage: localStorage["nxd_cookie_consent_v2"] = JSON
- *   { essentials:true, analytics:bool, ts:number, v:2 }
+ * Storage: localStorage["nxd_cookie_consent_v3"] = JSON
+ *   { essentials:true, analytics:bool, ts:number, v:3 }
  *
- * Backward compat: legacy key "nxd_cookie_consent" ("accept"|"reject")
- * is migrated on load.
+ * Backward compat: legacy keys "nxd_cookie_consent" ("accept"|"reject") and
+ * "nxd_cookie_consent_v2" are NOT migrated automatically — the disclosure of
+ * subprocessors (Google Fonts, Stripe, Resend) was added in v3 and Quebec's
+ * Law 25 requires a new informed consent when the material information
+ * changes. Existing users will see the banner again on next visit.
  *
  * Public API exposed on window.NxdConsent:
  *   .get()   → { essentials, analytics } | null  (null = no decision yet)
@@ -22,7 +25,7 @@
 (function () {
     "use strict";
 
-    var KEY = "nxd_cookie_consent_v2";
+    var KEY = "nxd_cookie_consent_v3";
     var LEGACY = "nxd_cookie_consent";
 
     var docLang = (document.documentElement.getAttribute("lang") || "fr").toLowerCase();
@@ -31,7 +34,7 @@
     var fr = {
         head: "Témoins · Cookies",
         title: "Vous gardez le contrôle",
-        body: "Nous utilisons des témoins essentiels (sécurité, formulaire de dossier, langue). La mesure d'audience, elle, ne se déclenche qu'avec votre accord. Conforme à la Loi 25 du Québec.",
+        body: "Nous utilisons des témoins essentiels (sécurité, formulaire de dossier, langue). La mesure d'audience interne ne se déclenche qu'avec votre accord. Le site fait aussi appel à quelques sous-traitants (Cloudflare, Google Fonts, Stripe, Resend) détaillés dans la politique de confidentialité. Conforme à la Loi 25 du Québec.",
         privacy: "Politique de confidentialité",
         privacyHref: "/politique-confidentialite.html",
         accept: "Tout accepter",
@@ -42,14 +45,14 @@
         catEss: "Témoins essentiels",
         catEssBody: "Indispensables au fonctionnement du site (formulaire de dossier, suivi de panier, préférence linguistique). Toujours activés.",
         catAna: "Mesure d'audience interne",
-        catAnaBody: "Compteur de pages anonyme hébergé chez nous (Cloudflare). Aucun témoin publicitaire, aucun partage avec un tiers.",
+        catAnaBody: "Compteur de pages anonyme hébergé sur notre infrastructure (Cloudflare). Aucun témoin publicitaire. Pour les transferts à nos sous-traitants (Google Fonts, Stripe, Resend), voir la politique de confidentialité.",
         always: "Toujours actif",
         footerLink: "Préférences témoins"
     };
     var en = {
         head: "Cookies · Privacy",
         title: "You stay in control",
-        body: "We use essential cookies (security, case form, language). Internal audience measurement only fires with your consent. Compliant with Quebec's Law 25.",
+        body: "We use essential cookies (security, case form, language). Internal audience measurement only fires with your consent. The site also relies on a few subprocessors (Cloudflare, Google Fonts, Stripe, Resend) listed in the privacy policy. Compliant with Quebec's Law 25.",
         privacy: "Privacy policy",
         privacyHref: "/en/politique-confidentialite.html",
         accept: "Accept all",
@@ -60,7 +63,7 @@
         catEss: "Essential cookies",
         catEssBody: "Required for the site to function (case form, cart tracking, language preference). Always on.",
         catAna: "Internal audience measurement",
-        catAnaBody: "Anonymous page counter hosted by us (Cloudflare). No advertising cookies, no third-party sharing.",
+        catAnaBody: "Anonymous page counter hosted on our own infrastructure (Cloudflare). No advertising cookies. See the privacy policy for transfers to our subprocessors (Google Fonts, Stripe, Resend).",
         always: "Always on",
         footerLink: "Cookie preferences"
     };
@@ -75,19 +78,9 @@
                 var parsed = JSON.parse(raw);
                 if (parsed && typeof parsed === "object") return parsed;
             }
-            // Migrate legacy string key.
-            var legacy = localStorage.getItem(LEGACY);
-            if (legacy === "accept" || legacy === "reject") {
-                var migrated = {
-                    essentials: true,
-                    analytics: legacy === "accept",
-                    ts: Date.now(),
-                    v: 2,
-                    migrated: true
-                };
-                localStorage.setItem(KEY, JSON.stringify(migrated));
-                return migrated;
-            }
+            // No automatic migration of legacy keys: v3 introduces explicit
+            // subprocessor disclosure (Google Fonts, Stripe, Resend) and Law 25
+            // art. 9 requires a fresh informed consent when material info changes.
         } catch (e) { /* noop */ }
         return null;
     }
@@ -96,7 +89,7 @@
             essentials: true,
             analytics: !!consent.analytics,
             ts: Date.now(),
-            v: 2
+            v: 3
         };
         try { localStorage.setItem(KEY, JSON.stringify(payload)); } catch (e) { }
         try {

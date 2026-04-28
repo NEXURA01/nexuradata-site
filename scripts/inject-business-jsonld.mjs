@@ -26,7 +26,7 @@ function walk(d) {
 // Single source of truth for the business JSON-LD blocks.
 const business = JSON.parse(fs.readFileSync('assets/data/business.json', 'utf8'));
 const renderBlock = (data) =>
-  `  <script type="application/ld+json">\n${JSON.stringify(data, null, 4).replace(/^/gm, '    ').replace(/^    /, '    ')}\n  </script>\n`;
+  `  <script type="application/ld+json">\n${JSON.stringify(data, null, 4).replace(/^/gm, '    ')}\n  </script>\n`;
 const businessBlockFR = renderBlock(business.fr);
 const businessBlockEN = renderBlock(business.en);
 

@@ -23,6 +23,48 @@
         while (n >= 1024 && i < u.length - 1) { n /= 1024; i++; }
         return n.toFixed(n >= 100 || i === 0 ? 0 : 2) + " " + u[i];
     }
+    // HTML-escape any value before concatenating into innerHTML.
+    function esc(s) {
+        if (s === null || s === undefined) return "";
+        return String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+    // Build a safe mailto: URL — never lets attacker control the URL scheme.
+    function safeMailto(email, subject, body) {
+        var clean = String(email || "").trim();
+        if (!/^[^\s<>"'@]+@[^\s<>"'@]+\.[^\s<>"'@]+$/.test(clean)) return "";
+        return "mailto:" + encodeURIComponent(clean)
+            + "?subject=" + encodeURIComponent(subject || "")
+            + "&body=" + encodeURIComponent(body || "");
+    }
+    // Tiny DOM builder. h("div", {class:"x"}, "text", h("span", null, "child"))
+    function h(tag, attrs) {
+        var n = document.createElement(tag);
+        if (attrs) {
+            for (var k in attrs) {
+                if (!Object.prototype.hasOwnProperty.call(attrs, k)) continue;
+                if (k === "class") n.className = attrs[k];
+                else if (k === "html") { /* refused — use children */ }
+                else n.setAttribute(k, attrs[k]);
+            }
+        }
+        for (var i = 2; i < arguments.length; i++) {
+            var c = arguments[i];
+            if (c == null || c === false) continue;
+            if (Array.isArray(c)) c.forEach(function (x) { if (x != null && x !== false) n.append(x); });
+            else n.append(c);
+        }
+        return n;
+    }
+    // Build a <div><dt>label</dt><dd>...</dd></div> row.
+    function row(label, value) {
+        var dd = (value && value.nodeType) ? value : document.createTextNode(value == null ? "—" : String(value));
+        return h("div", null, h("dt", null, label), h("dd", null, dd));
+    }
     function fmtDuration(seconds) {
         if (seconds < 60) return seconds.toFixed(0) + " s";
         if (seconds < 3600) return (seconds / 60).toFixed(1) + " min";
@@ -435,7 +477,7 @@
                     var p = protocols[key];
                     var listHtml = p.steps.map(function (s, i) { return '<li><span class="ops-pb-num">' + String(i + 1).padStart(2, "0") + '</span><span>' + s + '</span></li>'; }).join("");
                     var listText = p.steps.map(function (s, i) {
-                        return (i + 1) + ". " + s.replace(/<[^>]+>/g, "");
+                        return (i + 1) + ". " + s.replace(/<\/?[^<>]*>?/g, "");
                     }).join("\n");
                     var record =
                         "Protocole — " + p.label + "\n" +
@@ -547,14 +589,32 @@
                 function saveLog(l) { localStorage.setItem(STORAGE, JSON.stringify(l)); }
                 function render() {
                     var log = getLog();
+                    var out = node.querySelector("[data-sl-out]");
+                    out.replaceChildren();
                     if (!log.length) {
-                        node.querySelector("[data-sl-out]").innerHTML = '<p class="ops-out-label">Aucune entrée</p><p class="ops-out-note">Saisis une action et clique « Horodater ».</p>';
+                        var p1 = document.createElement("p");
+                        p1.className = "ops-out-label";
+                        p1.textContent = "Aucune entrée";
+                        var p2 = document.createElement("p");
+                        p2.className = "ops-out-note";
+                        p2.textContent = "Saisis une action et clique « Horodater ».";
+                        out.append(p1, p2);
                         return;
                     }
-                    var rows = log.slice().reverse().map(function (e) {
-                        return '<div><dt>' + new Date(e.ts).toLocaleString("fr-CA") + ' · <code>' + e.ref + '</code></dt><dd>' + e.action + '</dd></div>';
-                    }).join("");
-                    node.querySelector("[data-sl-out]").innerHTML = '<dl class="ops-out-table ops-sl-list">' + rows + '</dl>';
+                    var dl = document.createElement("dl");
+                    dl.className = "ops-out-table ops-sl-list";
+                    log.slice().reverse().forEach(function (e) {
+                        var div = document.createElement("div");
+                        var dt = document.createElement("dt");
+                        var code = document.createElement("code");
+                        code.textContent = e.ref;
+                        dt.append(new Date(e.ts).toLocaleString("fr-CA") + " · ", code);
+                        var dd = document.createElement("dd");
+                        dd.textContent = e.action;
+                        div.append(dt, dd);
+                        dl.appendChild(div);
+                    });
+                    out.appendChild(dl);
                 }
                 node.querySelector("[data-sl-add]").addEventListener("click", function () {
                     var ref = node.querySelector('[data-sl="ref"]').value.trim();
@@ -675,29 +735,81 @@
                 );
                 node.querySelector('[data-cu="date"]').valueAsDate = new Date();
                 function build() {
-                    var v = function (k) { return (node.querySelector('[data-cu="' + k + '"]').value || "—"); };
-                    var html =
-                        '<header class="ops-cu-head"><h3>Procès-verbal — Chaîne de possession</h3><p>NEXURA DATA · Examinateur forensique certifié (CFE)</p></header>' +
-                        '<dl class="ops-cu-fields">' +
-                        '<div><dt>Référence dossier</dt><dd>' + v("ref") + '</dd></div>' +
-                        '<div><dt>Date</dt><dd>' + v("date") + '</dd></div>' +
-                        '<div><dt>Mandant</dt><dd>' + v("client") + '</dd></div>' +
-                        '<div><dt>Remis par</dt><dd>' + v("from") + '</dd></div>' +
-                        '<div><dt>Pièce</dt><dd>' + v("exhibit") + '</dd></div>' +
-                        '<div><dt>Description</dt><dd>' + v("desc") + '</dd></div>' +
-                        '<div><dt>Méthode d\'imagerie</dt><dd>' + v("method") + '</dd></div>' +
-                        '<div><dt>SHA-256 image</dt><dd><code>' + v("sha") + '</code></dd></div>' +
-                        '<div><dt>Observations</dt><dd>' + v("obs").replace(/\n/g, "<br>") + '</dd></div>' +
-                        '</dl>' +
-                        '<table class="ops-cu-log"><thead><tr><th>Date / heure</th><th>Action</th><th>Personne</th><th>Signature</th></tr></thead><tbody>' +
-                        '<tr><td>' + v("date") + '</td><td>Réception de la pièce, sceau intact, étiquette apposée</td><td>NEXURADATA</td><td>&nbsp;</td></tr>' +
-                        '<tr><td>&nbsp;</td><td>Imagerie forensique, SHA-256 calculé</td><td>NEXURADATA</td><td>&nbsp;</td></tr>' +
-                        '<tr><td>&nbsp;</td><td>Stockage en coffre-fort, accès journalisé</td><td>NEXURADATA</td><td>&nbsp;</td></tr>' +
-                        '<tr><td>&nbsp;</td><td>Restitution / destruction</td><td>&nbsp;</td><td>&nbsp;</td></tr>' +
-                        '</tbody></table>' +
-                        '<div class="ops-cu-sign"><div><span class="ops-cu-line"></span><p>Signature — examinateur</p></div><div><span class="ops-cu-line"></span><p>Signature — mandant / témoin</p></div></div>' +
-                        '<footer class="ops-cu-foot"><p>Document généré localement · NEXURA DATA · Région de Longueuil (Québec)</p></footer>';
-                    node.querySelector("[data-cu-out]").innerHTML = html;
+                    var v = function (k) { return node.querySelector('[data-cu="' + k + '"]').value || "—"; };
+                    var sha = h("code", null, v("sha"));
+                    // Observations: keep \n as <br> via DOM (no innerHTML)
+                    var obs = h("span");
+                    var obsLines = String(v("obs")).split("\n");
+                    obsLines.forEach(function (line, i) {
+                        if (i > 0) obs.appendChild(document.createElement("br"));
+                        obs.appendChild(document.createTextNode(line));
+                    });
+                    var dl = h("dl", { class: "ops-cu-fields" },
+                        row("Référence dossier", v("ref")),
+                        row("Date", v("date")),
+                        row("Mandant", v("client")),
+                        row("Remis par", v("from")),
+                        row("Pièce", v("exhibit")),
+                        row("Description", v("desc")),
+                        row("Méthode d'imagerie", v("method")),
+                        row("SHA-256 image", sha),
+                        row("Observations", obs)
+                    );
+                    var thead = h("thead", null,
+                        h("tr", null,
+                            h("th", null, "Date / heure"),
+                            h("th", null, "Action"),
+                            h("th", null, "Personne"),
+                            h("th", null, "Signature")
+                        )
+                    );
+                    var nbsp = function () { return document.createTextNode("\u00a0"); };
+                    var tbody = h("tbody", null,
+                        h("tr", null,
+                            h("td", null, v("date")),
+                            h("td", null, "Réception de la pièce, sceau intact, étiquette apposée"),
+                            h("td", null, "NEXURADATA"),
+                            h("td", null, nbsp())
+                        ),
+                        h("tr", null,
+                            h("td", null, nbsp()),
+                            h("td", null, "Imagerie forensique, SHA-256 calculé"),
+                            h("td", null, "NEXURADATA"),
+                            h("td", null, nbsp())
+                        ),
+                        h("tr", null,
+                            h("td", null, nbsp()),
+                            h("td", null, "Stockage en coffre-fort, accès journalisé"),
+                            h("td", null, "NEXURADATA"),
+                            h("td", null, nbsp())
+                        ),
+                        h("tr", null,
+                            h("td", null, nbsp()),
+                            h("td", null, "Restitution / destruction"),
+                            h("td", null, nbsp()),
+                            h("td", null, nbsp())
+                        )
+                    );
+                    var table = h("table", { class: "ops-cu-log" }, thead, tbody);
+                    var sign = h("div", { class: "ops-cu-sign" },
+                        h("div", null,
+                            h("span", { class: "ops-cu-line" }),
+                            h("p", null, "Signature — examinateur")
+                        ),
+                        h("div", null,
+                            h("span", { class: "ops-cu-line" }),
+                            h("p", null, "Signature — mandant / témoin")
+                        )
+                    );
+                    var hdr = h("header", { class: "ops-cu-head" },
+                        h("h3", null, "Procès-verbal — Chaîne de possession"),
+                        h("p", null, "NEXURA DATA · Examinateur forensique certifié (CFE)")
+                    );
+                    var foot = h("footer", { class: "ops-cu-foot" },
+                        h("p", null, "Document généré localement · NEXURA DATA · Région de Longueuil (Québec)")
+                    );
+                    var out = node.querySelector("[data-cu-out]");
+                    out.replaceChildren(hdr, dl, table, sign, foot);
                 }
                 node.addEventListener("input", build);
                 node.addEventListener("change", build);
@@ -1020,7 +1132,8 @@
                         '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-fx-copy>Copier le courriel</button><a class="button button-outline" data-fx-mailto>Ouvrir dans courriel</a></div>';
                     node.querySelector("[data-fx-mail]").textContent = mail;
                     node.querySelector("[data-fx-copy]").addEventListener("click", function (e) { copyToClipboard(mail, e.currentTarget); });
-                    node.querySelector("[data-fx-mailto]").href = "mailto:" + email + "?subject=" + encodeURIComponent("Devis additionnel — dossier " + ref) + "&body=" + encodeURIComponent(mail);
+                    var fxMailto = node.querySelector("[data-fx-mailto]");
+                    fxMailto.href = safeMailto(email, "Devis additionnel — dossier " + ref, mail) || "#";
                 }
                 node.addEventListener("input", build);
                 node.addEventListener("change", build);
@@ -1098,10 +1211,10 @@
                         var d = new Date(inv.date);
                         var days = Math.floor((today - d) / 86400000);
                         var t = tone(days);
-                        return '<details class="ops-rl-row" data-tone="' + t.css + '">' +
-                            '<summary><span class="ops-rl-ref"><code>' + inv.ref + '</code> — ' + inv.client + '</span><span class="ops-rl-amt">' + fmtCAD(inv.amount) + '</span><span class="ops-rl-age">' + days + ' j</span><span class="ops-rl-tone ops-rl-tone--' + t.css + '">' + t.label + '</span></summary>' +
-                            '<pre class="ops-out-text" data-rl-mail="' + inv.ref + '"></pre>' +
-                            '<div class="ops-tool-actions"><a class="button button-primary" data-rl-mailto="' + inv.ref + '">Ouvrir dans courriel</a><button type="button" class="button button-outline" data-rl-copy="' + inv.ref + '">Copier</button><button type="button" class="button button-outline" data-rl-del="' + inv.ref + '">Marquer payée</button></div>' +
+                        return '<details class="ops-rl-row" data-tone="' + esc(t.css) + '">' +
+                            '<summary><span class="ops-rl-ref"><code>' + esc(inv.ref) + '</code> — ' + esc(inv.client) + '</span><span class="ops-rl-amt">' + esc(fmtCAD(inv.amount)) + '</span><span class="ops-rl-age">' + days + ' j</span><span class="ops-rl-tone ops-rl-tone--' + esc(t.css) + '">' + esc(t.label) + '</span></summary>' +
+                            '<pre class="ops-out-text" data-rl-mail="' + esc(inv.ref) + '"></pre>' +
+                            '<div class="ops-tool-actions"><a class="button button-primary" data-rl-mailto="' + esc(inv.ref) + '">Ouvrir dans courriel</a><button type="button" class="button button-outline" data-rl-copy="' + esc(inv.ref) + '">Copier</button><button type="button" class="button button-outline" data-rl-del="' + esc(inv.ref) + '">Marquer payée</button></div>' +
                             '</details>';
                     }).join("");
                     out.innerHTML = '<div class="ops-rl-list">' + rows + '</div>';
@@ -1112,7 +1225,11 @@
                         var pre = out.querySelector('[data-rl-mail="' + CSS.escape(inv.ref) + '"]');
                         if (pre) pre.textContent = msg;
                         var mailto = out.querySelector('[data-rl-mailto="' + CSS.escape(inv.ref) + '"]');
-                        if (mailto) mailto.href = "mailto:" + inv.email + "?subject=" + encodeURIComponent(msg.split("\n")[0].replace(/^Objet\s*:\s*/i, "")) + "&body=" + encodeURIComponent(msg.split("\n").slice(2).join("\n"));
+                        if (mailto) {
+                            var subj = msg.split("\n")[0].replace(/^Objet\s*:\s*/i, "");
+                            var body = msg.split("\n").slice(2).join("\n");
+                            mailto.href = safeMailto(inv.email, subj, body) || "#";
+                        }
                         var cp = out.querySelector('[data-rl-copy="' + CSS.escape(inv.ref) + '"]');
                         if (cp) cp.addEventListener("click", function (e) { copyToClipboard(msg, e.currentTarget); });
                         var del = out.querySelector('[data-rl-del="' + CSS.escape(inv.ref) + '"]');
@@ -1287,7 +1404,7 @@
 
                 async function hashFile(file) {
                     out.hidden = false;
-                    out.innerHTML = '<p class="ops-out-label">Calcul en cours…</p><p class="ops-out-meta">' + file.name + ' · ' + fmtBytes(file.size) + '</p>';
+                    out.innerHTML = '<p class="ops-out-label">Calcul en cours…</p><p class="ops-out-meta">' + esc(file.name) + ' · ' + esc(fmtBytes(file.size)) + '</p>';
                     var t0 = performance.now();
                     var buf = await file.arrayBuffer();
                     var sha = await crypto.subtle.digest("SHA-256", buf);
@@ -1308,13 +1425,13 @@
                         "Examinateur : NEXURADATA";
                     out.innerHTML =
                         '<dl class="ops-out-table">' +
-                        '<div><dt>Fichier</dt><dd><code>' + file.name + '</code></dd></div>' +
-                        '<div><dt>Taille</dt><dd>' + fmtBytes(file.size) + '</dd></div>' +
-                        '<div><dt>SHA-256</dt><dd><code style="word-break:break-all;">' + s256 + '</code> <button type="button" class="ops-tool-copy" data-copy="' + s256 + '">Copier</button></dd></div>' +
-                        '<div><dt>SHA-1</dt><dd><code style="word-break:break-all;">' + s1 + '</code> <button type="button" class="ops-tool-copy" data-copy="' + s1 + '">Copier</button></dd></div>' +
-                        '<div class="is-total"><dt>Calculé en</dt><dd>' + dt + ' s · ' + stamp + '</dd></div>' +
+                        '<div><dt>Fichier</dt><dd><code>' + esc(file.name) + '</code></dd></div>' +
+                        '<div><dt>Taille</dt><dd>' + esc(fmtBytes(file.size)) + '</dd></div>' +
+                        '<div><dt>SHA-256</dt><dd><code class="ops-hash-val">' + esc(s256) + '</code> <button type="button" class="ops-tool-copy" data-copy="' + esc(s256) + '">Copier</button></dd></div>' +
+                        '<div><dt>SHA-1</dt><dd><code class="ops-hash-val">' + esc(s1) + '</code> <button type="button" class="ops-tool-copy" data-copy="' + esc(s1) + '">Copier</button></dd></div>' +
+                        '<div class="is-total"><dt>Calculé en</dt><dd>' + esc(dt) + ' s · ' + esc(stamp) + '</dd></div>' +
                         '</dl>' +
-                        '<p class="ops-out-label" style="margin-top:1rem;">Bloc chaîne de possession</p>' +
+                        '<p class="ops-out-label ops-block-spaced">Bloc chaîne de possession</p>' +
                         '<pre class="ops-out-text" data-h-rec></pre>' +
                         '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-h-copy>Copier le bloc</button></div>';
                     out.querySelector("[data-h-rec]").textContent = record;
@@ -1360,8 +1477,8 @@
                 );
                 function build() {
                     var v = {};
-                    node.querySelectorAll("[data-i]").forEach(function (el) { v[el.getAttribute("data-i")] = el.value || "—"; });
-                    var date = new Date().toLocaleString("fr-CA");
+                    node.querySelectorAll("[data-i]").forEach(function (el) { v[el.getAttribute("data-i")] = esc(el.value || "—"); });
+                    var date = esc(new Date().toLocaleString("fr-CA"));
                     var html =
                         '<article class="ops-pv">' +
                         '<header><h3>Procès-verbal de réception · ' + v.ref + '</h3><p>Date : ' + date + ' · Longueuil, Québec</p></header>' +
@@ -1475,10 +1592,10 @@
                     node.querySelector("[data-e-out]").innerHTML =
                         '<dl class="ops-out-table">' +
                         '<div><dt>Destinataire</dt><dd><code>paiements@nexuradata.ca</code> <button type="button" class="ops-tool-copy" data-copy="paiements@nexuradata.ca">Copier</button></dd></div>' +
-                        '<div><dt>Montant</dt><dd>' + fmtCAD(amt) + '</dd></div>' +
-                        '<div><dt>Message</dt><dd><code>' + msg + '</code> <button type="button" class="ops-tool-copy" data-copy="' + msg + '">Copier</button></dd></div>' +
-                        '<div><dt>Question secrète</dt><dd><code>' + question + '</code> <button type="button" class="ops-tool-copy" data-copy="' + question + '">Copier</button></dd></div>' +
-                        '<div class="is-total"><dt>Réponse (à transmettre par téléphone)</dt><dd><code>' + answer + '</code> <button type="button" class="ops-tool-copy" data-copy="' + answer + '">Copier</button></dd></div>' +
+                        '<div><dt>Montant</dt><dd>' + esc(fmtCAD(amt)) + '</dd></div>' +
+                        '<div><dt>Message</dt><dd><code>' + esc(msg) + '</code> <button type="button" class="ops-tool-copy" data-copy="' + esc(msg) + '">Copier</button></dd></div>' +
+                        '<div><dt>Question secrète</dt><dd><code>' + esc(question) + '</code> <button type="button" class="ops-tool-copy" data-copy="' + esc(question) + '">Copier</button></dd></div>' +
+                        '<div class="is-total"><dt>Réponse (à transmettre par téléphone)</dt><dd><code>' + esc(answer) + '</code> <button type="button" class="ops-tool-copy" data-copy="' + esc(answer) + '">Copier</button></dd></div>' +
                         '</dl>' +
                         '<p class="ops-out-note">Ne jamais transmettre la réponse par le même canal que la demande Interac. Toujours par téléphone ou SMS séparé.</p>';
                     node.querySelector("[data-e-out]").addEventListener("click", function (e) {
@@ -1531,10 +1648,10 @@
                         "Merci,\nNEXURADATA\nNEXURA DATA";
                     node.querySelector("[data-p-out]").innerHTML =
                         '<dl class="ops-out-table">' +
-                        '<div><dt>URL</dt><dd><code style="word-break:break-all;">' + url + '</code> <button type="button" class="ops-tool-copy" data-copy="' + url + '">Copier</button></dd></div>' +
-                        '<div class="is-total"><dt>Total TTC</dt><dd>' + fmtCAD(total) + '</dd></div>' +
+                        '<div><dt>URL</dt><dd><code class="ops-hash-val">' + esc(url) + '</code> <button type="button" class="ops-tool-copy" data-copy="' + esc(url) + '">Copier</button></dd></div>' +
+                        '<div class="is-total"><dt>Total TTC</dt><dd>' + esc(fmtCAD(total)) + '</dd></div>' +
                         '</dl>' +
-                        '<p class="ops-out-label" style="margin-top:1rem;">Courriel prêt</p>' +
+                        '<p class="ops-out-label ops-block-spaced">Courriel prêt</p>' +
                         '<pre class="ops-out-text" data-p-msg></pre>' +
                         '<div class="ops-tool-actions"><button type="button" class="button button-primary" data-p-copy>Copier le courriel</button></div>';
                     node.querySelector("[data-p-msg]").textContent = msg;

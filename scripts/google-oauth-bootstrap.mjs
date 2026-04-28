@@ -72,7 +72,9 @@ const server = http.createServer(async (req, res) => {
         console.log('  (paste the value above when prompted)\n');
         setTimeout(() => server.close(), 500);
     } catch (e) {
-        res.statusCode = 500; res.end(String(e));
+        console.error('OAuth callback error:', e);
+        res.statusCode = 500;
+        res.end('Error completing OAuth flow. Check the terminal for details.');
     }
 });
 

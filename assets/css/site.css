@@ -6808,8 +6808,8 @@ html[lang^='en'] .trust-bar::before {
   background-size: 48px 48px;
   pointer-events: none;
   z-index: 0;
-  mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
+  mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
 }
 
 .page-hero>*,
@@ -6879,8 +6879,8 @@ html[lang^='en'] .trust-bar::before {
   background-position: center;
   border-top: 1px solid var(--color-line-strong);
   border-bottom: 1px solid var(--color-line-strong);
-  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
 }
 
 /* ── BRUTALIST CROSSHAIR GRID — engineering plate ──────────────── */
@@ -6898,8 +6898,8 @@ html[lang^='en'] .trust-bar::before {
   border-bottom: 1px solid var(--color-line-strong);
   position: relative;
   overflow: hidden;
-  mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
 }
 
 .brutalist-crosshair::before,
@@ -7557,8 +7557,8 @@ main {
     linear-gradient(to right, rgba(232, 228, 220, 0.045) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(232, 228, 220, 0.045) 1px, transparent 1px);
   background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 38%, #000 30%, transparent 78%);
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 38%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 38%, #000 30%, transparent 78%);
   pointer-events: none;
 }
 
@@ -7873,4 +7873,18 @@ main {
 
 .breadcrumbs [aria-current="page"] {
   color: rgba(238, 241, 244, 0.95);
+}
+
+/* Top spacing helper for page cards */
+.page-content--top {
+  margin-top: 2rem;
+}
+
+/* Ops tools utility classes */
+.ops-hash-val {
+  word-break: break-all;
+}
+
+.ops-block-spaced {
+  margin-top: 1rem;
 }

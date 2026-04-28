@@ -125,6 +125,15 @@
             color: rgba(238, 241, 244, 0.7);
             margin: 0.5rem 0 0;
         }
+
+        .workflow-load .field--grow {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .workflow-summary {
+            margin-top: 1rem;
+        }
     </style>
 </head>
 
@@ -162,7 +171,7 @@
 
             <section class="page-card">
                 <form class="workflow-load" data-workflow-load>
-                    <label class="field" style="flex:1;min-width:240px;">
+                    <label class="field field--grow">
                         <span>Numéro de dossier</span>
                         <input type="text" name="caseId" placeholder="NX-2026-XXXX" autocomplete="off" required>
                     </label>
@@ -170,7 +179,7 @@
                 </form>
                 <p class="workflow-status" data-workflow-status></p>
 
-                <div data-workflow-summary hidden style="margin-top:1rem;">
+                <div class="workflow-summary" data-workflow-summary hidden>
                     <strong data-workflow-client></strong>
                     <span class="stage-meta"> · <span data-workflow-support></span> · urgence <span
                             data-workflow-urgency></span></span>

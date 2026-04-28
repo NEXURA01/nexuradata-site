@@ -299,18 +299,29 @@ const ensureStickyBar = () => {
 
 ensureStickyBar();
 
-/* ── Conversion tracking (lightweight, no third-party) ───────────── */
+/* ── Conversion tracking (lightweight, no third-party) ─────────────
+ * Loi 25: nothing fires before explicit consent. NxdConsent.get()
+ * returns null when the user has not yet decided, and an object with
+ * { analytics: bool } once they have. We treat null as "decline".
+ * ──────────────────────────────────────────────────────────────── */
+const hasAnalyticsConsent = () => {
+  try {
+    return !!(window.NxdConsent && window.NxdConsent.get() && window.NxdConsent.get().analytics);
+  } catch (_) {
+    return false;
+  }
+};
+
 const trackConversion = (event, data = {}) => {
+  if (!hasAnalyticsConsent()) return;
   try {
     const payload = { event, ts: Date.now(), path: location.pathname, ...data };
-    // Send to gtag/plausible if present, else just console for now (audit ready)
     if (typeof window.gtag === "function") {
       window.gtag("event", event, data);
     }
     if (typeof window.plausible === "function") {
       window.plausible(event, { props: data });
     }
-    // Best-effort beacon to own endpoint (silent fail if not deployed yet)
     if ("sendBeacon" in navigator) {
       try {
         navigator.sendBeacon("/api/track", new Blob([JSON.stringify(payload)], { type: "application/json" }));

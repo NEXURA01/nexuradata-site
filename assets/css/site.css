@@ -8168,3 +8168,60 @@ main {
   .nxd-consent-slider::before { transition: none; }
 }
 
+
+/* ── Hero AI badge ─────────────────────────────────────────────
+ * Discreet pill linking to the AI lab page. Sits between eyebrow
+ * and lab-status. Pulsing dot signals "live, local, active."             */
+.hero-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.6rem auto 0.4rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.7rem;
+  border: 1px solid rgba(120, 200, 255, 0.28);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(74, 144, 226, 0.08), rgba(74, 144, 226, 0.02));
+  color: rgba(232, 240, 248, 0.88);
+  font-family: var(--mono, "IBM Plex Mono", monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color .25s ease, background .25s ease, color .25s ease, transform .25s ease;
+}
+
+.hero-ai-badge:hover,
+.hero-ai-badge:focus-visible {
+  border-color: rgba(120, 200, 255, 0.55);
+  background: linear-gradient(180deg, rgba(74, 144, 226, 0.16), rgba(74, 144, 226, 0.04));
+  color: #f1f6fb;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.hero-ai-badge__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+  animation: heroAiPulse 2.2s ease-out infinite;
+}
+
+@keyframes heroAiPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); }
+  70%  { box-shadow: 0 0 0 9px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ai-badge__dot { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .hero-ai-badge {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 0.32rem 0.7rem 0.32rem 0.6rem;
+  }
+}

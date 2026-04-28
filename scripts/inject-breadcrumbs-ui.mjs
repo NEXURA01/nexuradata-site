@@ -21,6 +21,14 @@ const PAGES = {
     "resilience-donnees-entreprise-montreal.html": ["Résilience entreprise", "Enterprise resilience"],
     "zones-desservies-montreal-quebec.html": ["Zones desservies", "Service area"],
     "reception-securisee-donnees-montreal.html": ["Réception sécurisée", "Secure reception"],
+    "comment-choisir-recuperation-donnees-montreal.html": ["Comment choisir", "How to choose"],
+    "recuperation-donnees-brossard.html": ["Brossard", "Brossard"],
+    "recuperation-donnees-laval.html": ["Laval", "Laval"],
+    "recuperation-donnees-longueuil.html": ["Longueuil", "Longueuil"],
+    "recuperation-donnees-repentigny.html": ["Repentigny", "Repentigny"],
+    "recuperation-donnees-terrebonne.html": ["Terrebonne", "Terrebonne"],
+    "reserver-creneau-laboratoire.html": ["Réserver un créneau", "Book a slot"],
+    "suivi-dossier-client-montreal.html": ["Suivi de dossier", "Case tracking"],
 };
 
 let updated = 0;

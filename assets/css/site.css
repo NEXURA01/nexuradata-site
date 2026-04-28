@@ -8225,3 +8225,34 @@ main {
     padding: 0.32rem 0.7rem 0.32rem 0.6rem;
   }
 }
+/* ════════════════════════════════════════════════════════════════
+   CONTRAST PASS — bump pale text to readable opacity (WCAG AA)
+   Targets only text colors, not borders/backgrounds/watermarks.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Eyebrows / mono labels: 0.55 → 0.78 */
+.eyebrow { color: rgba(238, 241, 244, 0.78); }
+
+/* Section indexed prefix "§ 01 ——" */
+.section > .container > .section-heading::before { color: rgba(232, 228, 220, 0.62) !important; }
+
+/* Hero file ribbon */
+.hero::after { color: rgba(232, 228, 220, 0.62) !important; }
+
+/* Trust bar — section label and stat units */
+.trust-bar::before { color: rgba(232, 228, 220, 0.6) !important; }
+.trust-stat::before { color: rgba(232, 228, 220, 0.62) !important; }
+.trust-stat span { color: rgba(232, 228, 220, 0.78) !important; }
+
+/* Standards bar — header label + supporting em */
+.standards-bar-label { color: rgba(232, 228, 220, 0.72) !important; }
+.standards-bar-list em { color: rgba(232, 228, 220, 0.78) !important; }
+
+/* Case ledger */
+.case-ledger-eyebrow { color: rgba(232, 228, 220, 0.7); }
+.case-file-status { color: rgba(232, 228, 220, 0.78); }
+.case-file dt { color: rgba(232, 228, 220, 0.7); }
+.case-ledger-footnote { color: rgba(232, 228, 220, 0.7); }
+
+/* Generic os-dim variable used for muted captions */
+:root { --os-dim: rgba(232, 228, 220, 0.62); }

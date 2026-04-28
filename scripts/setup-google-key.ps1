@@ -53,25 +53,4 @@ if (Test-Path secrets\google-sa.json) {
 } else {
   Write-Host "FAILED — file not created" -ForegroundColor Red
 }
-
-$gitignore = Join-Path (git rev-parse --show-toplevel 2>$null) ".gitignore"
-if ((Test-Path $gitignore) -and -not (Select-String -Path $gitignore -Pattern 'secrets/' -Quiet)) {
-    Write-Host "WARNING: 'secrets/' is not in .gitignore — add it before committing" -ForegroundColor Yellow
-=======
-if ($created) {
-    $size = (Get-Item $keyPath).Length
-    Write-Host "$keyPath : OK ($size bytes)" -ForegroundColor Green
-}
-else {
-    Write-Host "FAILED - key not created after retries" -ForegroundColor Red
-    exit 1
-}
-
-# Safety check: ensure secrets/ is ignored before showing git status
-$gitignore = Join-Path (Get-Location) ".gitignore"
-if ((Test-Path $gitignore) -and -not (Select-String -Path $gitignore -Pattern '^\s*secrets/?\s*$' -Quiet)) {
-    Write-Host "WARNING: 'secrets/' is not in .gitignore - add it before committing" -ForegroundColor Yellow
->>>>>>> 582e0171ab1991ea616c14de979a618a136adc2e
-}
-
 git status --short

@@ -292,6 +292,15 @@ select {
   opacity: 0.78;
 }
 
+/* Email + phone links keep readable spacing and never break mid-address. */
+.footer-block a[href^="mailto:"],
+.footer-block a[href^="tel:"] {
+  letter-spacing: normal;
+  font-size: 0.95rem;
+  text-transform: none;
+  overflow-wrap: anywhere;
+}
+
 .nav-links a:hover,
 .footer-legal a:hover,
 .footer-block a:hover {

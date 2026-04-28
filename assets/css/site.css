@@ -220,7 +220,6 @@ select {
   backdrop-filter: blur(16px);
   background: var(--noir);
   border-bottom: 0;
-  position: sticky;
 }
 
 .site-header::after {

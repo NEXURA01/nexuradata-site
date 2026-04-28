@@ -426,6 +426,42 @@ if (trustStats.length > 0) {
   }
 }
 
+/* ── Live lab-status indicator (open/closed badge) ───────────────── */
+// Reads current time in Montreal (America/Toronto), shows a green dot when
+// the lab is within opening hours (9-18 every day per JSON-LD), otherwise
+// a muted dot with the next opening hint. Progressive enhancement only —
+// the static markup in HTML serves as the no-JS fallback.
+const updateLabStatus = () => {
+  const nodes = document.querySelectorAll("[data-lab-status]");
+  if (!nodes.length) return;
+  let hour = new Date().getHours();
+  try {
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Toronto",
+      hour: "2-digit",
+      hour12: false,
+    });
+    hour = parseInt(fmt.format(new Date()), 10);
+    if (Number.isNaN(hour)) hour = new Date().getHours();
+  } catch (_e) {
+    /* fall back to local time */
+  }
+  const isOpen = hour >= 9 && hour < 18;
+  const en = isEnglishDocument;
+  const labels = isOpen
+    ? (en ? "Lab open · response under 1 h" : "Labo ouvert · réponse < 1 h")
+    : (en ? "Lab closed · reply tomorrow morning" : "Labo fermé · réponse demain matin");
+  nodes.forEach((node) => {
+    node.classList.toggle("is-open", isOpen);
+    node.classList.toggle("is-closed", !isOpen);
+    const textNode = node.querySelector("[data-lab-status-text]") || node;
+    textNode.textContent = labels;
+  });
+};
+updateLabStatus();
+// Refresh hourly so a session that crosses 18:00 updates without reload.
+setInterval(updateLabStatus, 60 * 60 * 1000);
+
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (event) => {
     const href = anchor.getAttribute("href");

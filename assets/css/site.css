@@ -7770,3 +7770,50 @@ main {
   .quote-options--cards label,
   .quote-options--cards label:hover { transform: none; transition: none; }
 }
+
+/* ── Live lab status indicator (hero eyebrow accessory) ───────── */
+.lab-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.45rem 0 0;
+  padding: 0.18rem 0.65rem 0.18rem 0.55rem;
+  border: 1px solid rgba(238, 241, 244, 0.18);
+  border-radius: 999px;
+  background: rgba(238, 241, 244, 0.04);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(238, 241, 244, 0.78);
+  line-height: 1.4;
+  text-transform: none;
+}
+.lab-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(238, 241, 244, 0.45);
+  box-shadow: 0 0 0 0 rgba(238, 241, 244, 0);
+  flex: 0 0 auto;
+}
+.lab-status.is-open {
+  color: #d8e8d8;
+  border-color: rgba(120, 200, 120, 0.32);
+  background: rgba(120, 200, 120, 0.08);
+}
+.lab-status.is-open::before {
+  background: #5fd17a;
+  animation: nxd-lab-pulse 2.6s cubic-bezier(0.0, 0.0, 0.2, 1) infinite;
+}
+.lab-status.is-closed {
+  color: rgba(238, 241, 244, 0.6);
+}
+@keyframes nxd-lab-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(95, 209, 122, 0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(95, 209, 122, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(95, 209, 122, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-status.is-open::before { animation: none; }
+}

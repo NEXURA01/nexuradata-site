@@ -1,0 +1,4 @@
+﻿name: projects/nexuradata-seo-bot/policies/iam.disableServiceAccountKeyCreation
+spec:
+  rules:
+    - enforce: false

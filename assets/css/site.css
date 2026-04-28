@@ -6916,24 +6916,23 @@ html[lang^='en'] .trust-bar::before {
   text-transform: uppercase;
 }
 
-/* ── BRUTALIST DATA BAND — concentric circle rhythm ─────────── */
+/* ── BRUTALIST DATA BAND — refined dot rhythm ─────────────────
+ * (Was a dense radar-circle pattern repeated edge-to-edge — too noisy.
+ *  Reduced to a single subtle dot row with horizontal fade.)              */
 .brutalist-band {
-  height: 140px;
+  height: 64px;
   width: 100%;
   background-color: var(--color-bg-soft);
   background-image:
-    /* outer ring */
-    radial-gradient(circle, transparent 26px, var(--color-text) 26px, var(--color-text) 28px, transparent 29px),
-    /* inner solid disc */
-    radial-gradient(circle, var(--color-text) 9px, transparent 10px),
-    /* mid ring */
-    radial-gradient(circle, transparent 16px, var(--color-text-muted) 16px, var(--color-text-muted) 17px, transparent 18px);
-  background-size: 80px 80px, 80px 80px, 80px 80px;
-  background-position: center, center, center;
+    radial-gradient(circle, rgba(232, 228, 220, 0.22) 1.5px, transparent 2px);
+  background-size: 28px 28px;
+  background-position: center;
   border-top: 1px solid var(--color-line-strong);
   border-bottom: 1px solid var(--color-line-strong);
   position: relative;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
 }
 
 /* ── BRUTALIST CIRCLE GRID — dot field, fades at edges ───────── */

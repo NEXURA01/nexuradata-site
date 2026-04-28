@@ -7817,3 +7817,36 @@ main {
 @media (prefers-reduced-motion: reduce) {
   .lab-status.is-open::before { animation: none; }
 }
+
+/* ── Breadcrumbs (visible nav, pairs with BreadcrumbList JSON-LD) ─ */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: rgba(238, 241, 244, 0.55);
+  text-transform: uppercase;
+}
+.breadcrumbs a {
+  color: rgba(238, 241, 244, 0.78);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+.breadcrumbs a:hover,
+.breadcrumbs a:focus-visible {
+  color: var(--color-text);
+  border-bottom-color: rgba(238, 241, 244, 0.5);
+}
+.breadcrumbs-sep {
+  color: rgba(238, 241, 244, 0.32);
+  user-select: none;
+}
+.breadcrumbs [aria-current="page"] {
+  color: rgba(238, 241, 244, 0.95);
+}

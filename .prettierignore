@@ -1,0 +1,6 @@
+# Generated artifacts — never format
+release-cloudflare/
+
+# Single source of truth for site styles. Auto-formatting has duplicated
+# blocks in the past (commit 404ffa1). Edit by hand only.
+assets/css/site.css

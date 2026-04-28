@@ -140,11 +140,19 @@ export async function runGoogleSync(env) {
 }
 
 export async function onRequestGet({ request, env }) {
-    const auth = authorizeOpsRequest(request, env);
-    if (!auth.ok) return new Response(JSON.stringify({ ok: false, error: auth.error || 'unauthorized' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-    });
+    // Accept either Cloudflare Access (human/dashboard) OR x-ops-secret header
+    // (machine-to-machine, e.g. cron-job.org, GitHub Actions, external scheduler).
+    const expectedSecret = env?.ACCESS_CODE_SECRET;
+    const providedSecret = request.headers.get("x-ops-secret") || "";
+    const secretMatch = !!expectedSecret && providedSecret === expectedSecret;
+
+    if (!secretMatch) {
+        const auth = authorizeOpsRequest(request, env);
+        if (!auth.ok) return new Response(JSON.stringify({ ok: false, error: auth.error || 'unauthorized' }), {
+            status: 401,
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
     const result = await runGoogleSync(env);
     return new Response(JSON.stringify(result, null, 2), {
         status: result.ok ? 200 : 500,

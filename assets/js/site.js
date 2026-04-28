@@ -1,4 +1,4 @@
-const yearTarget = document.querySelector("[data-year]");
+const yearTargets = document.querySelectorAll("[data-year]");
 const documentLanguage = document.documentElement.lang?.toLowerCase() || "fr-ca";
 const isEnglishDocument = documentLanguage.startsWith("en");
 
@@ -178,8 +178,9 @@ const publicI18n = isEnglishDocument
     }
   };
 
-if (yearTarget) {
-  yearTarget.textContent = new Date().getFullYear();
+if (yearTargets.length) {
+  const currentYear = new Date().getFullYear();
+  yearTargets.forEach((node) => { node.textContent = currentYear; });
 }
 
 const revealElements = document.querySelectorAll("[data-reveal]");

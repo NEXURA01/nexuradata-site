@@ -1477,30 +1477,48 @@
                 );
                 function build() {
                     var v = {};
-                    node.querySelectorAll("[data-i]").forEach(function (el) { v[el.getAttribute("data-i")] = esc(el.value || "—"); });
-                    var date = esc(new Date().toLocaleString("fr-CA"));
-                    var html =
-                        '<article class="ops-pv">' +
-                        '<header><h3>Procès-verbal de réception · ' + v.ref + '</h3><p>Date : ' + date + ' · Longueuil, Québec</p></header>' +
-                        '<dl class="ops-out-table">' +
-                        '<div><dt>Client</dt><dd>' + v.client + '</dd></div>' +
-                        '<div><dt>Téléphone</dt><dd>' + v.tel + '</dd></div>' +
-                        '<div><dt>Courriel</dt><dd>' + v.mail + '</dd></div>' +
-                        '<div><dt>Appareil</dt><dd>' + v.dev + '</dd></div>' +
-                        '<div><dt>N° de série</dt><dd><code>' + v.sn + '</code></dd></div>' +
-                        '<div><dt>Capacité</dt><dd>' + v.cap + '</dd></div>' +
-                        '<div><dt>État apparent</dt><dd>' + v.state + '</dd></div>' +
-                        '<div class="is-total"><dt>Données prioritaires</dt><dd>' + v.prio + '</dd></div>' +
-                        '</dl>' +
-                        '<p class="ops-out-note">Le client confirme la remise de l\'appareil ci-dessus à NEXURA DATA aux fins d\'évaluation et, le cas échéant, de récupération de données. Aucun travail facturable n\'est entrepris avant approbation écrite d\'une soumission.</p>' +
-                        '<div class="ops-pv-sign">' +
-                        '<div><span>Signature client</span><div class="ops-pv-line"></div><small>' + v.client + '</small></div>' +
-                        '<div><span>Signature examinateur</span><div class="ops-pv-line"></div><small>NEXURADATA, CFE</small></div>' +
-                        '</div>' +
-                        '</article>';
+                    node.querySelectorAll("[data-i]").forEach(function (el) { v[el.getAttribute("data-i")] = el.value || "—"; });
+                    var date = new Date().toLocaleString("fr-CA");
+                    var snCode = h("code", null, v.sn);
+                    var dl = h("dl", { class: "ops-out-table" },
+                        row("Client", v.client),
+                        row("Téléphone", v.tel),
+                        row("Courriel", v.mail),
+                        row("Appareil", v.dev),
+                        row("N° de série", snCode),
+                        row("Capacité", v.cap),
+                        row("État apparent", v.state)
+                    );
+                    var prio = h("div", { class: "is-total" },
+                        h("dt", null, "Données prioritaires"),
+                        h("dd", null, v.prio)
+                    );
+                    dl.appendChild(prio);
+                    var article = h("article", { class: "ops-pv" },
+                        h("header", null,
+                            h("h3", null, "Procès-verbal de réception · " + v.ref),
+                            h("p", null, "Date : " + date + " · Longueuil, Québec")
+                        ),
+                        dl,
+                        h("p", { class: "ops-out-note" },
+                            "Le client confirme la remise de l'appareil ci-dessus à NEXURA DATA aux fins d'évaluation et, le cas échéant, de récupération de données. Aucun travail facturable n'est entrepris avant approbation écrite d'une soumission."
+                        ),
+                        h("div", { class: "ops-pv-sign" },
+                            h("div", null,
+                                h("span", null, "Signature client"),
+                                h("div", { class: "ops-pv-line" }),
+                                h("small", null, v.client)
+                            ),
+                            h("div", null,
+                                h("span", null, "Signature examinateur"),
+                                h("div", { class: "ops-pv-line" }),
+                                h("small", null, "NEXURADATA, CFE")
+                            )
+                        )
+                    );
                     var out = node.querySelector("[data-i-out]");
                     out.hidden = false;
-                    out.innerHTML = html;
+                    out.replaceChildren(article);
                 }
                 node.querySelector("[data-i-build]").addEventListener("click", build);
                 node.querySelector("[data-i-print]").addEventListener("click", function () { window.print(); });

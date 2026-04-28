@@ -219,7 +219,26 @@ select {
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   background: var(--noir);
-  border-bottom: var(--rule);
+  border-bottom: 0;
+  position: sticky;
+}
+
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232, 228, 220, 0.04) 12%,
+    rgba(232, 228, 220, 0.28) 50%,
+    rgba(232, 228, 220, 0.04) 88%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 /* Brand-locked nav — LOCKED */
@@ -2499,8 +2518,58 @@ select {
 .impact-stats-section {
   padding-top: 3.5rem;
   padding-bottom: 3.5rem;
-  border-top: var(--rule);
-  border-bottom: var(--rule);
+  border-top: 0;
+  border-bottom: 0;
+  position: relative;
+}
+
+.impact-stats-section::before,
+.impact-stats-section::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(880px, 80%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232, 228, 220, 0.05) 18%,
+    rgba(232, 228, 220, 0.32) 50%,
+    rgba(232, 228, 220, 0.05) 82%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.impact-stats-section::before { top: 0; }
+.impact-stats-section::after  { bottom: 0; }
+
+/* Generic divider utility — drop <hr class="nxd-divider"> or wrap */
+.nxd-divider {
+  border: 0;
+  height: 1px;
+  margin: 2.5rem auto;
+  width: min(880px, 80%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232, 228, 220, 0.05) 18%,
+    rgba(232, 228, 220, 0.32) 50%,
+    rgba(232, 228, 220, 0.05) 82%,
+    transparent 100%
+  );
+}
+
+.nxd-divider--accent {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 169, 106, 0.08) 20%,
+    rgba(201, 169, 106, 0.55) 50%,
+    rgba(201, 169, 106, 0.08) 80%,
+    transparent 100%
+  );
 }
 
 .impact-stats {

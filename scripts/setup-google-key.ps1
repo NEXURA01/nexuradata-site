@@ -14,8 +14,8 @@ if (-not (Get-Command gcloud -ErrorAction SilentlyContinue)) {
 }
 
 Write-Host "==> Writing org policy override..." -ForegroundColor Cyan
-$policyBody = @"
-name: projects/$project/policies/iam.disableServiceAccountKeyCreation
+@"
+name: projects/nexuradata-seo-bot/policies/iam.disableServiceAccountKeyCreation
 spec:
   rules:
     - enforce: false
@@ -47,18 +47,15 @@ for ($i = 1; $i -le 10; $i++) {
 
 Write-Host ""
 Write-Host "==> Result:" -ForegroundColor Green
-if ($created) {
-    $size = (Get-Item $keyPath).Length
-    Write-Host "$keyPath : OK ($size bytes)" -ForegroundColor Green
-}
-else {
-    Write-Host "FAILED - key not created after retries" -ForegroundColor Red
-    exit 1
+if (Test-Path secrets\google-sa.json) {
+  Write-Host "secrets\google-sa.json: OK ($((Get-Item secrets\google-sa.json).Length) bytes)" -ForegroundColor Green
+} else {
+  Write-Host "FAILED — file not created" -ForegroundColor Red
 }
 
-# Safety check: ensure secrets/ is ignored before showing git status
-$gitignore = Join-Path (Get-Location) ".gitignore"
-if ((Test-Path $gitignore) -and -not (Select-String -Path $gitignore -Pattern '^\s*secrets/?\s*$' -Quiet)) {
-    Write-Host "WARNING: 'secrets/' is not in .gitignore - add it before committing" -ForegroundColor Yellow
+$gitignore = Join-Path (git rev-parse --show-toplevel 2>$null) ".gitignore"
+if ((Test-Path $gitignore) -and -not (Select-String -Path $gitignore -Pattern 'secrets/' -Quiet)) {
+    Write-Host "WARNING: 'secrets/' is not in .gitignore — add it before committing" -ForegroundColor Yellow
 }
+
 git status --short

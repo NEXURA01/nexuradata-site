@@ -5589,8 +5589,8 @@ html[lang^='en'] .trust-bar::before {
    ============================================================ */
 .sticky-bar {
   position: fixed;
-  right: 0.75rem;
-  bottom: 0.75rem;
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
   display: flex;
   gap: 0.4rem;
   z-index: 90;

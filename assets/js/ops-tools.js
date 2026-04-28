@@ -2235,6 +2235,141 @@
                 });
                 return node;
             }
+        },
+
+        // ─── Tool : AI compliance attestation ────────────────────────────
+        // Generates a written statement confirming local-AI handling for a
+        // given case. Used for legal mandates, insurers, internal compliance.
+        aiAttest: {
+            title: "Attestation IA",
+            build: function () {
+                var node = el(
+                    '<div class="ops-tool ops-tool--ai-attest">' +
+                    '<header class="ops-tool-head"><h2>Attestation IA — conformité Loi&nbsp;25</h2><p>Génère une attestation écrite confirmant le mode de traitement IA du dossier (local uniquement, opt-out, journalisation). À joindre au livrable juridique ou à transmettre sur demande du client.</p></header>' +
+                    '<div class="ops-tool-grid">' +
+                    '<label class="field"><span>Nom du client / mandataire</span><input type="text" placeholder="Ex. Cabinet Tremblay & Associés" data-ai="party"></label>' +
+                    '<label class="field"><span>Référence dossier</span><input type="text" placeholder="NX-2026-0123" data-ai="ref"></label>' +
+                    '<label class="field"><span>Mode de traitement</span><select data-ai="mode">' +
+                    '<option value="ai-local">IA locale au laboratoire (par défaut)</option>' +
+                    '<option value="manual">Strictement manuel — opt-out client</option>' +
+                    '</select></label>' +
+                    '<label class="field"><span>Technicien responsable</span><input type="text" placeholder="Nom + titre" data-ai="tech"></label>' +
+                    '<label class="field"><span>Langue</span><select data-ai="lang"><option value="fr">Français</option><option value="en">English</option></select></label>' +
+                    '</div>' +
+                    '<output class="ops-tool-out"><pre class="ops-out-text" data-ai-out></pre><div class="ops-tool-actions"><button type="button" class="button button-primary" data-ai-copy>Copier l\'attestation</button></div></output>' +
+                    '</div>'
+                );
+                function build() {
+                    var party = node.querySelector('[data-ai="party"]').value || "[CLIENT]";
+                    var ref = node.querySelector('[data-ai="ref"]').value || "[RÉF]";
+                    var mode = node.querySelector('[data-ai="mode"]').value;
+                    var tech = node.querySelector('[data-ai="tech"]').value || "[TECHNICIEN]";
+                    var lang = node.querySelector('[data-ai="lang"]').value;
+                    var date = new Date().toLocaleDateString(lang === "fr" ? "fr-CA" : "en-CA", { year: "numeric", month: "long", day: "numeric" });
+                    var text;
+                    if (lang === "fr") {
+                        if (mode === "manual") {
+                            text =
+                                "ATTESTATION DE TRAITEMENT — DOSSIER " + ref + "\n" +
+                                "Date : " + date + "\n" +
+                                "Destinataire : " + party + "\n\n" +
+                                "NEXURA DATA atteste que le dossier " + ref + " a été traité en MODE STRICTEMENT MANUEL, " +
+                                "à la demande du Client. Aucun outil d'intelligence artificielle, local ou externe, " +
+                                "n'a été utilisé à aucune étape du traitement (acquisition, triage, classement, livraison).\n\n" +
+                                "Le présent mode a été appliqué conformément au droit prévu à la section 8 de la politique " +
+                                "de confidentialité de NEXURADATA et aux dispositions de la Loi sur la protection des " +
+                                "renseignements personnels dans le secteur privé (RLRQ c. P-39.1).\n\n" +
+                                "Technicien responsable : " + tech + "\n" +
+                                "Pour NEXURA DATA — Laboratoire de récupération de données, Montréal\n" +
+                                "Signature : ____________________________";
+                        } else {
+                            text =
+                                "ATTESTATION DE TRAITEMENT — DOSSIER " + ref + "\n" +
+                                "Date : " + date + "\n" +
+                                "Destinataire : " + party + "\n\n" +
+                                "NEXURA DATA atteste que le dossier " + ref + " a fait l'objet, le cas échéant, d'un traitement " +
+                                "assisté par intelligence artificielle dans le cadre des opérations de triage, de classement " +
+                                "ou d'identification préliminaire des fichiers récupérés.\n\n" +
+                                "ENGAGEMENTS APPLIQUÉS AU PRÉSENT DOSSIER\n\n" +
+                                "1. Exécution locale exclusive — Tous les modèles d'intelligence artificielle utilisés dans le " +
+                                "traitement du dossier " + ref + " ont été exécutés sur l'infrastructure du laboratoire NEXURADATA. " +
+                                "Aucun fichier, aucune métadonnée et aucun renseignement personnel issu du dossier n'ont été " +
+                                "transmis à un service d'intelligence artificielle externe ou hébergé chez un tiers (notamment " +
+                                "OpenAI, Google, Anthropic, Microsoft, Amazon ou tout autre fournisseur d'IA grand public).\n\n" +
+                                "2. Aucune décision automatisée — Conformément à l'article 12.1 de la Loi sur la protection des " +
+                                "renseignements personnels dans le secteur privé (RLRQ c. P-39.1), aucune décision produisant " +
+                                "un effet juridique ou affectant de manière significative la personne concernée n'a été rendue " +
+                                "exclusivement de façon automatisée. Chaque résultat produit par un outil d'intelligence " +
+                                "artificielle a été révisé et validé par un technicien.\n\n" +
+                                "3. Absence d'apprentissage — Aucun fichier du dossier " + ref + " n'a été utilisé pour entraîner, " +
+                                "ajuster ou améliorer un modèle d'intelligence artificielle, qu'il soit local ou externe. Les " +
+                                "modèles utilisés sont fixés en version.\n\n" +
+                                "4. Journalisation — Les opérations d'intelligence artificielle exécutées sur le dossier (modèle, " +
+                                "version, paramètres, technicien responsable, date) ont été consignées au journal de session " +
+                                "du dossier. Un extrait du journal peut être fourni sur demande écrite.\n\n" +
+                                "5. Destruction — Les images de travail et les indexes générés par les outils d'intelligence " +
+                                "artificielle sont détruits avec le reste du dossier au terme de la période de conservation " +
+                                "convenue.\n\n" +
+                                "Technicien responsable : " + tech + "\n" +
+                                "Pour NEXURA DATA — Laboratoire de récupération de données, Montréal\n" +
+                                "Signature : ____________________________\n\n" +
+                                "Référence : politique de confidentialité NEXURADATA, section 8 — Outils d'intelligence artificielle.";
+                        }
+                    } else {
+                        if (mode === "manual") {
+                            text =
+                                "PROCESSING ATTESTATION — CASE " + ref + "\n" +
+                                "Date: " + date + "\n" +
+                                "Recipient: " + party + "\n\n" +
+                                "NEXURA DATA hereby attests that case " + ref + " was handled in STRICTLY MANUAL MODE, " +
+                                "at the Client's request. No artificial intelligence tooling, local or external, was used " +
+                                "at any stage of processing (acquisition, triage, sorting, delivery).\n\n" +
+                                "This mode was applied pursuant to the right set out in section 8 of NEXURADATA's privacy " +
+                                "policy and to the provisions of the Quebec Act respecting the protection of personal " +
+                                "information in the private sector (CQLR c. P-39.1).\n\n" +
+                                "Responsible technician: " + tech + "\n" +
+                                "For NEXURA DATA — Data Recovery Lab, Montreal\n" +
+                                "Signature: ____________________________";
+                        } else {
+                            text =
+                                "PROCESSING ATTESTATION — CASE " + ref + "\n" +
+                                "Date: " + date + "\n" +
+                                "Recipient: " + party + "\n\n" +
+                                "NEXURA DATA hereby attests that case " + ref + " was, where applicable, processed with the " +
+                                "assistance of artificial intelligence for triage, sorting and preliminary identification of " +
+                                "recovered files.\n\n" +
+                                "COMMITMENTS APPLIED TO THIS CASE\n\n" +
+                                "1. Strictly local execution — All AI models used in processing case " + ref + " were executed " +
+                                "on NEXURADATA's lab infrastructure. No file, metadata or personal information from the case " +
+                                "was transmitted to any external or third-party-hosted AI service (notably OpenAI, Google, " +
+                                "Anthropic, Microsoft, Amazon or any other consumer AI provider).\n\n" +
+                                "2. No automated decision-making — In accordance with section 12.1 of the Quebec Act respecting " +
+                                "the protection of personal information in the private sector (CQLR c. P-39.1), no decision " +
+                                "producing legal effects or significantly affecting the person concerned was made on a solely " +
+                                "automated basis. Every result produced by an AI tool was reviewed and validated by a technician.\n\n" +
+                                "3. No training — No file from case " + ref + " was used to train, fine-tune or improve any AI " +
+                                "model, local or external. Models in use are version-locked.\n\n" +
+                                "4. Logging — AI operations performed on the case (model, version, parameters, responsible " +
+                                "technician, date) were recorded in the case session log. An extract of the log can be provided " +
+                                "on written request.\n\n" +
+                                "5. Destruction — Working images and indexes generated by AI tools are destroyed with the rest " +
+                                "of the case file at the end of the agreed retention period.\n\n" +
+                                "Responsible technician: " + tech + "\n" +
+                                "For NEXURA DATA — Data Recovery Lab, Montreal\n" +
+                                "Signature: ____________________________\n\n" +
+                                "Reference: NEXURADATA privacy policy, section 8 — Artificial intelligence tools.";
+                        }
+                    }
+                    node.querySelector("[data-ai-out]").textContent = text;
+                }
+                node.addEventListener("input", build);
+                node.addEventListener("change", build);
+                node.querySelector("[data-ai-copy]").addEventListener("click", function (e) {
+                    copyToClipboard(node.querySelector("[data-ai-out]").textContent, e.currentTarget);
+                });
+                setTimeout(build, 0);
+                return node;
+            }
         }
     };
 

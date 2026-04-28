@@ -46,9 +46,9 @@ npx wrangler pages secret put GOOGLE_OAUTH_CLIENT_ID --project-name nexuradata
 npx wrangler pages secret put GOOGLE_OAUTH_CLIENT_SECRET --project-name nexuradata
 npx wrangler pages secret put GOOGLE_OAUTH_REFRESH_TOKEN --project-name nexuradata
 npx wrangler pages secret put GOOGLE_GSC_SITE_URL --project-name nexuradata
-# valeur: https://nexuradata.ca/
+# valeur: sc-domain:nexuradata.ca   (ou https://nexuradata.ca/ si URL-prefix property)
 npx wrangler pages secret put GOOGLE_GBP_LOCATION_NAME --project-name nexuradata
-# valeur: accounts/XXXXX/locations/YYYYY
+# valeur: accounts/XXXXX/locations/YYYYY  (optionnel — skip si pas encore claim GBP)
 ```
 
 ---
@@ -57,24 +57,30 @@ npx wrangler pages secret put GOOGLE_GBP_LOCATION_NAME --project-name nexuradata
 
 Le worker `functions/api/cron/google-sync.js` est déjà en place. Il fait :
 
-- **GET `/api/cron/google-sync`** (Cf Access protégé) :
+- **GET `/api/cron/google-sync`** — auth via Cf Access OU header `x-ops-secret: <ACCESS_CODE_SECRET>` :
   - Refresh OAuth token
   - Soumet le sitemap à Search Console
   - Récupère top 50 requêtes des 7 derniers jours
-  - Publie un post quotidien sur Google Business Profile
+  - Publie un post quotidien sur Google Business Profile (si `GOOGLE_GBP_LOCATION_NAME` set)
   - Log dans D1 (table `ops_log` si elle existe)
 
-### Activer le cron quotidien
-1. Cloudflare dashboard → Pages → nexuradata → **Settings → Functions → Cron triggers**
-2. Add trigger : `0 13 * * *` (9h heure Montréal en été, 8h en hiver)
+### Activer le cron quotidien (option A — GitHub Actions, gratuit)
+1. <https://github.com/NEXURA01/nexuradata-site/settings/secrets/actions> → **New repository secret**
+2. Name : `OPS_SECRET`  Value : la même que Cloudflare `ACCESS_CODE_SECRET`
+3. Le workflow `.github/workflows/google-sync.yml` tourne automatiquement à 13h UTC chaque jour
+4. Test manuel : Actions tab → "Google daily sync" → **Run workflow**
+
+### Activer le cron quotidien (option B — Cloudflare dashboard)
+1. Cloudflare → Pages → nexuradata → **Settings → Functions → Cron triggers**
+2. Add trigger : `0 13 * * *`
 3. Path : `/api/cron/google-sync`
-4. **Headers** : ajouter `CF-Access-Client-Id` + `CF-Access-Client-Secret` d'un service token Cf Access (ou allowlister une IP)
+4. Headers : `x-ops-secret: <ACCESS_CODE_SECRET value>`
 
 ### Tester manuellement
 ```powershell
-# Via curl (avec Cf Access service token):
-curl -H "CF-Access-Client-Id: xxxx" -H "CF-Access-Client-Secret: yyyy" `
-     https://nexuradata.ca/api/cron/google-sync
+# Avec x-ops-secret (recommandé):
+$headers = @{ "x-ops-secret" = "<valeur ACCESS_CODE_SECRET>" }
+Invoke-RestMethod -Uri "https://nexuradata.ca/api/cron/google-sync" -Headers $headers
 ```
 
 ---

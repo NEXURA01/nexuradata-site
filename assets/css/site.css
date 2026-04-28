@@ -194,14 +194,14 @@ select {
 /* ── Locked branding: header/nav ─────────────────────────────── */
 .brand-logo {
   display: block;
-  height: 76px;
+  height: 104px;
   width: auto;
   max-width: none;
 }
 
 @media (max-width: 720px) {
   .brand-logo {
-    height: 60px;
+    height: 76px;
   }
 }
 
@@ -333,7 +333,7 @@ select {
 
 .brand img {
   display: block;
-  height: 56px;
+  height: 88px;
   width: auto;
 }
 
@@ -2885,7 +2885,7 @@ select {
   }
 
   .brand img {
-    height: clamp(40px, 11vw, 52px);
+    height: clamp(60px, 14vw, 76px);
   }
 
   .nav-toggle {
@@ -3139,7 +3139,7 @@ select {
 
 @media (max-width: 640px) {
   .brand-logo {
-    height: 44px;
+    height: 64px;
   }
 
   .footer-logo {

@@ -1,0 +1,48 @@
+name: Google daily sync
+
+# Daily SEO sync: pings /api/cron/google-sync which:
+#   - refreshes OAuth, submits sitemap to Search Console,
+#   - pulls top 50 search queries (7d),
+#   - publishes a daily Google Business Profile post (if GOOGLE_GBP_LOCATION_NAME set).
+#
+# Required GitHub repo secret:
+#   OPS_SECRET  → same value as Cloudflare Pages secret ACCESS_CODE_SECRET
+#
+# Schedule: 13:00 UTC daily (~ 9h Montreal in EDT, 8h in EST).
+
+on:
+  schedule:
+    - cron: '0 13 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: google-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger google-sync worker
+        env:
+          OPS_SECRET: ${{ secrets.OPS_SECRET }}
+        run: |
+          if [ -z "$OPS_SECRET" ]; then
+            echo "::error::OPS_SECRET repo secret is not configured."
+            exit 1
+          fi
+          response=$(curl -sS -o /tmp/body.json -w '%{http_code}' \
+            -H "x-ops-secret: $OPS_SECRET" \
+            -H "Accept: application/json" \
+            --max-time 90 \
+            "https://nexuradata.ca/api/cron/google-sync")
+          echo "HTTP $response"
+          # Strip the OAuth token field defensively before logging.
+          jq 'del(.steps.token)' /tmp/body.json 2>/dev/null || cat /tmp/body.json
+          if [ "$response" != "200" ]; then
+            exit 1
+          fi

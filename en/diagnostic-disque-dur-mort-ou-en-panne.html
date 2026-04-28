@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dead Hard Drive or Just Failing? | NEXURADATA</title>
+  <meta name="description"
+    content="Complete guide: how to know if your hard drive is really dead or just failing. Warning signs, simple tests, and when to call a lab.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="NEXURADATA">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:title" content="Dead Hard Drive or Just Failing? How to Tell">
+  <meta property="og:description"
+    content="Guide: symptoms of a dead hard drive vs. failing drive. Critical signals, DIY tests, and when to call the lab.">
+  <meta property="og:url" content="https://nexuradata.ca/en/diagnostic-disque-dur-mort-ou-en-panne.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dead Hard Drive or Just Failing? Diagnostic Guide">
+  <meta name="twitter:description"
+    content="How to know if a hard drive is truly dead or simply failing. Critical signals and tests.">
+  <link rel="canonical" href="https://nexuradata.ca/en/diagnostic-disque-dur-mort-ou-en-panne.html">
+  <link rel="alternate" hreflang="fr-CA" href="https://nexuradata.ca/diagnostic-disque-dur-mort-ou-en-panne.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "@id": "https://nexuradata.ca/en/diagnostic-disque-dur-mort-ou-en-panne.html",
+      "headline": "Dead Hard Drive or Just Failing? How to Tell",
+      "description": "Complete guide to diagnosing a failing hard drive. Learn to recognize critical signals, the differences between a dead and failing drive, and when to call a lab.",
+      "image": "https://nexuradata.ca/assets/icons/og-default.png",
+      "datePublished": "2026-04-28",
+      "dateModified": "2026-04-28",
+      "author": {
+        "@type": "Organization",
+        "name": "NEXURADATA",
+        "url": "https://nexuradata.ca/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "NEXURADATA",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://nexuradata.ca/assets/nexuradata-master.svg"
+        }
+      },
+      "mainEntity": {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What are the signals that a hard drive is dead?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A completely dead hard drive won't power on, makes no sound, is not recognized by the BIOS, and cannot be identified by any operating system. If the drive is absent from Disk Management after restart, that's a critical signal."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What's the difference between a failing vs. dead hard drive?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "A failing drive starts partially but shows errors, lags, or clicking sounds. A dead drive won't start at all and isn't recognized by the system. Failing drives often have a reasonable recovery chance; dead drives require component-level intervention."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can clicking from a hard drive be repaired?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Repetitive clicking usually indicates a faulty read head or degraded motor. This isn't a software issue. A cleanroom intervention (parts replacement) is needed to recover data."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can you diagnose a dead hard drive at home?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, partially. Check: (1) connections, (2) test on another computer, (3) listen for clicking (clicking = danger). But if the drive isn't recognized after these tests, a lab evaluation is necessary."
+            }
+          }
+        ]
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <header class="header">
+    <nav class="nav-container">
+      <a href="/en/" class="nav-logo">NEXURADATA</a>
+      <div class="nav-menu">
+        <a href="/en/" class="nav-link">Home</a>
+        <a href="/en/recuperation-donnees-montreal.html" class="nav-link">Recovery</a>
+        <a href="/en/forensique-numerique-montreal.html" class="nav-link">Forensics</a>
+        <a href="/en/tarifs-recuperation-donnees-montreal.html" class="nav-link">Pricing</a>
+        <a href="/en/suivi-dossier-client-montreal.html" class="nav-link">Track</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <article class="article-container">
+      <header class="article-header">
+        <h1>Dead Hard Drive or Just Failing? How to Tell</h1>
+        <p class="article-meta">
+          Published <time datetime="2026-04-28">April 28, 2026</time> | Read time: ~8 min
+        </p>
+        <p class="article-lead">
+          Your hard drive won't boot. Panic sets in. But before you assume the worst: is it <strong>truly dead</strong>, or just <strong>failing</strong>? The difference matters — and it determines your chances of recovering your data.
+        </p>
+      </header>
+
+      <section class="article-section">
+        <h2>Dead vs. Failing: Quick Definitions</h2>
+        <p>
+          <strong>Dead drive:</strong> Completely non-functional. No signs of life. Not recognized by BIOS, operating system, or diagnostic tools. It's like a fried motherboard — you need component-level intervention.
+        </p>
+        <p>
+          <strong>Failing drive:</strong> Partially functional but degraded. The drive boots, is recognized, but shows read errors, significant lag, unexpected reboots, or suspicious noises. Most data is still intact — you just need to extract it before complete failure.
+        </p>
+        <p style="background: #f5f5f5; padding: 12px 16px; border-left: 4px solid #0a0d12; margin: 20px 0;">
+          <strong>Good news:</strong> Both cases are recoverable at a lab with a cleanroom. But dead drives are more expensive and take longer to treat.
+        </p>
+      </section>
+
+      <section class="article-section">
+        <h2>Critical Warning Signals: What to Listen For</h2>
+        <p>
+          Before making assumptions, <strong>stop</strong> restarting your drive and listen carefully:
+        </p>
+        <ul style="margin-left: 20px;">
+          <li><strong>Repetitive clicking</strong> (click-click-click) → <strong>CRITICAL DANGER.</strong> This means the read head can't access the platters. Each restart worsens the damage. Stop immediately and call the lab.</li>
+          <li><strong>Normal whirring sound</strong> → Normal. Hard drives spin.</li>
+          <li><strong>Grinding or scraping noise</strong> → Internal contact. Stop the drive. Lab required.</li>
+          <li><strong>Complete silence, no sound at all</strong> → Either the controller board is dead, or the motor won't start. Check connections first (see below).</li>
+          <li><strong>Repeated BIOS beeping</strong> → Often a connection issue, not necessarily the drive.</li>
+        </ul>
+      </section>
+
+      <section class="article-section">
+        <h2>Test #1: The Basics (Try at Home)</h2>
+        <ol style="margin-left: 20px;">
+          <li>
+            <strong>Check physical connections:</strong>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+              <li>Disconnect and reconnect the power and SATA/IDE cables.</li>
+              <li>Test with a different cable if available (sometimes the cable is faulty, not the drive).</li>
+              <li>Try a different SATA port on the motherboard.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Test on another computer:</strong>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+              <li>Install the drive on a different PC or Mac.</li>
+              <li>If it works elsewhere, the problem is with your machine (motherboard, power supply).</li>
+              <li>If it doesn't work anywhere, the drive is likely the issue.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Check the BIOS:</strong>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+              <li>Restart, enter BIOS (usually F2, DEL, or F12).</li>
+              <li>Go to "Storage" or "Hard Drives".</li>
+              <li>If the drive appears, the system detected it — good sign. If absent, it won't initialize.</li>
+            </ul>
+          </li>
+        </ol>
+      </section>
+
+      <section class="article-section">
+        <h2>Test #2: Diagnostic Tools (Windows/Linux)</h2>
+        <p>
+          <strong>⚠️ Warning:</strong> Using diagnostic tools on a failing drive can worsen the situation. Use sparingly and stop immediately if you hear clicking.
+        </p>
+        <h3 style="margin-top: 20px;">On Windows:</h3>
+        <ul style="margin-left: 20px;">
+          <li>
+            <strong>Check disk status:</strong> Go to Task Manager → Performance → Disk. A dying drive will show 100% disk usage constantly.
+          </li>
+          <li>
+            <strong>CrystalDiskInfo (free):</strong> Download this app. It reads your drive's SMART health. A drive with SMART = "Alert" or "Critical" is in imminent danger.
+          </li>
+        </ul>
+        <h3 style="margin-top: 20px;">On macOS:</h3>
+        <ul style="margin-left: 20px;">
+          <li>Open Disk Utility (Applications → Utilities).</li>
+          <li>Select your external or internal hard drive.</li>
+          <li>If the status says "Errors detected" or "Needs repair," that's a warning sign.</li>
+        </ul>
+      </section>
+
+      <section class="article-section">
+        <h2>Common Scenarios: Quick Diagnostics</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background: #f5f5f5; border-bottom: 2px solid #0a0d12;">
+              <th style="padding: 12px; text-align: left; border: 1px solid #ddd;"><strong>Symptom</strong></th>
+              <th style="padding: 12px; text-align: left; border: 1px solid #ddd;"><strong>Likely Diagnosis</strong></th>
+              <th style="padding: 12px; text-align: left; border: 1px solid #ddd;"><strong>Recommended Action</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #ddd;">Drive recognized but Windows won't boot.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Corrupted system files (software).</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Try Windows Recovery or Linux live USB.</td>
+            </tr>
+            <tr style="background: #fafafa;">
+              <td style="padding: 12px; border: 1px solid #ddd;">Repetitive clicking, no recognition.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Faulty read head (hardware).</td>
+              <td style="padding: 12px; border: 1px solid #ddd;"><strong>Stop immediately. Contact a lab.</strong></td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #ddd;">Complete silence. No noise. No recognition.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Controller board or PCB dead, or motor locked.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Lab for parts replacement.</td>
+            </tr>
+            <tr style="background: #fafafa;">
+              <td style="padding: 12px; border: 1px solid #ddd;">Appears in BIOS but 100% slowness.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Partial failure, degraded platters.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Recovery possible. Lab for fast extraction.</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; border: 1px solid #ddd;">Random blue screens (BSOD), frequent freezes.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Accumulated bad sectors, degraded SMART.</td>
+              <td style="padding: 12px; border: 1px solid #ddd;">Urgent backup or lab if not bootable.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="article-section">
+        <h2>Truly Dead? Unmistakable Signs</h2>
+        <p>If <strong>all</strong> of these signs are present, the drive is very likely dead:</p>
+        <ul style="margin-left: 20px;">
+          <li>❌ No motor sound (not even initial whirring).</li>
+          <li>❌ No BIOS recognition after connection verification.</li>
+          <li>❌ No activity LED on the drive's face.</li>
+          <li>❌ Installation on another system changes nothing.</li>
+          <li>❌ After 3 minutes, the drive still does nothing.</li>
+        </ul>
+        <p style="background: #f5f5f5; padding: 12px 16px; border-left: 4px solid #0a0d12; margin: 20px 0;">
+          <strong>Good news (yes, again!):</strong> Even dead drives are recoverable at a lab with a cleanroom. Our technicians can replace controller boards, read heads, or even platters. It takes longer and costs more, but it's possible.
+        </p>
+      </section>
+
+      <section class="article-section">
+        <h2>What to Do (and Avoid)</h2>
+        <h3 style="margin-top: 20px;">✅ Do:</h3>
+        <ul style="margin-left: 20px;">
+          <li>Stop the drive immediately if you hear clicking.</li>
+          <li>Document all symptoms (noises, errors, timing).</li>
+          <li>Check connections before assuming the worst.</li>
+          <li>Contact a lab with a detailed description of the problem.</li>
+          <li>Keep the drive in a dry, stable place while awaiting intervention.</li>
+        </ul>
+        <h3 style="margin-top: 20px;">❌ Don't:</h3>
+        <ul style="margin-left: 20px;">
+          <li>Restart the drive repeatedly to see if it works.</li>
+          <li>Open the drive yourself (unless you're in a cleanroom).</li>
+          <li>Use cheap "repair" software (they only read, never fix).</li>
+          <li>Ignore clicking sounds — it's almost always a serious hardware issue.</li>
+          <li>Wait too long — each restart can worsen potential damage.</li>
+        </ul>
+      </section>
+
+      <section class="article-section">
+        <h2>When to Call NEXURADATA</h2>
+        <p>
+          You should contact us if:
+        </p>
+        <ul style="margin-left: 20px;">
+          <li>The drive is recognized but inaccessible (read errors).</li>
+          <li>You hear clicking or unusual noises.</li>
+          <li>The drive isn't recognized after connection verification.</li>
+          <li>You need a professional evaluation (free).</li>
+          <li>You have critical data and want the best recovery chance.</li>
+        </ul>
+        <p>
+          We offer a <strong>free 30-minute evaluation</strong> to diagnose your drive. No obligation. No fees. If we can recover your data, you only pay after success.
+        </p>
+        <div style="background: linear-gradient(135deg, #0a0d12, #1a1f2e); color: white; padding: 24px; border-radius: 8px; margin-top: 24px; text-align: center;">
+          <h3 style="margin-top: 0; color: white;">Free Evaluation — Diagnose Your Drive</h3>
+          <p>Unsure if your data is recoverable? We'll find out for you, at no cost.</p>
+          <a href="/en/reserver-creneau-laboratoire.html"
+            style="display: inline-block; background: white; color: #0a0d12; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 12px;">Book an Evaluation</a>
+        </div>
+      </section>
+
+      <section class="article-section">
+        <h2>Summary: Quick Decision Tree</h2>
+        <p style="font-weight: 600; margin-top: 16px;">Is the drive making noise?</p>
+        <ul style="margin-left: 20px;">
+          <li><strong>Repetitive clicking:</strong> → Critical danger. Stop. Call a lab.</li>
+          <li><strong>Normal whirring:</strong> → Probably functional. Next test.</li>
+          <li><strong>Grinding/scraping:</strong> → Internal contact. Lab required.</li>
+          <li><strong>Complete silence:</strong> → Could be dead or just disconnected.</li>
+        </ul>
+        <p style="font-weight: 600; margin-top: 16px;">Is the drive recognized in BIOS?</p>
+        <ul style="margin-left: 20px;">
+          <li><strong>Yes:</strong> → Probably recoverable. Lab for fast extraction.</li>
+          <li><strong>No, after connection check:</strong> → Very likely dead. Lab for diagnosis.</li>
+        </ul>
+        <p style="font-weight: 600; margin-top: 16px;">Do you have critical data?</p>
+        <ul style="margin-left: 20px;">
+          <li><strong>Yes:</strong> → Contact NEXURADATA for free evaluation.</li>
+          <li><strong>No:</strong> → Replace the drive and document symptoms for your next machine.</li>
+        </ul>
+      </section>
+
+      <footer class="article-footer">
+        <p style="color: #666; font-size: 0.95em;">
+          <strong>About:</strong> NEXURADATA is an independent data recovery and digital forensics lab based in Longueuil, Quebec. We handle hard drives, SSDs, RAID systems, servers, smartphones, and critical media. All cases include a free evaluation and diagnosis before any work begins.
+        </p>
+        <p style="color: #666; font-size: 0.95em;">
+          <strong>Contact us:</strong> <a href="mailto:contact@nexuradata.ca">contact@nexuradata.ca</a> | <a href="tel:+14388130592">+1 (438) 813-0592</a> | Open 7 days, 9am–6pm.
+        </p>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <nav class="footer-nav">
+      <a href="/en/">Home</a>
+      <a href="/en/recuperation-donnees-montreal.html">Recovery</a>
+      <a href="/en/forensique-numerique-montreal.html">Forensics</a>
+      <a href="/en/tarifs-recuperation-donnees-montreal.html">Pricing</a>
+      <a href="/en/politique-confidentialite.html">Privacy</a>
+      <a href="/en/mentions-legales.html">Legal</a>
+    </nav>
+    <p>&copy; 2026 NEXURADATA. All rights reserved.</p>
+  </footer>
+
+  <style>
+    .article-container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 0 20px;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    .article-header {
+      margin-bottom: 40px;
+    }
+
+    .article-header h1 {
+      font-size: 2.2em;
+      font-weight: 700;
+      margin: 0 0 16px 0;
+      line-height: 1.2;
+    }
+
+    .article-meta {
+      color: #888;
+      font-size: 0.95em;
+      margin: 8px 0;
+    }
+
+    .article-lead {
+      font-size: 1.15em;
+      color: #555;
+      margin: 20px 0 0 0;
+      font-weight: 500;
+    }
+
+    .article-section {
+      margin: 40px 0;
+    }
+
+    .article-section h2 {
+      font-size: 1.6em;
+      font-weight: 700;
+      margin: 32px 0 16px 0;
+      color: #0a0d12;
+    }
+
+    .article-section h3 {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin: 24px 0 12px 0;
+      color: #0a0d12;
+    }
+
+    .article-section p {
+      margin: 16px 0;
+    }
+
+    .article-section ul,
+    .article-section ol {
+      margin: 16px 0;
+    }
+
+    .article-section li {
+      margin: 8px 0;
+    }
+
+    table {
+      font-size: 0.95em;
+    }
+
+    table th,
+    table td {
+      text-align: left;
+    }
+
+    .article-footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 768px) {
+      .article-header h1 {
+        font-size: 1.8em;
+      }
+
+      .article-section h2 {
+        font-size: 1.4em;
+      }
+    }
+  </style>
+</body>
+
+</html>

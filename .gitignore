@@ -17,6 +17,9 @@ node_modules/
 .env.*
 .dev.vars
 .dev.vars.*
+secrets/
+*.json.key
+google-sa*.json
 
 # Cloudflare / build artifacts
 .wrangler/

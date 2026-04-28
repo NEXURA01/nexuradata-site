@@ -279,9 +279,9 @@ select {
 .footer-block a {
   color: var(--os);
   text-decoration: none;
-  font-size: 0.92rem;
-  letter-spacing: var(--tracking-wide);
-  opacity: 0.82;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  opacity: 0.78;
   transition: opacity 0.2s ease;
 }
 
@@ -3207,7 +3207,7 @@ select {
 
 @media (max-width: 640px) {
   .brand-logo {
-    height: 64px;
+    height: 72px;
   }
 
   .footer-logo {

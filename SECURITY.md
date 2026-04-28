@@ -12,6 +12,7 @@ les intégrations Stripe et Resend, ainsi que les scripts de build et d'audit SE
 
 Merci de **ne pas** ouvrir d'issue GitHub publique pour un problème de sécurité.
 
+- **GitHub Security Advisory (privé)** : [Report a vulnerability](https://github.com/NEXURA01/nexuradata-site/security/advisories/new) — canal recommandé.
 - **Email confidentiel** : `security@nexuradata.ca`
 - **PGP / chiffrement** : disponible sur demande au même email.
 - **Téléphone** (urgences uniquement) : +1 438-813-0592
@@ -68,6 +69,7 @@ migrations, Stripe and Resend integrations, and build/SEO audit scripts.
 
 Please **do not** open a public GitHub issue for security problems.
 
+- **GitHub Security Advisory (private)**: [Report a vulnerability](https://github.com/NEXURA01/nexuradata-site/security/advisories/new) — preferred channel.
 - **Confidential email**: `security@nexuradata.ca`
 - **PGP / encryption**: available on request at the same address.
 - **Phone** (emergencies only): +1 438-813-0592

@@ -8,7 +8,9 @@
 //   GOOGLE_OAUTH_CLIENT_SECRET   OAuth 2.0 client secret
 //   GOOGLE_OAUTH_REFRESH_TOKEN   Long-lived refresh token (generated once via human OAuth flow)
 //   GOOGLE_GBP_LOCATION_NAME     e.g. "accounts/12345/locations/67890" (from GBP API)
-//   GOOGLE_GSC_SITE_URL          e.g. "https://nexuradata.ca/" (must be GSC-verified)
+//   GOOGLE_GSC_SITE_URL          GSC property identifier — either a URL-prefix
+//                                ("https://nexuradata.ca/") or a Domain property
+//                                ("sc-domain:nexuradata.ca"). Must be verified.
 //
 // SCOPES the refresh token must cover:
 //   https://www.googleapis.com/auth/webmasters
@@ -107,10 +109,12 @@ export async function runGoogleSync(env) {
         result.steps.token = 'ok';
 
         if (env.GOOGLE_GSC_SITE_URL) {
+            const siteOrigin = (env.PUBLIC_SITE_ORIGIN || 'https://nexuradata.ca').replace(/\/$/, '');
+            const sitemapUrl = `${siteOrigin}/sitemap.xml`;
             result.steps.sitemap = await submitSitemap(
                 token,
                 env.GOOGLE_GSC_SITE_URL,
-                `${env.GOOGLE_GSC_SITE_URL.replace(/\/$/, '')}/sitemap.xml`
+                sitemapUrl
             );
             result.steps.queries = await fetchTopQueries(token, env.GOOGLE_GSC_SITE_URL, 7);
         }

@@ -121,7 +121,8 @@ for await (const file of walk(releaseDir)) {
   let changed = false;
   for (const [base, hashedBase] of hashedNames) {
     // Replace any href/src ending in the original basename (without query) with the hashed basename.
-    const escaped = base.replace(/\./g, "\\.");
+    // Escape regex meta-characters (covers . \ + * ? ( ) [ ] { } | ^ $).
+    const escaped = base.replace(/[.\\+*?()[\]{}|^$]/g, "\\$&");
     const re = new RegExp(`((?:href|src)=["'][^"']*?\\/?)${escaped}(["'])`, "g");
     const next = html.replace(re, (_m, p1, p2) => `${p1}${hashedBase}${p2}`);
     if (next !== html) {

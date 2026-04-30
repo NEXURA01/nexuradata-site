@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attestation d'entreprise — Nexura Data</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #141618;
+            --rule: #1a1d1f;
+            --muted: #4a5158;
+            --accent: #2ecc71;
+            --paper: #ffffff;
+        }
+
+        .sig-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #9aa1a8;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            background: #e8eaed;
+            color: var(--ink);
+            font-family: "IBM Plex Sans", system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #141618;
+            color: #fff;
+            padding: 0.75rem 1rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+
+        .toolbar strong {
+            color: #2ecc71;
+        }
+
+        .toolbar button {
+            background: #2ecc71;
+            color: #141618;
+            border: none;
+            padding: 0.45rem 0.85rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .toolbar button.ghost {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .toolbar small {
+            color: rgba(255, 255, 255, 0.65);
+            margin-left: auto;
+        }
+
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            margin: 1.25rem auto;
+            padding: 0.85in 0.85in 0.7in;
+            background: var(--paper);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 2px solid var(--ink);
+            margin-bottom: 1.4rem;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .brand .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand .dot {
+            width: 0.55rem;
+            height: 0.55rem;
+            border-radius: 50%;
+            background: var(--accent);
+            display: inline-block;
+        }
+
+        .brand h1 {
+            font-size: 1.35rem;
+            letter-spacing: 0.18em;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .brand .tag {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .meta {
+            text-align: right;
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 0.72rem;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .meta .label {
+            color: #9aa1a8;
+        }
+
+        .meta [contenteditable="true"] {
+            outline: 1px dashed transparent;
+            padding: 0 2px;
+            cursor: text;
+        }
+
+        .meta [contenteditable="true"]:hover,
+        .meta [contenteditable="true"]:focus {
+            outline-color: var(--accent);
+            background: #f3fff8;
+        }
+
+        .doc-title {
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin: 0 0 0.3rem;
+        }
+
+        .doc-h2 {
+            font-size: 1.6rem;
+            margin: 0 0 1.1rem;
+            line-height: 1.2;
+        }
+
+        .legal {
+            border: 1px solid var(--ink);
+            border-radius: 4px;
+            padding: 0.85rem 1rem;
+            margin: 0 0 1.2rem;
+            background: #fafbfc;
+        }
+
+        .legal dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 0.35rem 1rem;
+            font-size: 0.92rem;
+        }
+
+        .legal dt {
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            align-self: center;
+        }
+
+        .legal dd {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .legal dd [contenteditable="true"] {
+            outline: 1px dashed transparent;
+            padding: 0 3px;
+            border-radius: 2px;
+        }
+
+        .legal dd [contenteditable="true"]:hover,
+        .legal dd [contenteditable="true"]:focus {
+            outline-color: var(--accent);
+            background: #f3fff8;
+        }
+
+        .body p {
+            font-size: 0.96rem;
+            line-height: 1.55;
+            margin: 0 0 0.7rem;
+        }
+
+        .body strong {
+            font-weight: 600;
+        }
+
+        .body ul {
+            font-size: 0.92rem;
+            line-height: 1.55;
+            padding-left: 1.2rem;
+            margin: 0 0 0.9rem;
+        }
+
+        .signature-block {
+            margin-top: 1.6rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .sig {
+            border-top: 1px solid var(--ink);
+            padding-top: 0.4rem;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        .sig strong {
+            color: var(--ink);
+            display: block;
+            margin-top: 0.1rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .stamp {
+            position: absolute;
+            bottom: 1.6in;
+            right: 1in;
+            transform: rotate(-8deg);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 0.4rem 0.9rem;
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            opacity: 0.9;
+            border-radius: 4px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0.55in;
+            left: 0.85in;
+            right: 0.85in;
+            border-top: 1px solid #d0d4d8;
+            padding-top: 0.4rem;
+            font-family: "IBM Plex Mono", monospace;
+            font-size: 0.66rem;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .notice {
+            max-width: 8.5in;
+            margin: 0 auto 1rem;
+            padding: 0.85rem 1rem;
+            background: #fff8e6;
+            border: 1px solid #f1c40f;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #5b4a00;
+        }
+
+        .notice strong {
+            color: #3a2f00;
+        }
+
+        @media print {
+
+            .toolbar,
+            .notice {
+                display: none !important;
+            }
+
+            html,
+            body {
+                background: #fff !important;
+            }
+
+            .page {
+                margin: 0 !important;
+                box-shadow: none !important;
+                width: auto;
+                min-height: auto;
+                padding: 0.65in 0.65in 0.55in;
+            }
+
+            [contenteditable="true"] {
+                outline: none !important;
+                background: transparent !important;
+            }
+
+            .footer {
+                position: fixed;
+            }
+        }
+
+        @page {
+            size: Letter;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="toolbar" role="region" aria-label="Outils du document">
+        <strong>Attestation Nexura Data</strong>
+        <button type="button" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+        <button type="button" class="ghost" onclick="document.body.classList.toggle('edit-hint')">Aide</button>
+        <small>Cliquez sur les zones surlignées pour éditer · Ctrl+P pour PDF</small>
+    </div>
+
+    <div class="notice">
+        <strong>Statut actuel :</strong> entreprise individuelle non immatriculée au REQ
+        (revenus inférieurs au seuil obligeant l'immatriculation, et nom commercial « NEXURADATA »
+        utilisé sous la responsabilité personnelle d'Olivier Blanchet). Pour la vérification
+        Meta / Stripe / Google : utilisez la <strong>vérification individuelle</strong> avec votre
+        permis de conduire ou passeport. Cette attestation peut être jointe en complément
+        pour les partenaires B2B qui demandent un papier-en-tête.
+    </div>
+
+    <article class="page" aria-label="Attestation d'entreprise">
+        <header class="header">
+            <div class="brand">
+                <div class="logo-row">
+                    <span class="dot" aria-hidden="true"></span>
+                    <h1>NEXURADATA</h1>
+                </div>
+                <span class="tag">Récupération de données · Forensique numérique</span>
+            </div>
+            <div class="meta">
+                <div><span class="label">DOC. N°</span> <span contenteditable="true">NXD-ATT-2026-001</span></div>
+                <div><span class="label">DATE</span> <span contenteditable="true" id="docDate">27 avril 2026</span>
+                </div>
+                <div><span class="label">RÉF.</span> Vérification commerciale</div>
+            </div>
+        </header>
+
+        <p class="doc-title">Attestation d'identité commerciale</p>
+        <h2 class="doc-h2">Renseignements officiels de l'entreprise</h2>
+
+        <section class="legal" aria-label="Renseignements légaux">
+            <dl>
+                <dt>Nom légal du propriétaire</dt>
+                <dd><span contenteditable="true">Olivier Blanchet</span></dd>
+
+                <dt>Nom commercial</dt>
+                <dd><span contenteditable="true">NEXURADATA (faisant affaire sous « Nexura Data »)</span></dd>
+
+                <dt>Forme juridique</dt>
+                <dd><span contenteditable="true">Travailleur autonome — entreprise individuelle (non immatriculée au REQ
+                        à ce jour)</span></dd>
+
+                <dt>NEQ</dt>
+                <dd><span contenteditable="true">Sans objet — entreprise individuelle exploitée sous le nom du
+                        propriétaire</span></dd>
+
+                <dt>Adresse du siège</dt>
+                <dd><span contenteditable="true">1100, rue Coteau-Rouge, Longueuil (Québec) J4K 1W6, Canada</span></dd>
+
+                <dt>Téléphone</dt>
+                <dd>+1 438 813-0592</dd>
+
+                <dt>Courriel officiel</dt>
+                <dd>dossiers@nexuradata.ca</dd>
+
+                <dt>Site web</dt>
+                <dd>https://nexuradata.ca</dd>
+
+                <dt>Domaine d'activité</dt>
+                <dd>Services techniques spécialisés — récupération de données, forensique numérique, conseil en
+                    cybersécurité</dd>
+            </dl>
+        </section>
+
+        <div class="body">
+            <p>
+                Je soussigné, <strong><span contenteditable="true">Olivier Blanchet</span></strong>,
+                atteste exercer l'activité commerciale décrite ci-dessous à titre de
+                <strong>travailleur autonome</strong> sous le nom commercial <strong>NEXURADATA</strong>
+                (également orthographié « Nexura Data »), à l'adresse de Longueuil indiquée plus haut.
+            </p>
+            <p>
+                L'entreprise opère légalement comme entreprise individuelle exploitée sous le nom du
+                propriétaire (« Olivier Blanchet, faisant affaire sous NEXURADATA »), conformément
+                à l'article 1525 du Code civil du Québec. L'ensemble des publications, signatures
+                électroniques, contrats et communications officielles est émis sous la marque NEXURADATA.
+            </p>
+            <p>
+                L'entreprise se conforme aux obligations applicables, notamment&nbsp;:
+            </p>
+            <ul>
+                <li>Loi 25 — Loi modernisant des dispositions législatives en matière de protection des renseignements
+                    personnels.</li>
+                <li>Code criminel du Canada — section 184 et suivants concernant l'intégrité de la preuve numérique
+                    (chaîne de possession).</li>
+                <li>Code civil du Québec, art. 1525 — entreprise individuelle exploitée sous le nom du propriétaire.
+                </li>
+            </ul>
+            <p>
+                La présente attestation est délivrée à des fins de vérification commerciale auprès de
+                partenaires technologiques (notamment Meta Platforms Inc., Google LLC, Stripe Inc.,
+                Cloudflare Inc.) et d'institutions financières.
+            </p>
+        </div>
+
+        <div class="signature-block">
+            <div class="sig">
+                <span class="sig-label">Signature
+                    autorisée</span>
+                <strong contenteditable="true">Olivier Blanchet</strong>
+                Propriétaire et représentant légal
+            </div>
+            <div class="sig">
+                <span class="sig-label">Lieu
+                    et date</span>
+                <strong contenteditable="true">Longueuil, le 27 avril 2026</strong>
+                Province de Québec, Canada
+            </div>
+        </div>
+
+        <div class="stamp" aria-hidden="true">NEXURADATA · OFFICIEL</div>
+
+        <footer class="footer">
+            <span>NEXURADATA — Olivier Blanchet, travailleur autonome · 1100 Coteau-Rouge, Longueuil (QC) J4K 1W6</span>
+            <span>nexuradata.ca · 438 813-0592</span>
+        </footer>
+    </article>
+
+    <script>
+        // Auto-fill today's date in human-readable French.
+        const today = new Date();
+        const months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+        const human = `${today.getDate()} ${months[today.getMonth()]} ${today.getFullYear()}`;
+        const dateNodes = document.querySelectorAll("#docDate, .signature-block .sig:nth-child(2) strong");
+        dateNodes.forEach((n, i) => {
+            if (i === 0) n.textContent = human;
+            if (i === 1) n.textContent = `Longueuil, le ${human}`;
+        });
+    </script>
+</body>
+
+</html>

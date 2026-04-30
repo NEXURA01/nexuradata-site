@@ -44,18 +44,19 @@ These values are fixed — no color substitution, no typographic replacement, no
         <img src="/assets/nexuradata-master.svg" alt="NEXURA DATA" class="brand-logo">
       </a>
       <div class="nav-links">
-        <a href="/services.html">Services</a>
+        <a href="/services-recuperation-forensique-montreal.html">Services</a>
         <a href="/tarifs-recuperation-donnees-montreal.html">Tarifs</a>
-        <a href="/politique-confidentialite.html">Confidentialité</a>
-        <a href="/conditions-intervention-paiement.html">Conditions</a>
+        <a href="/reception-securisee-donnees-montreal.html">Envoi &amp; dépôt</a>
         <a href="/#contact">Contact</a>
       </div>
+      <a class="nav-tel" href="tel:+15145551234">514 555-1234</a>
+      <a class="lang-switch" href="/en/" hreflang="en">EN</a>
     </nav>
   </div>
 </header>
 ```
 
-Same structure on all public FR pages. EN pages use equivalent translated links. Do not move the logo or break the `nav > brand` hierarchy.
+Same structure on all public FR pages (4 nav links max — Services, Tarifs, Envoi & dépôt, Contact). EN pages use equivalent translated links and link back to `/`. Do not move the logo or break the `nav > brand` hierarchy. Reducing to fewer than 4 nav links requires branding validation. Adding more requires validation too — use the footer for tertiary links instead.
 
 ## Locked Footer
 
@@ -63,7 +64,19 @@ Same footer on all public pages. Do not remove legal links, rewrite the operatin
 
 ## Locked CSS (Header/Footer/Logo)
 
-Logo sizing, nav layout, footer grid, link styles, and responsive breakpoints are locked. No local overrides without a branding decision. Full reference: see `docs/branding-read-only.txt` section G.
+Nav layout, footer grid, link styles, and responsive breakpoints are locked. No local overrides without a branding decision. Full reference: see `docs/branding-read-only.txt` section G.
+
+### Logo sizing — adjustable (validated 2026-04-28)
+
+Logo height is **technical**, not creative. Current validated values:
+
+| Breakpoint | `.brand-logo` height | `.brand img` (legacy ops) |
+|------------|----------------------|---------------------------|
+| Desktop (`> 720px`) | `104px` | `88px` |
+| Tablet (`≤ 720px`) | `76px` | `clamp(60px, 14vw, 76px)` |
+| Mobile (`≤ 640px`) | `64px` | — |
+
+Minimum acceptable height: **60px** desktop / **48px** mobile (legibility floor for the wordmark). Below this, switch to `nexuradata-icon.png`. Above `120px` desktop, requires explicit branding validation.
 
 ## Email Signature
 
@@ -73,6 +86,6 @@ Only `Nom Prénom`, `Titre / Fonction`, and the email address are editable. The 
 
 | Category | Allowed? | Examples |
 |----------|----------|----------|
-| **Technical** | Yes, if faithful | PNG export, responsive sizing, path correction |
-| **Structural** | Yes, if coherent | New nav link, new legal page, EN extension |
-| **Creative** | **No** — requires explicit validation | Logo change, font change, spacing change, composition change |
+| **Technical** | Yes, if faithful | PNG export, responsive sizing, **logo height within validated range (60–120px)**, path correction |
+| **Structural** | Yes, if coherent | New nav link, new legal page, EN extension, footer link auto-injection (e.g. cookie preferences) |
+| **Creative** | **No** — requires explicit validation | Logo redesign, font change, color change, internal logo block rearrangement, composition change |

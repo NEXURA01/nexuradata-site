@@ -219,6 +219,9 @@
         }
     }
 
-    form.addEventListener("change", render);
+    form.addEventListener("change", function (e) {
+        var n = e.target.name;
+        if (n === "device" || n === "issue" || n === "urgency") render();
+    });
     form.addEventListener("submit", function (e) { e.preventDefault(); });
 })();

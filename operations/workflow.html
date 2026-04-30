@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Atelier — Workflow technique | NEXURADATA</title>
+    <meta name="description"
+        content="Console atelier NEXURADATA: diagnostic, extraction, réparation, vérification, livraison.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#141618">
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <style>
+        .workflow-stages {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .workflow-stage {
+            border: 1px solid rgba(238, 241, 244, 0.18);
+            border-radius: 8px;
+            padding: 1.25rem;
+            background: rgba(238, 241, 244, 0.03);
+            transition: border-color 0.2s ease;
+        }
+
+        .workflow-stage[data-status="in_progress"] {
+            border-color: #f5b400;
+        }
+
+        .workflow-stage[data-status="complete"] {
+            border-color: #2ecc71;
+        }
+
+        .workflow-stage[data-status="blocked"] {
+            border-color: #e74c3c;
+        }
+
+        .workflow-stage-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.75rem;
+        }
+
+        .workflow-stage h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .workflow-stage .stage-meta {
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.78rem;
+            color: rgba(238, 241, 244, 0.6);
+        }
+
+        .workflow-stage textarea {
+            width: 100%;
+            min-height: 90px;
+            background: rgba(0, 0, 0, 0.25);
+            color: #eef1f4;
+            border: 1px solid rgba(238, 241, 244, 0.18);
+            border-radius: 4px;
+            padding: 0.5rem;
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.85rem;
+        }
+
+        .workflow-stage .stage-controls {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .workflow-stage select,
+        .workflow-stage input[type="number"] {
+            background: rgba(0, 0, 0, 0.25);
+            color: #eef1f4;
+            border: 1px solid rgba(238, 241, 244, 0.18);
+            border-radius: 4px;
+            padding: 0.4rem 0.6rem;
+            font-family: inherit;
+        }
+
+        .workflow-stage .stage-checklist {
+            list-style: none;
+            padding: 0;
+            margin: 0.75rem 0;
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .workflow-stage .stage-checklist label {
+            display: flex;
+            gap: 0.55rem;
+            align-items: flex-start;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+
+        .workflow-load {
+            display: flex;
+            gap: 0.75rem;
+            align-items: end;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-status {
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.85rem;
+            color: rgba(238, 241, 244, 0.7);
+            margin: 0.5rem 0 0;
+        }
+
+        .workflow-load .field--grow {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .workflow-summary {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Navigation atelier">
+            <a class="brand" href="../index.html" aria-label="NEXURADATA, retour à l'accueil">
+                <img src="../assets/icons/logo-petit.svg" alt="NEXURADATA" width="200" height="24">
+            </a>
+            <div class="nav-links">
+                <a href="dashboard.html">Tableau de bord</a>
+                <a href="index.html">Dossiers</a>
+                <a href="workflow.html" aria-current="page">Atelier</a>
+                <a href="chain-of-custody.html">Chaîne</a>
+                <a href="whatsapp.html">WhatsApp</a>
+                <a href="quotes.html">Soumissions</a>
+                <a href="payments.html">Paiements</a>
+                <a href="../index.html" class="button button-outline button-small">Site public</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="contenu" class="page-shell">
+        <div class="container">
+            <header class="page-hero">
+                <p class="eyebrow">Atelier</p>
+                <h1>Workflow technique par dossier</h1>
+                <p class="page-intro">
+                    Diagnostic → Extraction → Réparation → Vérification → Livraison.
+                    Chaque étape est journalisée dans D1 et visible dans le timeline du dossier.
+                </p>
+            </header>
+
+            <section class="page-card">
+                <form class="workflow-load" data-workflow-load>
+                    <label class="field field--grow">
+                        <span>Numéro de dossier</span>
+                        <input type="text" name="caseId" placeholder="NX-2026-XXXX" autocomplete="off" required>
+                    </label>
+                    <button type="submit" class="button button-primary">Charger</button>
+                </form>
+                <p class="workflow-status" data-workflow-status></p>
+
+                <div class="workflow-summary" data-workflow-summary hidden>
+                    <strong data-workflow-client></strong>
+                    <span class="stage-meta"> · <span data-workflow-support></span> · urgence <span
+                            data-workflow-urgency></span></span>
+                </div>
+
+                <div class="workflow-stages" data-workflow-stages hidden></div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        (function () {
+            const STAGE_DEFS = [
+                {
+                    id: "diagnostic",
+                    label: "1 · Diagnostic",
+                    checklist: [
+                        "Inventaire visuel + photos",
+                        "Lecture SMART (smartctl -a)",
+                        "Test connectique / alim",
+                        "Estimation chances de succès",
+                        "Devis ferme transmis"
+                    ]
+                },
+                {
+                    id: "extraction",
+                    label: "2 · Extraction",
+                    checklist: [
+                        "Imageur dédié (PC-3000 / DeepSpar / ddrescue)",
+                        "Clone secteur par secteur",
+                        "Hash SHA-256 image source",
+                        "Mapping zones défaillantes",
+                        "Tentatives multi-passes"
+                    ]
+                },
+                {
+                    id: "reparation",
+                    label: "3 · Réparation",
+                    checklist: [
+                        "Identification cause racine (PCB, têtes, NAND, firmware, RAID)",
+                        "Pièce donor identifiée si requis",
+                        "Intervention salle blanche si plateaux",
+                        "Reconstruction firmware / translator si SSD",
+                        "Re-imageur post-réparation"
+                    ]
+                },
+                {
+                    id: "verification",
+                    label: "4 · Vérification",
+                    checklist: [
+                        "Montage de l'image en lecture seule",
+                        "Arborescence vérifiée par client (échantillon)",
+                        "Hash de cohérence sur fichiers critiques",
+                        "Liste finale des fichiers récupérables",
+                        "Rapport de récupération généré"
+                    ]
+                },
+                {
+                    id: "livraison",
+                    label: "5 · Livraison",
+                    checklist: [
+                        "Support de livraison préparé (HDD ext. / cloud chiffré)",
+                        "Chaîne de possession signée",
+                        "Paiement final reçu",
+                        "Données originales archivées 30 jours puis effacées",
+                        "Email confirmation envoyé"
+                    ]
+                }
+            ];
+
+            const STATUS_OPTIONS = [
+                { value: "pending", label: "En attente" },
+                { value: "in_progress", label: "En cours" },
+                { value: "blocked", label: "Bloqué" },
+                { value: "complete", label: "Terminé" },
+                { value: "skipped", label: "Sauté" }
+            ];
+
+            const loadForm = document.querySelector("[data-workflow-load]");
+            const statusEl = document.querySelector("[data-workflow-status]");
+            const stagesEl = document.querySelector("[data-workflow-stages]");
+            const summaryEl = document.querySelector("[data-workflow-summary]");
+            const clientEl = document.querySelector("[data-workflow-client]");
+            const supportEl = document.querySelector("[data-workflow-support]");
+            const urgencyEl = document.querySelector("[data-workflow-urgency]");
+
+            let currentCaseId = "";
+
+            function setStatus(msg, isError) {
+                statusEl.textContent = msg || "";
+                statusEl.style.color = isError ? "#e74c3c" : "rgba(238,241,244,0.7)";
+            }
+
+            function renderStages(steps) {
+                stagesEl.innerHTML = "";
+                const byStage = new Map(steps.map((s) => [s.stage, s]));
+                STAGE_DEFS.forEach((def) => {
+                    const step = byStage.get(def.id) || { status: "pending", notes: "", data: {}, minutesSpent: 0 };
+                    const card = document.createElement("article");
+                    card.className = "workflow-stage";
+                    card.dataset.stage = def.id;
+                    card.dataset.status = step.status;
+
+                    const checklistChecks = def.checklist.map((item, idx) => {
+                        const checked = step.data && step.data.checklist && step.data.checklist[idx] ? "checked" : "";
+                        return '<label><input type="checkbox" data-stage-check="' + idx + '" ' + checked + '><span>' + item + '</span></label>';
+                    }).join("");
+
+                    const statusOpts = STATUS_OPTIONS.map((o) =>
+                        '<option value="' + o.value + '"' + (o.value === step.status ? " selected" : "") + '>' + o.label + '</option>'
+                    ).join("");
+
+                    card.innerHTML =
+                        '<div class="workflow-stage-head">' +
+                        '<h3>' + def.label + '</h3>' +
+                        '<span class="stage-meta">' + (step.updatedAt ? "MAJ " + step.updatedAt.replace("T", " ").slice(0, 16) : "Jamais touché") + ' · ' + (step.minutesSpent || 0) + ' min</span>' +
+                        '</div>' +
+                        '<ul class="stage-checklist">' + checklistChecks + '</ul>' +
+                        '<textarea data-stage-notes placeholder="Notes techniques, numéros de pièces, observations...">' + (step.notes || "") + '</textarea>' +
+                        '<div class="stage-controls">' +
+                        '<label>Statut <select data-stage-status>' + statusOpts + '</select></label>' +
+                        '<label>Minutes <input type="number" data-stage-minutes min="0" max="10000" value="' + (step.minutesSpent || 0) + '" style="width:90px;"></label>' +
+                        '<button type="button" class="button button-primary button-small" data-stage-save>Sauvegarder</button>' +
+                        '<span class="stage-meta" data-stage-feedback></span>' +
+                        '</div>';
+
+                    card.querySelector("[data-stage-save]").addEventListener("click", async () => {
+                        const status = card.querySelector("[data-stage-status]").value;
+                        const notes = card.querySelector("[data-stage-notes]").value;
+                        const minutesSpent = Number.parseInt(card.querySelector("[data-stage-minutes]").value, 10) || 0;
+                        const checklist = Array.from(card.querySelectorAll("[data-stage-check]")).map((cb) => cb.checked);
+                        const feedback = card.querySelector("[data-stage-feedback]");
+                        feedback.textContent = "Enregistrement…";
+                        try {
+                            const res = await fetch("/api/ops/workflow", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    caseId: currentCaseId,
+                                    stage: def.id,
+                                    status,
+                                    notes,
+                                    minutesSpent,
+                                    data: { checklist }
+                                })
+                            });
+                            const json = await res.json();
+                            if (!res.ok || !json.ok) {
+                                feedback.textContent = "✗ " + (json.message || "Erreur");
+                                feedback.style.color = "#e74c3c";
+                                return;
+                            }
+                            feedback.textContent = "✓ Sauvegardé";
+                            feedback.style.color = "#2ecc71";
+                            card.dataset.status = status;
+                            setTimeout(() => { feedback.textContent = ""; }, 2500);
+                        } catch (err) {
+                            feedback.textContent = "✗ Réseau";
+                            feedback.style.color = "#e74c3c";
+                        }
+                    });
+
+                    stagesEl.appendChild(card);
+                });
+                stagesEl.hidden = false;
+            }
+
+            loadForm.addEventListener("submit", async (event) => {
+                event.preventDefault();
+                const caseId = (loadForm.elements.caseId.value || "").trim().toUpperCase();
+                if (!caseId) return;
+                setStatus("Chargement…");
+                stagesEl.hidden = true;
+                summaryEl.hidden = true;
+                try {
+                    const res = await fetch("/api/ops/workflow?caseId=" + encodeURIComponent(caseId));
+                    const json = await res.json();
+                    if (!res.ok || !json.ok) {
+                        setStatus(json.message || "Erreur de chargement", true);
+                        return;
+                    }
+                    currentCaseId = json.caseId;
+                    clientEl.textContent = json.caseSummary.clientName || "(sans nom)";
+                    supportEl.textContent = json.caseSummary.supportType || "—";
+                    urgencyEl.textContent = json.caseSummary.urgency || "—";
+                    summaryEl.hidden = false;
+                    renderStages(json.steps);
+                    setStatus("Dossier chargé.");
+                } catch (err) {
+                    setStatus("Erreur réseau", true);
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

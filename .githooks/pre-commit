@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+# Pre-commit hook: run unit tests + SEO audit before allowing a commit.
+# Enable once per clone with:  git config core.hooksPath .githooks
+
+set -e
+
+echo "[pre-commit] vitest..."
+npm test --silent
+
+echo "[pre-commit] seo-audit..."
+node scripts/seo-audit.mjs
+
+echo "[pre-commit] OK"

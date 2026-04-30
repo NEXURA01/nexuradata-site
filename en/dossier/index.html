@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-CA">
 
 <head>
@@ -13,7 +13,8 @@
     <meta property="og:locale" content="en_CA">
     <meta property="og:site_name" content="NEXURADATA">
     <meta property="og:title" content="My case | NEXURA DATA">
-    <meta property="og:description" content="NEXURA DATA client portal. Check your case status with your case number and access code.">
+    <meta property="og:description"
+        content="NEXURA DATA client portal. Check your case status with your case number and access code.">
     <meta property="og:url" content="https://nexuradata.ca/en/dossier/">
     <meta property="og:image" content="https://nexuradata.ca/assets/icons/og-default.png">
     <link rel="canonical" href="https://nexuradata.ca/en/dossier/">
@@ -30,11 +31,12 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/site.css">
     <script src="/assets/js/site.js" defer></script>
-  <script type="application/ld+json">
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": ["ProfessionalService", "LocalBusiness"],
       "@id": "https://nexuradata.ca/#business",
+      "sameAs": ["https://www.facebook.com/profile.php?id=61588752816284"],
       "name": "NEXURADATA",
       "url": "https://nexuradata.ca/en/",
       "telephone": "+1-438-813-0592",
@@ -43,13 +45,8 @@
       "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
       "priceRange": "$$",
       "currenciesAccepted": "CAD",
-      "paymentAccepted": "Credit Card, Interac, Bank Transfer",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Longueuil",
-        "addressRegion": "QC",
-        "addressCountry": "CA"
-      },
+      "paymentAccepted": "Credit Card, Interac, Bank Transfer, Bitcoin",
+      "address":{"@type":"PostalAddress","streetAddress":"5184 boulevard Cousineau","addressLocality":"Longueuil","addressRegion":"QC","postalCode":"J3Y 7G5","addressCountry":"CA"},
       "areaServed": ["Montreal", "Laval", "Longueuil", "South Shore", "North Shore", "Quebec", "Canada"],
       "availableLanguage": ["en-CA", "fr-CA"]
     }
@@ -66,10 +63,12 @@
                     <img src="/assets/icons/logo-petit.svg" alt="NEXURA DATA" class="brand-logo">
                 </a>
                 <div class="nav-links">
-                    <a href="/en/pages/services/services-recuperation-forensique-montreal.html">Services</a>
-                    <a href="/en/pages/services/tarifs-recuperation-donnees-montreal.html">Pricing</a>
-                    <a href="/en/pages/services/reserver-creneau-laboratoire.html">Book</a>
+                    <a href="/en/forensique-numerique-montreal.html">Services</a>
+                    <a href="/en/tarifs-recuperation-donnees-montreal.html">Pricing</a>
+                    <a href="/en/comment-nous-envoyer-vos-donnees.html">Shipping &amp; drop-off</a>
                     <a href="/en/#contact">Contact</a>
+                    <a class="nav-tel" href="tel:+14388130592" data-track="call-header"
+                        aria-label="Appeler le laboratoire">438 813-0592</a>
                     <a href="/dossier/" class="lang-switch" lang="fr">FR</a>
                 </div>
             </nav>
@@ -126,14 +125,14 @@
 
                     <article class="contact-card">
                         <h3>Urgent</h3>
-                        <a href="mailto:contact@nexuradata.ca?subject=Urgent%20case%20update">contact@nexuradata.ca</a>
+                        <a href="mailto:urgence@nexuradata.ca?subject=Urgent%20case%20update">urgence@nexuradata.ca</a>
                         <p>Email us if the urgency level has changed or if an authorization needs to be confirmed.</p>
                     </article>
 
                     <article class="contact-card">
                         <h3>Detailed view</h3>
                         <p>The full portal with timeline and history is available <a
-                                href="/en/pages/services/suivi-dossier-client-montreal.html">here</a>.</p>
+                                href="/en/suivi-dossier-client-montreal.html">here</a>.</p>
                     </article>
                 </aside>
             </div>
@@ -182,7 +181,7 @@
                     <p>Data recovery, RAID, NAS, server and digital forensics.</p>
                 </div>
                 <div class="footer-block"><small>LOCATION</small>
-                    <p>Longueuil, Quebec, Canada</p>
+                    <p>5184 boul. Cousineau<br>Longueuil (Quebec) J3Y&nbsp;7G5</p>
                 </div>
                 <div class="footer-block"><small>EMAIL</small>
                     <p><a href="mailto:contact@nexuradata.ca">contact@nexuradata.ca</a></p>
@@ -196,10 +195,10 @@
                 </div>
             </section>
             <section class="footer-legal" aria-label="Legal links">
-                <a href="/en/pages/legal/mentions-legales.html">Legal</a>
-                <a href="/en/pages/legal/politique-confidentialite.html">Privacy policy</a>
-                <a href="/en/pages/services/engagements-conformite-quebec.html">Quebec compliance</a>
-                <a href="/en/pages/legal/conditions-intervention-paiement.html">Terms</a>
+                <a href="/en/mentions-legales.html">Legal</a>
+                <a href="/en/politique-confidentialite.html">Privacy policy</a>
+                <a href="/en/engagements-conformite-quebec.html">Quebec compliance</a>
+                <a href="/en/conditions-intervention-paiement.html">Terms</a>
             </section>
         </div>
     </footer>

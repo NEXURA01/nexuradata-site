@@ -2,6 +2,13 @@
 
 **Laboratoire indépendant de récupération de données et de forensique numérique à Montréal.**  
 Longueuil · 1 station de métro de Montréal · Bilingue FR/EN · Certifié CFE · Ouvert 7 jours sur 7
+**Laboratoire indépendant de récupération de données et de forensique numérique.**  
+Basé à Longueuil, à une station de métro de Montréal.  
+Bilingue FR/EN · Certifié CFE · Ouvert 7 jours sur 7.
+
+Récupération de données sur disques durs, SSD, RAID, NAS, téléphones et médias critiques.  
+Forensique numérique certifiée pour incidents, litiges et mandats légaux.  
+Rapports structurés admissibles devant les tribunaux fédéraux et provinciaux du Québec.
 
 [![Site web](https://img.shields.io/badge/nexuradata.ca-en%20ligne-black?style=flat-square)](https://nexuradata.ca)
 [![Cloudflare Pages](https://img.shields.io/badge/Cloudflare-Pages-orange?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com)

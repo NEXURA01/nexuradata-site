@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Conversations WhatsApp — NEXURADATA</title>
+    <meta name="description" content="Console opérateur des conversations WhatsApp automatisées NEXURADATA.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#141618">
+    <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/site.css">
+    <style>
+        .wa-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 720px) {
+            .wa-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .wa-list {
+            max-height: 70vh;
+            overflow-y: auto;
+            border: 1px solid rgba(238, 241, 244, 0.14);
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .wa-thread {
+            display: block;
+            padding: 0.7rem 0.85rem;
+            border-bottom: 1px solid rgba(238, 241, 244, 0.08);
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #eef1f4;
+            text-decoration: none;
+        }
+
+        .wa-thread:hover,
+        .wa-thread[aria-current="true"] {
+            background: rgba(46, 204, 113, 0.08);
+        }
+
+        .wa-thread .name {
+            font-weight: 600;
+        }
+
+        .wa-thread .meta {
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.7rem;
+            color: rgba(238, 241, 244, 0.55);
+            margin-top: 0.2rem;
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .wa-pill {
+            display: inline-block;
+            padding: 0.05rem 0.45rem;
+            border-radius: 999px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .wa-pill.auto {
+            background: rgba(46, 204, 113, 0.15);
+            color: #2ecc71;
+        }
+
+        .wa-pill.human {
+            background: rgba(241, 196, 15, 0.18);
+            color: #f1c40f;
+        }
+
+        .wa-pill.escalated {
+            background: rgba(231, 76, 60, 0.18);
+            color: #e74c3c;
+        }
+
+        .wa-pill.closed {
+            background: rgba(149, 165, 166, 0.18);
+            color: #95a5a6;
+        }
+
+        .wa-conv {
+            border: 1px solid rgba(238, 241, 244, 0.14);
+            border-radius: 6px;
+            padding: 0.85rem;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wa-msgs {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 55vh;
+        }
+
+        .wa-msg {
+            padding: 0.45rem 0.7rem;
+            margin: 0.3rem 0;
+            border-radius: 8px;
+            max-width: 80%;
+            font-size: 0.86rem;
+        }
+
+        .wa-msg.inbound {
+            background: rgba(238, 241, 244, 0.06);
+            align-self: flex-start;
+        }
+
+        .wa-msg.outbound {
+            background: rgba(46, 204, 113, 0.12);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .wa-msg .when {
+            font-family: var(--mono, "IBM Plex Mono", monospace);
+            font-size: 0.65rem;
+            color: rgba(238, 241, 244, 0.5);
+            margin-top: 0.2rem;
+        }
+
+        .wa-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .wa-send {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.6rem;
+        }
+
+        .wa-send textarea {
+            flex: 1;
+            min-height: 60px;
+            background: rgba(0, 0, 0, 0.25);
+            color: #eef1f4;
+            border: 1px solid rgba(238, 241, 244, 0.18);
+            border-radius: 4px;
+            padding: 0.5rem;
+            font-family: var(--mono, monospace);
+            font-size: 0.85rem;
+        }
+
+        .wa-status {
+            font-family: var(--mono, monospace);
+            font-size: 0.78rem;
+            color: rgba(238, 241, 244, 0.65);
+        }
+    </style>
+</head>
+
+<body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Navigation WhatsApp">
+            <a class="brand" href="../index.html" aria-label="NEXURADATA, retour à l'accueil">
+                <img src="../assets/icons/logo-petit.svg" alt="NEXURADATA" width="200" height="24">
+            </a>
+            <div class="nav-links">
+                <a href="dashboard.html">Tableau de bord</a>
+                <a href="index.html">Dossiers</a>
+                <a href="workflow.html">Atelier</a>
+                <a href="chain-of-custody.html">Chaîne</a>
+                <a href="whatsapp.html" aria-current="page">WhatsApp</a>
+                <a href="quotes.html">Soumissions</a>
+                <a href="payments.html">Paiements</a>
+                <a href="../index.html" class="button button-outline button-small">Site public</a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="contenu" class="page-shell">
+        <div class="container">
+            <header class="page-hero">
+                <p class="eyebrow">Service client</p>
+                <h1>Conversations WhatsApp</h1>
+                <p class="page-intro">
+                    Réponses automatiques par IA (Workers AI) avec escalade humaine sur mots-clés sensibles
+                    (police, tribunal, ransomware, succession, urgence) ou après 5 réponses auto.
+                    Vous pouvez reprendre la main à tout moment — l'auto-réponse se désactive.
+                </p>
+            </header>
+
+            <section class="page-card">
+                <div class="wa-toolbar">
+                    <button type="button" class="button button-small" data-wa-refresh>Rafraîchir</button>
+                    <span class="wa-status" data-wa-status>Chargement…</span>
+                </div>
+                <div class="wa-grid">
+                    <aside class="wa-list" data-wa-list aria-label="Conversations"></aside>
+                    <section class="wa-conv" data-wa-conv aria-label="Conversation sélectionnée">
+                        <p class="wa-status">Sélectionnez une conversation à gauche.</p>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const $ = (sel, root = document) => root.querySelector(sel);
+        const status = $("[data-wa-status]");
+        const list = $("[data-wa-list]");
+        const conv = $("[data-wa-conv]");
+        let currentWaId = null;
+
+        const fmt = (iso) => iso ? new Date(iso).toLocaleString("fr-CA", { hour12: false }) : "—";
+        const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+        async function loadThreads() {
+            status.textContent = "Chargement…";
+            try {
+                const r = await fetch("/api/ops/whatsapp", { credentials: "include" });
+                const data = await r.json();
+                if (!data.ok) throw new Error(data.message || "Erreur");
+                renderList(data.threads || []);
+                status.textContent = `${(data.threads || []).length} conversation(s)`;
+            } catch (e) {
+                status.textContent = "Erreur: " + e.message;
+            }
+        }
+
+        function renderList(threads) {
+            if (!threads.length) {
+                list.innerHTML = '<p class="wa-status" style="padding:1rem;">Aucune conversation pour l\'instant.</p>';
+                return;
+            }
+            list.innerHTML = threads.map((t) => `
+        <a href="#" class="wa-thread" data-wa-id="${esc(t.wa_id)}" ${currentWaId === t.wa_id ? 'aria-current="true"' : ""}>
+          <div class="name">${esc(t.display_name || t.wa_id)}</div>
+          <div class="meta">
+            <span class="wa-pill ${esc(t.status)}">${esc(t.status)}</span>
+            <span>${esc(t.intent || "—")}</span>
+            <span>auto: ${Number(t.auto_replies_count) || 0}</span>
+            <span>${fmt(t.last_inbound_at || t.updated_at)}</span>
+          </div>
+        </a>
+      `).join("");
+            list.querySelectorAll("[data-wa-id]").forEach((a) => {
+                a.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    openThread(a.getAttribute("data-wa-id"));
+                });
+            });
+        }
+
+        async function openThread(waId) {
+            currentWaId = waId;
+            conv.innerHTML = '<p class="wa-status">Chargement…</p>';
+            try {
+                const r = await fetch(`/api/ops/whatsapp?wa_id=${encodeURIComponent(waId)}`, { credentials: "include" });
+                const data = await r.json();
+                if (!data.ok) throw new Error(data.message || "Erreur");
+                renderConv(data.thread, data.messages || []);
+            } catch (e) {
+                conv.innerHTML = `<p class="wa-status">Erreur: ${esc(e.message)}</p>`;
+            }
+        }
+
+        function renderConv(thread, messages) {
+            const status = thread?.status || "auto";
+            conv.innerHTML = `
+        <div class="wa-toolbar">
+          <strong>${esc(thread?.display_name || thread?.wa_id || "")}</strong>
+          <span class="wa-pill ${esc(status)}">${esc(status)}</span>
+          <button type="button" class="button button-small" data-act="auto">Mode auto</button>
+          <button type="button" class="button button-small" data-act="human">Reprendre</button>
+          <button type="button" class="button button-small" data-act="closed">Clôturer</button>
+        </div>
+        <div class="wa-msgs" data-msgs></div>
+        <form class="wa-send" data-send>
+          <textarea name="body" placeholder="Réponse manuelle…" required></textarea>
+          <button type="submit" class="button button-primary">Envoyer</button>
+        </form>
+      `;
+            const msgsEl = conv.querySelector("[data-msgs]");
+            msgsEl.innerHTML = messages.map((m) => `
+        <div class="wa-msg ${m.direction === "outbound" ? "outbound" : "inbound"}">
+          <div>${esc(m.body)}</div>
+          <div class="when">${fmt(m.occurred_at)}${m.ai_generated ? " · IA" : ""}</div>
+        </div>
+      `).join("");
+            msgsEl.scrollTop = msgsEl.scrollHeight;
+
+            conv.querySelectorAll("[data-act]").forEach((btn) => {
+                btn.addEventListener("click", async () => {
+                    const newStatus = btn.getAttribute("data-act");
+                    await fetch("/api/ops/whatsapp", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { "content-type": "application/json" },
+                        body: JSON.stringify({ action: "set_status", wa_id: thread.wa_id, status: newStatus })
+                    });
+                    openThread(thread.wa_id);
+                    loadThreads();
+                });
+            });
+
+            conv.querySelector("[data-send]").addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const body = e.target.body.value.trim();
+                if (!body) return;
+                const r = await fetch("/api/ops/whatsapp", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({ action: "send", wa_id: thread.wa_id, body })
+                });
+                const data = await r.json();
+                if (data.ok) {
+                    e.target.body.value = "";
+                    openThread(thread.wa_id);
+                    loadThreads();
+                } else {
+                    alert("Envoi refusé: " + (data.message || "erreur"));
+                }
+            });
+        }
+
+        document.querySelector("[data-wa-refresh]").addEventListener("click", loadThreads);
+        loadThreads();
+    </script>
+</body>
+
+</html>

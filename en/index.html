@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-CA">
 
 <head>
@@ -59,7 +59,7 @@
       "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
       "priceRange": "$$",
       "currenciesAccepted": "CAD",
-      "paymentAccepted": "Credit Card, Interac, Bank Transfer",
+      "paymentAccepted": "Credit Card, Interac, Bank Transfer, Bitcoin",
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -68,12 +68,8 @@
       },
       "areaServed": ["Montreal", "Laval", "Longueuil", "Brossard", "North Shore", "South Shore", "Quebec", "Canada"],
       "availableLanguage": ["en-CA", "fr-CA"],
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Longueuil",
-        "addressRegion": "QC",
-        "addressCountry": "CA"
-      },
+      "sameAs": ["https://www.facebook.com/profile.php?id=61588752816284"],
+      "address":{"@type":"PostalAddress","streetAddress":"5184 boulevard Cousineau","addressLocality":"Longueuil","addressRegion":"QC","postalCode":"J3Y 7G5","addressCountry":"CA"},
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Data Recovery Services",
@@ -180,10 +176,9 @@
           <img src="/assets/icons/logo-petit.svg" alt="NEXURA DATA" class="brand-logo">
         </a>
         <div class="nav-links">
-          <a href="/en/pages/services/forensique-numerique-montreal.html">Services</a>
-          <a href="/en/pages/services/tarifs-recuperation-donnees-montreal.html">Pricing</a>
-          <a href="/en/pages/legal/politique-confidentialite.html">Privacy</a>
-          <a href="/en/pages/legal/conditions-intervention-paiement.html">Terms</a>
+          <a href="/en/forensique-numerique-montreal.html">Services</a>
+          <a href="/en/tarifs-recuperation-donnees-montreal.html">Pricing</a>
+          <a href="/en/comment-nous-envoyer-vos-donnees.html">Shipping &amp; drop-off</a>
           <a href="/en/#contact">Contact</a>
           <a class="nav-tel" href="tel:+14388130592" data-track="call-header" aria-label="Call the lab">438 813-0592</a>
           <a href="/" class="lang-switch" lang="fr">FR</a>
@@ -195,49 +190,30 @@
   <main id="content">
     <section class="hero section" aria-labelledby="hero-title">
       <div class="hero-backdrop" aria-hidden="true"></div>
-      <div class="container hero-grid hero-grid--split">
-        <div class="hero-copy">
+      <div class="container hero-grid">
+        <div class="hero-copy hero-copy--centered">
           <p class="eyebrow">Data recovery · Montreal</p>
-          <h1 id="hero-title">Your data isn't lost. Not yet.</h1>
+          <a class="hero-ai-badge" href="intelligence-artificielle-laboratoire.html"
+            aria-label="Learn more about local AI at the lab">
+            <span class="hero-ai-badge__dot" aria-hidden="true"></span>
+            <span class="hero-ai-badge__text">Local AI at the lab · Quebec Law&nbsp;25 compliant</span>
+          </a>
+          <p class="lab-status" data-lab-status aria-live="polite"><span data-lab-status-text>Lab 7/7 · 9 AM–6 PM
+              Montreal time</span></p>
+          <h1 id="hero-title">We can probably recover your data.</h1>
           <p class="hero-lead">
-            Broken phone, computer that won't start, unreadable USB key, server that crashed…
-            We take a look for free. We tell you what we can recover, the price, the timeline.
-            <strong>You decide next.</strong>
+            Broken phone, computer that won't start, file deleted by mistake…
+            Write to us. We take a look for free and tell you honestly.
           </p>
           <div class="hero-actions">
-            <a href="#contact" class="button button-primary">Start for free</a>
-            <a href="#tarifs-apercu" class="button button-secondary">View pricing</a>
+            <a href="#contact" class="button button-primary button--xl" data-track="cta-hero-primary">Contact us</a>
+            <a href="#instant-quote" class="hero-link">or get a free estimate in 30&nbsp;s</a>
           </div>
           <ul class="hero-checklist" role="list">
-            <li>Reply within 24 h</li>
-            <li>Free assessment, firm price before any work</li>
-            <li>If we recover nothing, you pay nothing</li>
+            <li>Free assessment, no commitment</li>
+            <li>No upfront payment · if we recover nothing, you pay nothing</li>
           </ul>
         </div>
-        <aside class="hero-panel" aria-label="Lab commitment">
-          <div class="hero-panel-card">
-            <p class="hero-panel-eyebrow">Lab commitment</p>
-            <p class="hero-panel-headline">Free assessment, no commitment, within 24 h.</p>
-            <ol class="hero-panel-list" role="list">
-              <li><span>1</span>
-                <div><strong>You describe the problem</strong><em>2 minutes online</em></div>
-              </li>
-              <li><span>2</span>
-                <div><strong>We examine the device</strong><em>No charge at this stage</em></div>
-              </li>
-              <li><span>3</span>
-                <div><strong>We give you a firm price</strong><em>Timeline and odds of success</em></div>
-              </li>
-              <li><span>4</span>
-                <div><strong>You decide</strong><em>No agreement, no invoice</em></div>
-              </li>
-            </ol>
-            <div class="hero-panel-signature">
-              <p class="sig-title">Certified Forensic Examiner (CFE)</p>
-              <p class="sig-meta">NEXURADATA Lab · Longueuil, QC</p>
-            </div>
-          </div>
-        </aside>
       </div>
     </section>
 
@@ -273,7 +249,7 @@
         <div class="quote-layout">
           <div class="quote-intro">
             <p class="eyebrow">Instant estimate</p>
-            <h2 id="quote-title">How much will it cost? In 30 seconds.</h2>
+            <h2 id="quote-title">Find out what it'll cost — in 30 seconds.</h2>
             <p class="quote-lead">
               Three questions. You get a real price range, the turnaround and the next step.
               No commitment. No email required.
@@ -288,13 +264,18 @@
           <form class="quote-card" id="quote-form" novalidate>
             <fieldset class="quote-step">
               <legend>1. Which device?</legend>
-              <div class="quote-options" data-quote-group="device">
-                <label><input type="radio" name="device" value="phone"><span>Phone / tablet</span></label>
-                <label><input type="radio" name="device" value="laptop"><span>Laptop / computer</span></label>
-                <label><input type="radio" name="device" value="hdd"><span>Hard drive (HDD)</span></label>
-                <label><input type="radio" name="device" value="ssd"><span>SSD / NVMe</span></label>
-                <label><input type="radio" name="device" value="usb"><span>USB stick / SD card</span></label>
-                <label><input type="radio" name="device" value="raid"><span>RAID / NAS / server</span></label>
+              <div class="quote-options quote-options--cards" data-quote-group="device">
+                <label data-icon="phone"><input type="radio" name="device" value="phone"><span>Phone /
+                    tablet</span></label>
+                <label data-icon="laptop"><input type="radio" name="device" value="laptop"><span>Laptop /
+                    computer</span></label>
+                <label data-icon="hdd"><input type="radio" name="device" value="hdd"><span>Hard drive
+                    (HDD)</span></label>
+                <label data-icon="ssd"><input type="radio" name="device" value="ssd"><span>SSD / NVMe</span></label>
+                <label data-icon="usb"><input type="radio" name="device" value="usb"><span>USB stick / SD
+                    card</span></label>
+                <label data-icon="raid"><input type="radio" name="device" value="raid"><span>RAID / NAS /
+                    server</span></label>
               </div>
             </fieldset>
 
@@ -354,7 +335,7 @@
             <p>Phone, computer, USB key, external drive, memory card. We explain it in plain words.</p>
             <span class="audience-cta">See personal pricing →</span>
           </a>
-          <a href="/pages/services/mandats-entreprise.html" class="audience-card audience-card--pro">
+          <a href="mandats-entreprise.html" class="audience-card audience-card--pro">
             <p class="audience-tag">Business</p>
             <h2>Our business server, NAS or storage system went down</h2>
             <p>Lawyers, accountants, SMBs. Priority service, contract, official report, chain of custody.</p>
@@ -367,8 +348,8 @@
     <section class="section case-ledger-section" aria-label="Selected case files">
       <div class="container">
         <header class="case-ledger-head">
-          <p class="case-ledger-eyebrow">[ § 02 —— SELECTED CASE FILES ]</p>
-          <h2 class="case-ledger-title">Excerpts from the 2024–2025 register.</h2>
+          <p class="case-ledger-eyebrow">[ § 02 — SELECTED CASE FILES ]</p>
+          <h2 class="case-ledger-title">From the 2024–2025 case register.</h2>
           <p class="case-ledger-lead">
             Three real cases, anonymized. Drawn from closed files with client consent.
           </p>
@@ -531,7 +512,7 @@
             <p class="guide-meta">01</p>
             <h3>Computer, hard drive, USB, memory card</h3>
             <p>Drive that won't start, files deleted by mistake, USB key that won't open, unreadable camera card.</p>
-            <a class="service-link" href="/pages/services/recuperation-donnees-montreal.html">See how we handle it</a>
+            <a class="service-link" href="recuperation-donnees-montreal.html">See how we handle it</a>
           </article>
 
           <article class="page-card guide-card">
@@ -539,7 +520,7 @@
             <h3>Business server, NAS, multiple disks</h3>
             <p>The office storage system has crashed. Multiple disks at once. Technical cases where you must not try
               anything yourself.</p>
-            <a class="service-link" href="/pages/services/recuperation-raid-ssd-montreal.html">See how we handle it</a>
+            <a class="service-link" href="recuperation-raid-ssd-montreal.html">See how we handle it</a>
           </article>
 
           <article class="page-card guide-card">
@@ -547,7 +528,7 @@
             <h3>Phone, tablet</h3>
             <p>Cracked screen, phone that won't power on, photos and messages no longer accessible. iPhone and Android.
             </p>
-            <a class="service-link" href="/pages/services/recuperation-telephone-montreal.html">See how we handle it</a>
+            <a class="service-link" href="recuperation-telephone-montreal.html">See how we handle it</a>
           </article>
 
           <article class="page-card guide-card">
@@ -555,21 +536,36 @@
             <h3>Investigation, digital evidence</h3>
             <p>You need court-admissible evidence: emails, messages, deleted files, device history. Certified expert
               report.</p>
-            <a class="service-link" href="/pages/services/forensique-numerique-montreal.html">See how we handle it</a>
+            <a class="service-link" href="forensique-numerique-montreal.html">See how we handle it</a>
           </article>
 
           <article class="page-card guide-card">
             <p class="guide-meta">05</p>
             <h3>Business and legal engagements</h3>
             <p>Lawyers, accountants, SMBs: service agreement, priority handling, chain of custody, official reports.</p>
-            <a class="service-link" href="/pages/services/mandats-entreprise.html">See how we handle it</a>
+            <a class="service-link" href="mandats-entreprise.html">See how we handle it</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">06</p>
+            <h3>Local AI-powered file triage</h3>
+            <p>Automated sorting of recovered files by AI running <strong>at the lab</strong>. No data sent to any
+              third-party service. Quebec Law&nbsp;25 compliant.</p>
+            <a class="service-link" href="intelligence-artificielle-laboratoire.html">See how we handle it</a>
+          </article>
+
+          <article class="page-card guide-card">
+            <p class="guide-meta">Guide</p>
+            <h3>Dead Hard Drive or Just Failing? How to Tell</h3>
+            <p>Complete guide to diagnosing a failing hard drive. Learn critical signals, DIY tests, and when to call the lab.</p>
+            <a class="service-link" href="diagnostic-disque-dur-mort-ou-en-panne.html">Read the full article</a>
           </article>
         </div>
 
         <div class="page-links" data-reveal>
-          <a class="button button-secondary" href="/pages/services/tarifs-recuperation-donnees-montreal.html">Indicative pricing</a>
-          <a class="button button-primary" href="/pages/services/reserver-creneau-laboratoire.html">Book a drop-off slot</a>
-          <a class="button button-secondary" href="/pages/services/suivi-dossier-client-montreal.html">Case status</a>
+          <a class="button button-secondary" href="tarifs-recuperation-donnees-montreal.html">Indicative pricing</a>
+          <a class="button button-primary" href="reserver-creneau-laboratoire.html">Book a drop-off slot</a>
+          <a class="button button-secondary" href="suivi-dossier-client-montreal.html">Case status</a>
         </div>
       </div>
     </section>
@@ -583,6 +579,61 @@
             You know exactly what to expect, from the first email to the recovery.
           </p>
         </div>
+
+        <figure class="motion-explainer" aria-label="Animation of the five process stages">
+          <figcaption class="motion-explainer__caption">
+            <span>The process, in motion</span>
+            <span>Diagnostic → Delivery</span>
+          </figcaption>
+          <svg class="motion-explainer__svg" viewBox="0 0 880 160" role="img" aria-hidden="true" focusable="false">
+            <g class="motion-flow" stroke="rgba(238,241,244,0.25)" stroke-width="1.5" fill="none">
+              <line class="flow" x1="110" y1="60" x2="260" y2="60" />
+              <line class="flow" x1="310" y1="60" x2="460" y2="60" />
+              <line class="flow" x1="510" y1="60" x2="660" y2="60" />
+              <line class="flow" x1="710" y1="60" x2="830" y2="60" />
+            </g>
+            <g class="motion-stage" transform="translate(60,60)">
+              <circle r="22" fill="none" stroke="rgba(238,241,244,0.3)" stroke-width="1" />
+              <circle class="dot" r="7" fill="#f5b400" />
+              <text y="55" text-anchor="middle" fill="#eef1f4" font-family="IBM Plex Mono, monospace"
+                font-size="11">DIAGNOSTIC</text>
+              <text y="72" text-anchor="middle" fill="rgba(238,241,244,0.55)" font-family="IBM Plex Mono, monospace"
+                font-size="9">24 h · free</text>
+            </g>
+            <g class="motion-stage" transform="translate(285,60)">
+              <circle r="22" fill="none" stroke="rgba(238,241,244,0.3)" stroke-width="1" />
+              <circle class="dot" r="7" fill="#f5b400" />
+              <text y="55" text-anchor="middle" fill="#eef1f4" font-family="IBM Plex Mono, monospace"
+                font-size="11">EXTRACTION</text>
+              <text y="72" text-anchor="middle" fill="rgba(238,241,244,0.55)" font-family="IBM Plex Mono, monospace"
+                font-size="9">sector-by-sector image</text>
+            </g>
+            <g class="motion-stage" transform="translate(485,60)">
+              <circle r="22" fill="none" stroke="rgba(238,241,244,0.3)" stroke-width="1" />
+              <circle class="dot" r="7" fill="#f5b400" />
+              <text y="55" text-anchor="middle" fill="#eef1f4" font-family="IBM Plex Mono, monospace"
+                font-size="11">REPAIR</text>
+              <text y="72" text-anchor="middle" fill="rgba(238,241,244,0.55)" font-family="IBM Plex Mono, monospace"
+                font-size="9">PCB · NAND · RAID</text>
+            </g>
+            <g class="motion-stage" transform="translate(685,60)">
+              <circle r="22" fill="none" stroke="rgba(238,241,244,0.3)" stroke-width="1" />
+              <circle class="dot" r="7" fill="#f5b400" />
+              <text y="55" text-anchor="middle" fill="#eef1f4" font-family="IBM Plex Mono, monospace"
+                font-size="11">VERIFICATION</text>
+              <text y="72" text-anchor="middle" fill="rgba(238,241,244,0.55)" font-family="IBM Plex Mono, monospace"
+                font-size="9">tree + hash</text>
+            </g>
+            <g class="motion-stage" transform="translate(840,60)">
+              <circle r="22" fill="none" stroke="rgba(238,241,244,0.3)" stroke-width="1" />
+              <circle class="dot" r="7" fill="#2ecc71" />
+              <text y="55" text-anchor="middle" fill="#eef1f4" font-family="IBM Plex Mono, monospace"
+                font-size="11">DELIVERY</text>
+              <text y="72" text-anchor="middle" fill="rgba(238,241,244,0.55)" font-family="IBM Plex Mono, monospace"
+                font-size="9">encrypted media</text>
+            </g>
+          </svg>
+        </figure>
 
         <div class="guide-grid" data-reveal>
           <article class="page-card guide-card">
@@ -658,7 +709,7 @@
         </div>
 
         <div class="page-links" data-reveal>
-          <a class="button button-secondary" href="/pages/services/tarifs-recuperation-donnees-montreal.html">Full pricing</a>
+          <a class="button button-secondary" href="tarifs-recuperation-donnees-montreal.html">Full pricing</a>
         </div>
       </div>
     </section>
@@ -722,11 +773,11 @@
       </div>
     </section>
 
-    <section class="section section-lined" aria-labelledby="trust-title">
+    <section class="section section-lined" aria-labelledby="why-title">
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Why NEXURADATA</p>
-          <h2 id="trust-title">Real reasons to trust us</h2>
+          <h2 id="why-title">Real reasons to trust us</h2>
         </div>
 
         <div class="trust-grid" data-reveal>
@@ -740,7 +791,7 @@
             <h3>Certified Forensic Examiner (CFE)</h3>
             <p>Internationally recognized qualification in digital forensic analysis. Testimony before federal and
               provincial courts.</p>
-            <a class="service-link" href="/en/pages/services/le-laboratoire.html">The lab</a>
+            <a class="service-link" href="/en/le-laboratoire.html">The lab</a>
           </article>
 
           <article class="page-card trust-card">
@@ -757,13 +808,13 @@
           <article class="page-card trust-card">
             <h3>Real confidentiality</h3>
             <p>Secure intake, controlled access, full traceability. Compliant with Quebec's Law 25.</p>
-            <a class="service-link" href="/pages/services/reception-securisee-donnees-montreal.html">Secure intake process</a>
+            <a class="service-link" href="reception-securisee-donnees-montreal.html">Secure intake process</a>
           </article>
 
           <article class="page-card trust-card">
             <h3>Published pricing</h3>
             <p>Starting prices are published for the most common cases. No hidden fees, no opaque quoting.</p>
-            <a class="service-link" href="/pages/services/tarifs-recuperation-donnees-montreal.html">View pricing</a>
+            <a class="service-link" href="tarifs-recuperation-donnees-montreal.html">View pricing</a>
           </article>
 
           <article class="page-card trust-card">
@@ -879,7 +930,7 @@
                 <label class="consent-check field-full">
                   <input type="checkbox" name="consentement" required>
                   <span>I authorize NEXURA DATA to use this information to open my case and contact me about it. No
-                    marketing. Details&nbsp;: <a href="/pages/legal/politique-confidentialite.html">Privacy policy</a>.</span>
+                    marketing. Details&nbsp;: <a href="politique-confidentialite.html">Privacy policy</a>.</span>
                 </label>
 
                 <label class="field field-honeypot" aria-hidden="true">
@@ -890,7 +941,7 @@
 
               <div class="form-actions">
                 <button type="submit" class="button button-primary">Open a case</button>
-                <a href="mailto:contact@nexuradata.ca?subject=Urgent%20NEXURADATA%20request"
+                <a href="mailto:urgence@nexuradata.ca?subject=Urgent%20NEXURADATA%20request"
                   class="button button-secondary">Urgent email</a>
               </div>
 
@@ -911,10 +962,13 @@
                 <h3>Contact</h3>
                 <a href="mailto:contact@nexuradata.ca">contact@nexuradata.ca</a>
                 <address>
-                  Greater Longueuil area (Quebec), Canada<br>
+                  5184 boul. Cousineau<br>
+                  Longueuil (Quebec) J3Y&nbsp;7G5<br>
                   Full mailing address provided on request
                 </address>
                 <p><strong>Open 7/7</strong> — 9 AM to 6 PM</p>
+                <p class="lab-status" data-lab-status aria-live="polite"><span data-lab-status-text>Live status</span>
+                </p>
                 <p>Emergency requests accepted 24/7 by email.</p>
               </article>
             </div>
@@ -983,20 +1037,33 @@
           <small>PRIVACY</small>
           <p><a href="mailto:privacy@nexuradata.ca">privacy@nexuradata.ca</a></p>
         </div>
+
+        <div class="footer-block" data-social-fb>
+          <small>FOLLOW US</small>
+          <p><a href="https://www.facebook.com/profile.php?id=61588752816284" target="_blank" rel="noopener"
+              aria-label="NEXURADATA on Facebook">Facebook</a></p>
+        </div>
       </section>
 
       <section class="footer-legal" aria-label="Legal links">
-        <a href="/en/pages/legal/mentions-legales.html">Legal notice</a>
-        <a href="/en/pages/legal/politique-confidentialite.html">Privacy policy</a>
-        <a href="/en/pages/services/engagements-conformite-quebec.html">Quebec commitments</a>
-        <a href="/en/pages/legal/conditions-intervention-paiement.html">Terms of service</a>
+        <a href="/en/mentions-legales.html">Legal notice</a>
+        <a href="/en/politique-confidentialite.html">Privacy policy</a>
+        <a href="/en/engagements-conformite-quebec.html">Quebec commitments</a>
+        <a href="/en/conditions-intervention-paiement.html">Terms of service</a>
       </section>
 
       <section class="footer-note" aria-label="Operating note">
         <p>
-          NEXURA DATA operates in Canada in data recovery and specialized analysis.
-          All interventions are performed following a prior assessment and after
-          validation of the applicable terms.
+          NEXURA DATA is a trade name operated by <strong>Groupe Investissements B&amp;C inc.</strong>
+          (Quebec Enterprise Number <a href="https://www.registreentreprises.gouv.qc.ca/RQEntrepriseGRExt/GR/GR03/GR03A2_19A_PIU_RechEnt_PC/PageRechSimple.aspx" target="_blank" rel="noopener">1172436702</a>),
+          a Quebec corporation. Data recovery, RAID, NAS, servers and digital forensics in Canada.
+          Every intervention is preceded by an assessment and governed by written terms.
+        </p>
+        <p>
+          <strong>Confidentiality.</strong> Submitted media and recovered files are processed
+          exclusively on the laboratory's infrastructure in Montreal and are never transmitted to
+          any third party, in accordance with Quebec's <em>Law 25</em> and Canada's federal
+          <em>PIPEDA</em>. See the <a href="/en/politique-confidentialite.html">privacy policy</a>.
         </p>
       </section>
     </div>

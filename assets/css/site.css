@@ -1,4 +1,4 @@
-/* ── Brand tokens — refreshed 2026 (clinical / forensic monochrome) ─ */
+﻿/* ── Brand tokens — refreshed 2026 (clinical / forensic monochrome) ─ */
 :root {
   --noir: #0a0d12;
   --os: #e8e4dc;
@@ -194,9 +194,15 @@ select {
 /* ── Locked branding: header/nav ─────────────────────────────── */
 .brand-logo {
   display: block;
-  height: 56px;
+  height: 104px;
   width: auto;
   max-width: none;
+}
+
+@media (max-width: 720px) {
+  .brand-logo {
+    height: 76px;
+  }
 }
 
 .footer-logo {
@@ -213,7 +219,25 @@ select {
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
   background: var(--noir);
-  border-bottom: var(--rule);
+  border-bottom: 0;
+}
+
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232, 228, 220, 0.04) 12%,
+    rgba(232, 228, 220, 0.28) 50%,
+    rgba(232, 228, 220, 0.04) 88%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 /* Brand-locked nav — LOCKED */
@@ -222,7 +246,7 @@ select {
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  padding: 16px 0;
+  padding: 22px 0;
 }
 
 .brand {
@@ -255,10 +279,26 @@ select {
 .footer-block a {
   color: var(--os);
   text-decoration: none;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  opacity: 0.78;
+  transition: opacity 0.2s ease;
+}
+
+.footer-legal a,
+.footer-block a {
   font-size: 0.78rem;
   letter-spacing: var(--tracking-xwide);
   opacity: 0.78;
-  transition: opacity 0.2s ease;
+}
+
+/* Email + phone links keep readable spacing and never break mid-address. */
+.footer-block a[href^="mailto:"],
+.footer-block a[href^="tel:"] {
+  letter-spacing: normal;
+  font-size: 0.95rem;
+  text-transform: none;
+  overflow-wrap: anywhere;
 }
 
 .nav-links a:hover,
@@ -276,13 +316,13 @@ select {
 .nav-links .nav-tel {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.95rem;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
   border: 1px solid var(--color-line-strong);
   border-radius: 2px;
   color: var(--color-text);
   font-weight: 500;
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   letter-spacing: 0.04em;
   opacity: 1;
   transition: border-color 0.18s ease, color 0.18s ease;
@@ -320,7 +360,7 @@ select {
 
 .brand img {
   display: block;
-  height: 56px;
+  height: 88px;
   width: auto;
 }
 
@@ -2486,8 +2526,58 @@ select {
 .impact-stats-section {
   padding-top: 3.5rem;
   padding-bottom: 3.5rem;
-  border-top: var(--rule);
-  border-bottom: var(--rule);
+  border-top: 0;
+  border-bottom: 0;
+  position: relative;
+}
+
+.impact-stats-section::before,
+.impact-stats-section::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(880px, 80%);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232, 228, 220, 0.05) 18%,
+    rgba(232, 228, 220, 0.32) 50%,
+    rgba(232, 228, 220, 0.05) 82%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.impact-stats-section::before { top: 0; }
+.impact-stats-section::after  { bottom: 0; }
+
+/* Generic divider utility — drop <hr class="nxd-divider"> or wrap */
+.nxd-divider {
+  border: 0;
+  height: 1px;
+  margin: 2.5rem auto;
+  width: min(880px, 80%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(232, 228, 220, 0.05) 18%,
+    rgba(232, 228, 220, 0.32) 50%,
+    rgba(232, 228, 220, 0.05) 82%,
+    transparent 100%
+  );
+}
+
+.nxd-divider--accent {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 169, 106, 0.08) 20%,
+    rgba(201, 169, 106, 0.55) 50%,
+    rgba(201, 169, 106, 0.08) 80%,
+    transparent 100%
+  );
 }
 
 .impact-stats {
@@ -2573,6 +2663,92 @@ select {
   width: 14px;
   height: 1px;
   background: rgba(238, 241, 244, 0.55);
+}
+
+/* Motion explainer — animated SVG process */
+.motion-explainer {
+  margin: 2.5rem auto 1.5rem;
+  max-width: 920px;
+  padding: 1.75rem;
+  border: 1px solid rgba(238, 241, 244, 0.14);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(238, 241, 244, 0.03) 0%, rgba(0, 0, 0, 0.18) 100%);
+}
+
+.motion-explainer__caption {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 0 0 1rem;
+  font-family: var(--mono, "IBM Plex Mono", monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(238, 241, 244, 0.6);
+}
+
+.motion-explainer__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.motion-stage circle.dot {
+  transform-origin: center;
+  animation: nx-pulse 4s ease-in-out infinite;
+}
+
+.motion-stage:nth-child(1) circle.dot {
+  animation-delay: 0s;
+}
+
+.motion-stage:nth-child(2) circle.dot {
+  animation-delay: 0.8s;
+}
+
+.motion-stage:nth-child(3) circle.dot {
+  animation-delay: 1.6s;
+}
+
+.motion-stage:nth-child(4) circle.dot {
+  animation-delay: 2.4s;
+}
+
+.motion-stage:nth-child(5) circle.dot {
+  animation-delay: 3.2s;
+}
+
+@keyframes nx-pulse {
+
+  0%,
+  100% {
+    r: 7;
+    opacity: 0.5;
+  }
+
+  50% {
+    r: 11;
+    opacity: 1;
+  }
+}
+
+.motion-flow line.flow {
+  stroke-dasharray: 6 4;
+  animation: nx-flow 1.5s linear infinite;
+}
+
+@keyframes nx-flow {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .motion-stage circle.dot,
+  .motion-flow line.flow {
+    animation: none;
+  }
 }
 
 .hero-panel {
@@ -2786,7 +2962,7 @@ select {
   }
 
   .brand img {
-    height: clamp(40px, 11vw, 52px);
+    height: clamp(60px, 14vw, 76px);
   }
 
   .nav-toggle {
@@ -3040,7 +3216,7 @@ select {
 
 @media (max-width: 640px) {
   .brand-logo {
-    height: 44px;
+    height: 56px;
   }
 
   .footer-logo {
@@ -3465,17 +3641,17 @@ body.nxd-consent-open .sticky-bar {
   border-top: 1px solid rgba(238, 241, 244, 0.18);
   border-bottom: 1px solid rgba(238, 241, 244, 0.18);
   color: var(--os);
-  padding-block: clamp(3rem, 6vw, 5rem);
+  padding-block: clamp(4rem, 8vw, 6rem);
 }
 
 .quote-section .container {
-  max-width: 1180px;
+  max-width: 1360px;
 }
 
 .quote-layout {
   display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
   align-items: start;
 }
 
@@ -3579,12 +3755,12 @@ body.nxd-consent-open .sticky-bar {
 .quote-options label {
   position: relative;
   display: block;
-  padding: 0.7rem 0.85rem;
+  padding: 0.9rem 1rem;
   border: 1px solid rgba(238, 241, 244, 0.18);
   background: rgba(238, 241, 244, 0.03);
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   color: rgba(238, 241, 244, 0.88);
   line-height: 1.3;
 }
@@ -5490,8 +5666,8 @@ html[lang^='en'] .trust-bar::before {
    ============================================================ */
 .sticky-bar {
   position: fixed;
-  right: 0.75rem;
-  bottom: 0.75rem;
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
   display: flex;
   gap: 0.4rem;
   z-index: 90;
@@ -5568,7 +5744,57 @@ html[lang^='en'] .trust-bar::before {
   }
 
   .sticky-bar-item--wa::before {
-    content: "💬";
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'/></svg>") center / contain no-repeat;
+    mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'><path d='M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z'/></svg>") center / contain no-repeat;
+  }
+}
+
+/* Subtle pulse on the call CTA — draws the eye in panic mode without being noisy. */
+.sticky-bar-item--call .sticky-call-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  margin-right: 0.25rem;
+  position: relative;
+}
+
+.sticky-bar-item--call .sticky-call-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.7;
+  animation: nxd-call-ping 2.4s cubic-bezier(0.0, 0.0, 0.2, 1) infinite;
+}
+
+@keyframes nxd-call-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+
+  80% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sticky-bar-item--call .sticky-call-dot::after {
+    animation: none;
+    opacity: 0;
   }
 }
 
@@ -6659,8 +6885,8 @@ html[lang^='en'] .trust-bar::before {
   background-size: 48px 48px;
   pointer-events: none;
   z-index: 0;
-  mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
   -webkit-mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
+  mask-image: radial-gradient(ellipse at top, rgba(0, 0, 0, 0.85), transparent 80%);
 }
 
 .page-hero>*,
@@ -6699,24 +6925,23 @@ html[lang^='en'] .trust-bar::before {
   text-transform: uppercase;
 }
 
-/* ── BRUTALIST DATA BAND — concentric circle rhythm ─────────── */
+/* ── BRUTALIST DATA BAND — refined dot rhythm ─────────────────
+ * (Was a dense radar-circle pattern repeated edge-to-edge — too noisy.
+ *  Reduced to a single subtle dot row with horizontal fade.)              */
 .brutalist-band {
-  height: 140px;
+  height: 64px;
   width: 100%;
   background-color: var(--color-bg-soft);
   background-image:
-    /* outer ring */
-    radial-gradient(circle, transparent 26px, var(--color-text) 26px, var(--color-text) 28px, transparent 29px),
-    /* inner solid disc */
-    radial-gradient(circle, var(--color-text) 9px, transparent 10px),
-    /* mid ring */
-    radial-gradient(circle, transparent 16px, var(--color-text-muted) 16px, var(--color-text-muted) 17px, transparent 18px);
-  background-size: 80px 80px, 80px 80px, 80px 80px;
-  background-position: center, center, center;
+    radial-gradient(circle, rgba(232, 228, 220, 0.22) 1.5px, transparent 2px);
+  background-size: 28px 28px;
+  background-position: center;
   border-top: 1px solid var(--color-line-strong);
   border-bottom: 1px solid var(--color-line-strong);
   position: relative;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
 }
 
 /* ── BRUTALIST CIRCLE GRID — dot field, fades at edges ───────── */
@@ -6730,8 +6955,8 @@ html[lang^='en'] .trust-bar::before {
   background-position: center;
   border-top: 1px solid var(--color-line-strong);
   border-bottom: 1px solid var(--color-line-strong);
-  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
 }
 
 /* ── BRUTALIST CROSSHAIR GRID — engineering plate ──────────────── */
@@ -6749,8 +6974,8 @@ html[lang^='en'] .trust-bar::before {
   border-bottom: 1px solid var(--color-line-strong);
   position: relative;
   overflow: hidden;
-  mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 100% at center, black 50%, transparent 100%);
 }
 
 .brutalist-crosshair::before,
@@ -6888,6 +7113,7 @@ html[lang^='en'] .trust-bar::before {
   z-index: 2;
   pointer-events: none;
 }
+
 html[lang^="en"] .hero::after {
   content: "FILE / NXD-2026-LIVE · MTL · LAB · 01";
 }
@@ -6896,6 +7122,7 @@ html[lang^="en"] .hero::after {
 .hero .container {
   position: relative;
 }
+
 .hero .container::before,
 .hero .container::after {
   content: "";
@@ -6907,11 +7134,13 @@ html[lang^="en"] .hero::after {
   pointer-events: none;
   z-index: 2;
 }
+
 .hero .container::before {
   top: -8px;
   left: -8px;
   border-width: 1px 0 0 1px;
 }
+
 .hero .container::after {
   bottom: -8px;
   right: -8px;
@@ -6928,6 +7157,7 @@ html[lang^="en"] .hero::after {
   color: rgba(232, 228, 220, 0.62);
   text-transform: uppercase;
 }
+
 .hero-copy .eyebrow::before {
   content: "§ 00 ——";
   position: absolute;
@@ -6945,6 +7175,7 @@ html[lang^="en"] .hero::after {
   font-size: 0.78rem;
   padding-left: 1.6rem;
 }
+
 .hero-actions .button-primary::before {
   content: "▸";
   position: absolute;
@@ -6954,6 +7185,7 @@ html[lang^="en"] .hero::after {
   font-size: 0.7rem;
   opacity: 0.7;
 }
+
 .hero-actions .button-secondary {
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -6961,12 +7193,16 @@ html[lang^="en"] .hero::after {
 }
 
 /* Section eyebrow indexed system — auto-numbered via counter */
-main { counter-reset: section-idx; }
-.section > .container > h2,
-.section > .container > .section-heading {
+main {
+  counter-reset: section-idx;
+}
+
+.section>.container>h2,
+.section>.container>.section-heading {
   counter-increment: section-idx;
 }
-.section > .container > .section-heading::before {
+
+.section>.container>.section-heading::before {
   content: "§ " counter(section-idx, decimal-leading-zero) " ——";
   display: block;
   font-family: "IBM Plex Mono", "Consolas", monospace;
@@ -6978,15 +7214,31 @@ main { counter-reset: section-idx; }
 }
 
 /* Z-index lift hero content above watermark */
-.hero-grid { position: relative; z-index: 1; }
+.hero-grid {
+  position: relative;
+  z-index: 1;
+}
 
 /* Mobile: kill bracket noise */
 @media (max-width: 720px) {
-  .hero::after { display: none; }
+  .hero::after {
+    display: none;
+  }
+
   .hero .container::before,
-  .hero .container::after { display: none; }
-  .hero-copy .eyebrow { padding-left: 0; }
-  .hero-copy .eyebrow::before { position: static; display: block; margin-bottom: 0.5rem; }
+  .hero .container::after {
+    display: none;
+  }
+
+  .hero-copy .eyebrow {
+    padding-left: 0;
+  }
+
+  .hero-copy .eyebrow::before {
+    position: static;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -7025,13 +7277,22 @@ main { counter-reset: section-idx; }
   height: 22px !important;
   border-color: rgba(232, 228, 220, 0.32) !important;
 }
-.hero .container::before { top: -14px !important; left: -14px !important; }
-.hero .container::after { bottom: -14px !important; right: -14px !important; }
+
+.hero .container::before {
+  top: -14px !important;
+  left: -14px !important;
+}
+
+.hero .container::after {
+  bottom: -14px !important;
+  right: -14px !important;
+}
 
 /* Eyebrow indexed — more subtle, no decorative §00 */
 .hero-copy .eyebrow {
   padding-left: 0 !important;
 }
+
 .hero-copy .eyebrow::before {
   content: "" !important;
   display: none !important;
@@ -7043,6 +7304,7 @@ main { counter-reset: section-idx; }
   align-items: center;
   gap: 0.7rem;
 }
+
 .hero-copy .eyebrow::after {
   content: "";
   display: inline-block;
@@ -7057,19 +7319,23 @@ main { counter-reset: section-idx; }
   padding: 1.6rem 0 1.4rem !important;
   border-bottom: 0 !important;
 }
+
 .trust-bar::before {
   font-size: 0.55rem !important;
   letter-spacing: 0.28em !important;
   color: rgba(232, 228, 220, 0.28) !important;
   top: 0.55rem !important;
 }
+
 .trust-bar-grid {
   margin-top: 0.9rem !important;
 }
+
 .trust-stat {
   padding: 0.85rem 0.9rem 0.3rem !important;
   gap: 0.4rem !important;
 }
+
 .trust-stat::before {
   top: 0 !important;
   left: 0.9rem !important;
@@ -7077,9 +7343,11 @@ main { counter-reset: section-idx; }
   letter-spacing: 0.18em !important;
   color: rgba(232, 228, 220, 0.25) !important;
 }
+
 .trust-stat strong {
   font-size: clamp(1.5rem, 2.6vw, 2rem) !important;
 }
+
 .trust-stat span {
   font-size: 0.55rem !important;
   letter-spacing: 0.18em !important;
@@ -7093,10 +7361,12 @@ main { counter-reset: section-idx; }
   border-bottom: 1px solid var(--color-line-strong) !important;
   padding: 1rem 0 1.5rem !important;
 }
+
 .standards-bar-grid {
   border-top: 1px dashed rgba(232, 228, 220, 0.08);
   padding-top: 1.2rem;
 }
+
 .standards-bar-label {
   font-size: 0.55rem !important;
   letter-spacing: 0.28em !important;
@@ -7104,6 +7374,7 @@ main { counter-reset: section-idx; }
   color: rgba(232, 228, 220, 0.42) !important;
   opacity: 1 !important;
 }
+
 .standards-tag {
   font-size: 0.62rem !important;
   letter-spacing: 0.12em !important;
@@ -7111,6 +7382,7 @@ main { counter-reset: section-idx; }
   border-color: rgba(232, 228, 220, 0.22) !important;
   color: rgba(232, 228, 220, 0.85) !important;
 }
+
 .standards-bar-list em {
   font-size: 0.7rem !important;
   color: rgba(232, 228, 220, 0.55) !important;
@@ -7124,7 +7396,7 @@ main { counter-reset: section-idx; }
 }
 
 /* Section headings: indexed prefix only on .section-heading containers, lighter */
-.section > .container > .section-heading::before {
+.section>.container>.section-heading::before {
   font-size: 0.55rem !important;
   letter-spacing: 0.28em !important;
   color: rgba(232, 228, 220, 0.32) !important;
@@ -7139,12 +7411,24 @@ main { counter-reset: section-idx; }
 
 /* Mobile: kill all decorative chrome */
 @media (max-width: 720px) {
+
   .hero::before,
-  .hero::after { display: none !important; }
+  .hero::after {
+    display: none !important;
+  }
+
   .trust-bar::before,
-  .standards-bar-grid { border-top: 0 !important; }
-  .trust-stat::before { display: none !important; }
-  .trust-stat { text-align: center !important; }
+  .standards-bar-grid {
+    border-top: 0 !important;
+  }
+
+  .trust-stat::before {
+    display: none !important;
+  }
+
+  .trust-stat {
+    text-align: center !important;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -7211,13 +7495,15 @@ main { counter-reset: section-idx; }
   transition: background 0.18s ease;
 }
 
-.case-file:first-child { border-left: 0; }
+.case-file:first-child {
+  border-left: 0;
+}
 
 .case-file:hover {
   background: rgba(232, 228, 220, 0.02);
 }
 
-.case-file > header {
+.case-file>header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -7252,7 +7538,7 @@ main { counter-reset: section-idx; }
   gap: 0.6rem;
 }
 
-.case-file dl > div {
+.case-file dl>div {
   display: grid;
   grid-template-columns: 5.5rem 1fr;
   gap: 0.7rem;
@@ -7292,11 +7578,15 @@ main { counter-reset: section-idx; }
   .case-ledger {
     grid-template-columns: 1fr;
   }
+
   .case-file {
     border-left: 0;
     border-top: 1px solid rgba(232, 228, 220, 0.08);
   }
-  .case-file:first-child { border-top: 0; }
+
+  .case-file:first-child {
+    border-top: 0;
+  }
 }
 
 /* Lab page intro card — elevated, framed */
@@ -7305,6 +7595,7 @@ main { counter-reset: section-idx; }
   background: rgba(232, 228, 220, 0.03) !important;
   position: relative;
 }
+
 .page-content-strong::before {
   content: "[ \00a7  00 ]";
   position: absolute;
@@ -7315,9 +7606,662 @@ main { counter-reset: section-idx; }
   letter-spacing: 0.28em;
   color: rgba(232, 228, 220, 0.42);
 }
+
 .page-content-strong h2 {
   font-family: "Georgia", "Times New Roman", serif !important;
   font-size: clamp(1.6rem, 2.6vw, 2rem) !important;
   font-weight: 400 !important;
   letter-spacing: -0.005em !important;
 }
+
+/* ─────────────────────────────────────────────────────────────────
+   Visual polish 2026-04 — hero grid backdrop, primary button glow,
+   trust-bar stat reveal. Everything respects prefers-reduced-motion.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Subtle technical grid behind the hero copy. Pure CSS, no JS, GPU friendly. */
+.hero {
+  isolation: isolate;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, rgba(232, 228, 220, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(232, 228, 220, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 38%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 38%, #000 30%, transparent 78%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  width: min(900px, 92vw);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  z-index: 0;
+  background:
+    radial-gradient(closest-side, rgba(125, 211, 252, 0.08), transparent 70%);
+  filter: blur(12px);
+  pointer-events: none;
+  animation: nxd-hero-pulse 12s ease-in-out infinite;
+}
+
+@keyframes nxd-hero-pulse {
+
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 0.85;
+    transform: translateX(-50%) scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero::after {
+    animation: none;
+  }
+}
+
+/* Primary button — soft accent glow + lift on hover. Keeps the sober brand. */
+.button-primary {
+  position: relative;
+  transition: transform 180ms ease, box-shadow 220ms ease, filter 220ms ease;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 8px 24px -12px rgba(232, 228, 220, 0.35);
+}
+
+.button-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 14px 32px -14px rgba(232, 228, 220, 0.55);
+}
+
+.button-primary:active {
+  transform: translateY(0);
+}
+
+.button--xl {
+  position: relative;
+}
+
+.button--xl::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(125, 211, 252, 0.0), rgba(125, 211, 252, 0.35), rgba(125, 211, 252, 0.0));
+  background-size: 220% 100%;
+  z-index: -1;
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.button--xl:hover::after {
+  opacity: 0.9;
+  animation: nxd-cta-shine 2.6s linear infinite;
+}
+
+@keyframes nxd-cta-shine {
+  to {
+    background-position: -220% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .button-primary,
+  .button-primary:hover {
+    transform: none;
+    transition: none;
+  }
+
+  .button--xl:hover::after {
+    animation: none;
+  }
+}
+
+/* Trust-bar stats — reveal & subtle count-up support. JS toggles .is-counted */
+.trust-stat strong {
+  display: inline-block;
+  transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 600ms ease;
+  transform: translateY(8px);
+  opacity: 0;
+}
+
+.trust-stat.is-counted strong {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-stat strong {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
+}
+
+/* Quote device options as visual cards (Lucide-style icons via mask). */
+.quote-options--cards {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.6rem;
+}
+
+.quote-options--cards label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  text-align: center;
+  padding: 1.1rem 0.7rem;
+  min-height: 96px;
+  border-radius: 4px;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.quote-options--cards label:hover {
+  transform: translateY(-1px);
+  background: rgba(238, 241, 244, 0.05);
+}
+
+.quote-options--cards label::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  background: currentColor;
+  -webkit-mask: var(--ico) center / contain no-repeat;
+  mask: var(--ico) center / contain no-repeat;
+  opacity: 0.85;
+  flex: none;
+}
+
+.quote-options--cards label:has(input:checked)::before {
+  opacity: 1;
+}
+
+.quote-options--cards label[data-icon="phone"] {
+  --ico: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><rect x='6' y='2' width='12' height='20' rx='2'/><line x1='10' y1='18' x2='14' y2='18'/></svg>");
+}
+
+.quote-options--cards label[data-icon="laptop"] {
+  --ico: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='12' rx='2'/><path d='M2 20h20'/></svg>");
+}
+
+.quote-options--cards label[data-icon="hdd"] {
+  --ico: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='12' rx='2'/><circle cx='7' cy='12' r='1.2'/><line x1='12' y1='12' x2='19' y2='12'/></svg>");
+}
+
+.quote-options--cards label[data-icon="ssd"] {
+  --ico: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='5' width='18' height='14' rx='2'/><line x1='7' y1='9' x2='17' y2='9'/><line x1='7' y1='13' x2='17' y2='13'/><line x1='7' y1='17' x2='12' y2='17'/></svg>");
+}
+
+.quote-options--cards label[data-icon="usb"] {
+  --ico: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M9 21V9a3 3 0 0 1 6 0v12'/><rect x='7' y='17' width='10' height='5' rx='1'/><circle cx='12' cy='5' r='2'/></svg>");
+}
+
+.quote-options--cards label[data-icon="raid"] {
+  --ico: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='3' width='18' height='6' rx='1'/><rect x='3' y='10' width='18' height='6' rx='1'/><rect x='3' y='17' width='18' height='4' rx='1'/><circle cx='6' cy='6' r='0.9'/><circle cx='6' cy='13' r='0.9'/></svg>");
+}
+
+.quote-options--cards label span {
+  font-size: 0.86rem;
+  line-height: 1.25;
+}
+
+@media (max-width: 540px) {
+  .quote-options--cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quote-options--cards label {
+    min-height: 88px;
+    padding: 0.9rem 0.55rem;
+  }
+
+  .quote-options--cards label::before {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .quote-options--cards label,
+  .quote-options--cards label:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* ── Live lab status indicator (hero eyebrow accessory) ───────── */
+.lab-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.45rem 0 0;
+  padding: 0.18rem 0.65rem 0.18rem 0.55rem;
+  border: 1px solid rgba(238, 241, 244, 0.18);
+  border-radius: 999px;
+  background: rgba(238, 241, 244, 0.04);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgba(238, 241, 244, 0.78);
+  line-height: 1.4;
+  text-transform: none;
+}
+
+.lab-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(238, 241, 244, 0.45);
+  box-shadow: 0 0 0 0 rgba(238, 241, 244, 0);
+  flex: 0 0 auto;
+}
+
+.lab-status.is-open {
+  color: #d8e8d8;
+  border-color: rgba(120, 200, 120, 0.32);
+  background: rgba(120, 200, 120, 0.08);
+}
+
+.lab-status.is-open::before {
+  background: #5fd17a;
+  animation: nxd-lab-pulse 2.6s cubic-bezier(0.0, 0.0, 0.2, 1) infinite;
+}
+
+.lab-status.is-closed {
+  color: rgba(238, 241, 244, 0.6);
+}
+
+@keyframes nxd-lab-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(95, 209, 122, 0.55);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(95, 209, 122, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(95, 209, 122, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-status.is-open::before {
+    animation: none;
+  }
+}
+
+/* ── Breadcrumbs (visible nav, pairs with BreadcrumbList JSON-LD) ─ */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: rgba(238, 241, 244, 0.55);
+  text-transform: uppercase;
+}
+
+.breadcrumbs a {
+  color: rgba(238, 241, 244, 0.78);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.breadcrumbs a:hover,
+.breadcrumbs a:focus-visible {
+  color: var(--color-text);
+  border-bottom-color: rgba(238, 241, 244, 0.5);
+}
+
+.breadcrumbs-sep {
+  color: rgba(238, 241, 244, 0.32);
+  user-select: none;
+}
+
+.breadcrumbs [aria-current="page"] {
+  color: rgba(238, 241, 244, 0.95);
+}
+
+/* Top spacing helper for page cards */
+.page-content--top {
+  margin-top: 2rem;
+}
+
+/* Ops tools utility classes */
+.ops-hash-val {
+  word-break: break-all;
+}
+
+.ops-block-spaced {
+  margin-top: 1rem;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Visual polish 2026-04-28 — pricing cards lift, FAQ chevron,
+   smooth open animation. Respects prefers-reduced-motion.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Pricing cards — tactile hover, accent edge on featured tiers */
+.pricing-card {
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(232, 228, 220, 0.32);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 22px 44px -28px rgba(0, 0, 0, 0.95),
+    0 0 0 1px rgba(125, 211, 252, 0.06);
+}
+
+.pricing-card-strong {
+  position: relative;
+}
+
+.pricing-card-strong::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.55), transparent);
+  pointer-events: none;
+}
+
+.price-tag {
+  background: linear-gradient(180deg, var(--color-accent) 0%, rgba(232, 228, 220, 0.78) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-card,
+  .pricing-card:hover { transform: none; transition: none; }
+}
+
+/* FAQ — chevron indicator + smooth open. Uses native <details>. */
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-right: 1.4rem;
+  transition: background-color 180ms ease;
+}
+
+.faq-item summary::after {
+  content: "";
+  flex: 0 0 14px;
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid rgba(232, 228, 220, 0.55);
+  border-bottom: 2px solid rgba(232, 228, 220, 0.55);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 240ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 240ms ease;
+}
+
+.faq-item:hover summary::after,
+.faq-item[open] summary::after {
+  border-color: var(--color-accent);
+}
+
+.faq-item[open] summary::after {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.faq-item:hover summary {
+  background: rgba(232, 228, 220, 0.025);
+}
+
+.faq-item[open] p {
+  animation: nxd-faq-fade 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes nxd-faq-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .faq-item summary,
+  .faq-item summary::after { transition: none; }
+  .faq-item[open] p { animation: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Cookie consent — granular preferences panel (Loi 25)
+   ───────────────────────────────────────────────────────────────── */
+.nxd-consent-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.4rem 0 0.9rem;
+}
+
+.nxd-consent-cat {
+  border: 1px solid rgba(238, 241, 244, 0.14);
+  border-radius: 2px;
+  padding: 0.7rem 0.85rem;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.nxd-consent-cat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.nxd-consent-cat-title {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--color-text);
+}
+
+.nxd-consent-cat-body {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--color-text-soft);
+}
+
+.nxd-consent-cat-badge {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(238, 241, 244, 0.55);
+  border: 1px solid rgba(238, 241, 244, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+/* Toggle switch */
+.nxd-consent-toggle {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+  flex: 0 0 38px;
+  cursor: pointer;
+}
+
+.nxd-consent-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.nxd-consent-slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(238, 241, 244, 0.16);
+  border: 1px solid rgba(238, 241, 244, 0.28);
+  border-radius: 999px;
+  transition: background-color 180ms ease, border-color 180ms ease;
+}
+
+.nxd-consent-slider::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: rgba(238, 241, 244, 0.92);
+  border-radius: 50%;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.nxd-consent-toggle input:checked + .nxd-consent-slider {
+  background: var(--os, #c9a96a);
+  border-color: var(--os, #c9a96a);
+}
+
+.nxd-consent-toggle input:checked + .nxd-consent-slider::before {
+  transform: translateX(16px);
+  background: var(--color-bg-soft, #0a0d12);
+}
+
+.nxd-consent-toggle input:focus-visible + .nxd-consent-slider {
+  outline: 2px solid var(--color-accent, #c9a96a);
+  outline-offset: 2px;
+}
+
+.nxd-consent-toggle input:disabled + .nxd-consent-slider {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nxd-consent-slider,
+  .nxd-consent-slider::before { transition: none; }
+}
+
+
+/* ── Hero AI badge ─────────────────────────────────────────────
+ * Discreet pill linking to the AI lab page. Sits between eyebrow
+ * and lab-status. Pulsing dot signals "live, local, active."             */
+.hero-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0.6rem auto 0.4rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.7rem;
+  border: 1px solid rgba(120, 200, 255, 0.28);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(74, 144, 226, 0.08), rgba(74, 144, 226, 0.02));
+  color: rgba(232, 240, 248, 0.88);
+  font-family: var(--mono, "IBM Plex Mono", monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: border-color .25s ease, background .25s ease, color .25s ease, transform .25s ease;
+}
+
+.hero-ai-badge:hover,
+.hero-ai-badge:focus-visible {
+  border-color: rgba(120, 200, 255, 0.55);
+  background: linear-gradient(180deg, rgba(74, 144, 226, 0.16), rgba(74, 144, 226, 0.04));
+  color: #f1f6fb;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.hero-ai-badge__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+  animation: heroAiPulse 2.2s ease-out infinite;
+}
+
+@keyframes heroAiPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55); }
+  70%  { box-shadow: 0 0 0 9px rgba(74, 222, 128, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ai-badge__dot { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .hero-ai-badge {
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    padding: 0.32rem 0.7rem 0.32rem 0.6rem;
+  }
+}
+/* ════════════════════════════════════════════════════════════════
+   CONTRAST PASS — bump pale text to readable opacity (WCAG AA)
+   Targets only text colors, not borders/backgrounds/watermarks.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Eyebrows / mono labels: 0.55 → 0.78 */
+.eyebrow { color: rgba(238, 241, 244, 0.78); }
+
+/* Section indexed prefix "§ 01 ——" */
+.section > .container > .section-heading::before { color: rgba(232, 228, 220, 0.62) !important; }
+
+/* Hero file ribbon */
+.hero::after { color: rgba(232, 228, 220, 0.62) !important; }
+
+/* Trust bar — section label and stat units */
+.trust-bar::before { color: rgba(232, 228, 220, 0.6) !important; }
+.trust-stat::before { color: rgba(232, 228, 220, 0.62) !important; }
+.trust-stat span { color: rgba(232, 228, 220, 0.78) !important; }
+
+/* Standards bar — header label + supporting em */
+.standards-bar-label { color: rgba(232, 228, 220, 0.72) !important; }
+.standards-bar-list em { color: rgba(232, 228, 220, 0.78) !important; }
+
+/* Case ledger */
+.case-ledger-eyebrow { color: rgba(232, 228, 220, 0.7); }
+.case-file-status { color: rgba(232, 228, 220, 0.78); }
+.case-file dt { color: rgba(232, 228, 220, 0.7); }
+.case-ledger-footnote { color: rgba(232, 228, 220, 0.7); }
+
+/* Generic os-dim variable used for muted captions */
+:root { --os-dim: rgba(232, 228, 220, 0.62); }

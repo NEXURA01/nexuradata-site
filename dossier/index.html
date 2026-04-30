@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr-CA">
 
 <head>
@@ -13,7 +13,8 @@
     <meta property="og:locale" content="fr_CA">
     <meta property="og:site_name" content="NEXURADATA">
     <meta property="og:title" content="Mon dossier | NEXURA DATA">
-    <meta property="og:description" content="Portail client NEXURA DATA. Consultez l'état de votre dossier avec votre numéro et votre code d'accès.">
+    <meta property="og:description"
+        content="Portail client NEXURA DATA. Consultez l'état de votre dossier avec votre numéro et votre code d'accès.">
     <meta property="og:url" content="https://nexuradata.ca/dossier/">
     <meta property="og:image" content="https://nexuradata.ca/assets/icons/og-default.png">
     <link rel="canonical" href="https://nexuradata.ca/dossier/">
@@ -30,11 +31,12 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/site.css">
     <script src="/assets/js/site.js" defer></script>
-  <script type="application/ld+json">
+    <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": ["ProfessionalService", "LocalBusiness"],
       "@id": "https://nexuradata.ca/#business",
+      "sameAs": ["https://www.facebook.com/profile.php?id=61588752816284"],
       "name": "NEXURADATA",
       "url": "https://nexuradata.ca/",
       "telephone": "+1-438-813-0592",
@@ -43,13 +45,8 @@
       "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
       "priceRange": "$$",
       "currenciesAccepted": "CAD",
-      "paymentAccepted": "Credit Card, Interac, Bank Transfer",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Longueuil",
-        "addressRegion": "QC",
-        "addressCountry": "CA"
-      },
+      "paymentAccepted": "Credit Card, Interac, Bank Transfer, Bitcoin",
+      "address":{"@type":"PostalAddress","streetAddress":"5184 boulevard Cousineau","addressLocality":"Longueuil","addressRegion":"QC","postalCode":"J3Y 7G5","addressCountry":"CA"},
       "areaServed": ["Montréal", "Laval", "Longueuil", "Rive-Sud", "Rive-Nord", "Québec", "Canada"],
       "availableLanguage": ["fr-CA", "en-CA"]
     }
@@ -68,8 +65,10 @@
                 <div class="nav-links">
                     <a href="/services-recuperation-forensique-montreal.html">Services</a>
                     <a href="/tarifs-recuperation-donnees-montreal.html">Tarifs</a>
-                    <a href="/reserver-creneau-laboratoire.html">Réserver</a>
+                    <a href="/comment-nous-envoyer-vos-donnees.html">Envoi &amp; dépôt</a>
                     <a href="/#contact">Contact</a>
+                    <a class="nav-tel" href="tel:+14388130592" data-track="call-header"
+                        aria-label="Appeler le laboratoire">438 813-0592</a>
                     <a href="/en/dossier/" class="lang-switch" lang="en">EN</a>
                 </div>
             </nav>
@@ -127,7 +126,7 @@
                     <article class="contact-card">
                         <h3>Besoin urgent</h3>
                         <a
-                            href="mailto:contact@nexuradata.ca?subject=Urgence%20sur%20un%20dossier">contact@nexuradata.ca</a>
+                            href="mailto:urgence@nexuradata.ca?subject=Urgence%20sur%20un%20dossier">urgence@nexuradata.ca</a>
                         <p>Écrivez-nous si l'urgence a changé ou si une autorisation doit être confirmée.</p>
                     </article>
 
@@ -183,7 +182,7 @@
                     <p>Récupération de données, RAID, NAS, serveurs et forensique numérique.</p>
                 </div>
                 <div class="footer-block"><small>LOCALISATION</small>
-                    <p>Longueuil, Québec, Canada</p>
+                    <p>5184, boul. Cousineau<br>Longueuil (Québec) J3Y&nbsp;7G5</p>
                 </div>
                 <div class="footer-block"><small>COURRIEL</small>
                     <p><a href="mailto:contact@nexuradata.ca">contact@nexuradata.ca</a></p>

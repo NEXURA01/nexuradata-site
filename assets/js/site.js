@@ -1,4 +1,4 @@
-const yearTarget = document.querySelector("[data-year]");
+const yearTargets = document.querySelectorAll("[data-year]");
 const documentLanguage = document.documentElement.lang?.toLowerCase() || "fr-ca";
 const isEnglishDocument = documentLanguage.startsWith("en");
 
@@ -178,8 +178,9 @@ const publicI18n = isEnglishDocument
     }
   };
 
-if (yearTarget) {
-  yearTarget.textContent = new Date().getFullYear();
+if (yearTargets.length) {
+  const currentYear = new Date().getFullYear();
+  yearTargets.forEach((node) => { node.textContent = currentYear; });
 }
 
 const revealElements = document.querySelectorAll("[data-reveal]");
@@ -298,18 +299,29 @@ const ensureStickyBar = () => {
 
 ensureStickyBar();
 
-/* ── Conversion tracking (lightweight, no third-party) ───────────── */
+/* ── Conversion tracking (lightweight, no third-party) ─────────────
+ * Loi 25: nothing fires before explicit consent. NxdConsent.get()
+ * returns null when the user has not yet decided, and an object with
+ * { analytics: bool } once they have. We treat null as "decline".
+ * ──────────────────────────────────────────────────────────────── */
+const hasAnalyticsConsent = () => {
+  try {
+    return !!(window.NxdConsent && window.NxdConsent.get() && window.NxdConsent.get().analytics);
+  } catch (_) {
+    return false;
+  }
+};
+
 const trackConversion = (event, data = {}) => {
+  if (!hasAnalyticsConsent()) return;
   try {
     const payload = { event, ts: Date.now(), path: location.pathname, ...data };
-    // Send to gtag/plausible if present, else just console for now (audit ready)
     if (typeof window.gtag === "function") {
       window.gtag("event", event, data);
     }
     if (typeof window.plausible === "function") {
       window.plausible(event, { props: data });
     }
-    // Best-effort beacon to own endpoint (silent fail if not deployed yet)
     if ("sendBeacon" in navigator) {
       try {
         navigator.sendBeacon("/api/track", new Blob([JSON.stringify(payload)], { type: "application/json" }));
@@ -361,6 +373,106 @@ if (!("IntersectionObserver" in window) || prefersReducedMotion.matches) {
 
   revealElements.forEach((element) => observer.observe(element));
 }
+
+/* ── Trust-bar stats: count-up on first viewport entry ─────────────
+   Reads the existing strong text (e.g. "2 847", "96,4 %", "4,2 j"),
+   animates 0 → final, preserves separators and any trailing unit.
+   Skipped when reduced-motion is preferred or IO is missing. */
+const animateCountUp = (el, finalText) => {
+  const match = finalText.match(/^([\d \u00a0,.]+)(.*)$/);
+  if (!match) {
+    el.classList.add("is-counted");
+    return;
+  }
+  const [, numPart, suffix] = match;
+  const decimalSep = numPart.includes(",") ? "," : (numPart.includes(".") ? "." : "");
+  const cleanNum = parseFloat(numPart.replace(/[ \u00a0]/g, "").replace(",", "."));
+  if (!Number.isFinite(cleanNum)) {
+    el.classList.add("is-counted");
+    return;
+  }
+  const decimals = decimalSep && numPart.split(decimalSep)[1] ? numPart.split(decimalSep)[1].length : 0;
+  const duration = 1100;
+  const start = performance.now();
+  const format = (value) => {
+    const fixed = value.toFixed(decimals);
+    const [intPart, decPart] = fixed.split(".");
+    const grouped = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
+    return decimals > 0 ? `${grouped}${decimalSep}${decPart}${suffix}` : `${grouped}${suffix}`;
+  };
+  el.classList.add("is-counted");
+  const step = (now) => {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    el.textContent = format(cleanNum * eased);
+    if (t < 1) requestAnimationFrame(step);
+    else el.textContent = finalText;
+  };
+  requestAnimationFrame(step);
+};
+
+const trustStats = document.querySelectorAll(".trust-stat");
+if (trustStats.length > 0) {
+  if (!("IntersectionObserver" in window) || prefersReducedMotion.matches) {
+    trustStats.forEach((stat) => stat.classList.add("is-counted"));
+  } else {
+    const statObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const stat = entry.target;
+        const strong = stat.querySelector("strong");
+        if (strong) {
+          const finalText = strong.textContent.trim();
+          // Only count purely numeric stats; non-numeric ones (e.g. "CFE") just fade in.
+          if (/^[\d]/.test(finalText)) {
+            strong.textContent = "0";
+            requestAnimationFrame(() => animateCountUp(strong, finalText));
+          } else {
+            stat.classList.add("is-counted");
+          }
+        }
+        obs.unobserve(stat);
+      });
+    }, { threshold: 0.4 });
+    trustStats.forEach((stat) => statObserver.observe(stat));
+  }
+}
+
+/* ── Live lab-status indicator (open/closed badge) ───────────────── */
+// Reads current time in Montreal (America/Toronto), shows a green dot when
+// the lab is within opening hours (9-18 every day per JSON-LD), otherwise
+// a muted dot with the next opening hint. Progressive enhancement only —
+// the static markup in HTML serves as the no-JS fallback.
+const updateLabStatus = () => {
+  const nodes = document.querySelectorAll("[data-lab-status]");
+  if (!nodes.length) return;
+  let hour = new Date().getHours();
+  try {
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/Toronto",
+      hour: "2-digit",
+      hour12: false,
+    });
+    hour = parseInt(fmt.format(new Date()), 10);
+    if (Number.isNaN(hour)) hour = new Date().getHours();
+  } catch (_e) {
+    /* fall back to local time */
+  }
+  const isOpen = hour >= 9 && hour < 18;
+  const en = isEnglishDocument;
+  const labels = isOpen
+    ? (en ? "Lab open · response under 1 h" : "Labo ouvert · réponse < 1 h")
+    : (en ? "Lab closed · reply tomorrow morning" : "Labo fermé · réponse demain matin");
+  nodes.forEach((node) => {
+    node.classList.toggle("is-open", isOpen);
+    node.classList.toggle("is-closed", !isOpen);
+    const textNode = node.querySelector("[data-lab-status-text]") || node;
+    textNode.textContent = labels;
+  });
+};
+updateLabStatus();
+// Refresh hourly so a session that crosses 18:00 updates without reload.
+setInterval(updateLabStatus, 60 * 60 * 1000);
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (event) => {

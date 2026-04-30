@@ -23,57 +23,12 @@ function walk(d) {
   });
 }
 
-const businessBlockFR = `  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": ["ProfessionalService", "LocalBusiness"],
-      "@id": "https://nexuradata.ca/#business",
-      "name": "NEXURADATA",
-      "url": "https://nexuradata.ca/",
-      "telephone": "+1-438-813-0592",
-      "email": "contact@nexuradata.ca",
-      "image": "https://nexuradata.ca/assets/icons/og-default.png",
-      "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
-      "priceRange": "$$",
-      "currenciesAccepted": "CAD",
-      "paymentAccepted": "Credit Card, Interac, Bank Transfer",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Longueuil",
-        "addressRegion": "QC",
-        "addressCountry": "CA"
-      },
-      "areaServed": ["Montréal", "Laval", "Longueuil", "Rive-Sud", "Rive-Nord", "Québec", "Canada"],
-      "availableLanguage": ["fr-CA", "en-CA"]
-    }
-  </script>
-`;
-
-const businessBlockEN = `  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": ["ProfessionalService", "LocalBusiness"],
-      "@id": "https://nexuradata.ca/#business",
-      "name": "NEXURADATA",
-      "url": "https://nexuradata.ca/en/",
-      "telephone": "+1-438-813-0592",
-      "email": "contact@nexuradata.ca",
-      "image": "https://nexuradata.ca/assets/icons/og-default.png",
-      "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
-      "priceRange": "$$",
-      "currenciesAccepted": "CAD",
-      "paymentAccepted": "Credit Card, Interac, Bank Transfer",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Longueuil",
-        "addressRegion": "QC",
-        "addressCountry": "CA"
-      },
-      "areaServed": ["Montreal", "Laval", "Longueuil", "South Shore", "North Shore", "Quebec", "Canada"],
-      "availableLanguage": ["en-CA", "fr-CA"]
-    }
-  </script>
-`;
+// Single source of truth for the business JSON-LD blocks.
+const business = JSON.parse(fs.readFileSync('assets/data/business.json', 'utf8'));
+const renderBlock = (data) =>
+  `  <script type="application/ld+json">\n${JSON.stringify(data, null, 4).replace(/^/gm, '    ')}\n  </script>\n`;
+const businessBlockFR = renderBlock(business.fr);
+const businessBlockEN = renderBlock(business.en);
 
 const norm = (s) => s.split(path.sep).join('/');
 const files = walk('.').filter((f) => f.endsWith('.html') && !f.endsWith('404.html'));

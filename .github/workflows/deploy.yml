@@ -1,15 +1,18 @@
 name: Deploy to Cloudflare Pages
 
+# Manual-only. Local deploys via `npx wrangler pages deploy` are the primary
+# workflow; this job exists as an emergency fallback when running it from a
+# GitHub runner is preferable. Requires repo secrets:
+#   - CLOUDFLARE_API_TOKEN
+#   - CLOUDFLARE_ACCOUNT_ID
+
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
   deploy:
     name: Build and deploy
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
 

@@ -81,7 +81,7 @@ function buildEmail(env, lead) {
             ? "Notre laboratoire à Longueuil propose une évaluation gratuite sans engagement."
             : "Our Longueuil lab offers a free no-obligation assessment.",
         "",
-        ...why.map((w) => "- " + w.replace(/&nbsp;/g, " ").replace(/<[^>]+>/g, "")),
+        ...why.map((w) => "- " + w.replace(/&nbsp;/g, " ").replace(/[<>]/g, "")),
         "",
         cta1Label + " : " + cta1Url,
         cta2Label + " : " + cta2Url,

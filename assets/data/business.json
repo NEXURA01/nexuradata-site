@@ -1,0 +1,78 @@
+{
+    "fr": {
+        "@context": "https://schema.org",
+        "@type": [
+            "ProfessionalService",
+            "LocalBusiness"
+        ],
+        "@id": "https://nexuradata.ca/#business",
+        "name": "NEXURADATA",
+        "url": "https://nexuradata.ca/",
+        "telephone": "+1-438-813-0592",
+        "email": "contact@nexuradata.ca",
+        "image": "https://nexuradata.ca/assets/icons/og-default.png",
+        "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
+        "priceRange": "$$",
+        "currenciesAccepted": "CAD",
+        "paymentAccepted": "Credit Card, Interac, Bank Transfer",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "5184 boulevard Cousineau",
+            "addressLocality": "Longueuil",
+            "addressRegion": "QC",
+            "postalCode": "J3Y 7G5",
+            "addressCountry": "CA"
+        },
+        "areaServed": [
+            "Montréal",
+            "Laval",
+            "Longueuil",
+            "Rive-Sud",
+            "Rive-Nord",
+            "Québec",
+            "Canada"
+        ],
+        "availableLanguage": [
+            "fr-CA",
+            "en-CA"
+        ]
+    },
+    "en": {
+        "@context": "https://schema.org",
+        "@type": [
+            "ProfessionalService",
+            "LocalBusiness"
+        ],
+        "@id": "https://nexuradata.ca/#business",
+        "name": "NEXURADATA",
+        "url": "https://nexuradata.ca/en/",
+        "telephone": "+1-438-813-0592",
+        "email": "contact@nexuradata.ca",
+        "image": "https://nexuradata.ca/assets/icons/og-default.png",
+        "logo": "https://nexuradata.ca/assets/nexuradata-master.svg",
+        "priceRange": "$$",
+        "currenciesAccepted": "CAD",
+        "paymentAccepted": "Credit Card, Interac, Bank Transfer",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "5184 boulevard Cousineau",
+            "addressLocality": "Longueuil",
+            "addressRegion": "QC",
+            "postalCode": "J3Y 7G5",
+            "addressCountry": "CA"
+        },
+        "areaServed": [
+            "Montreal",
+            "Laval",
+            "Longueuil",
+            "South Shore",
+            "North Shore",
+            "Quebec",
+            "Canada"
+        ],
+        "availableLanguage": [
+            "en-CA",
+            "fr-CA"
+        ]
+    }
+}

@@ -384,3 +384,248 @@ export const listThreads = async (env, limit = 50) => {
         .all();
     return result?.results || [];
 };
+
+// ---------------------------------------------------------------------------
+// Structured intake flow  (state machine: DEVICE → SYMPTOMS → URGENCY → COMPLETE)
+// State is persisted in whatsapp_threads.qualification_json as JSON.
+// ---------------------------------------------------------------------------
+
+const DEVICE_OPTIONS = {
+    dev_hdd:   { fr: "Disque dur interne/externe", en: "Internal/external HDD" },
+    dev_ssd:   { fr: "SSD / M.2 / NVMe",          en: "SSD / M.2 / NVMe" },
+    dev_usb:   { fr: "Clé USB / Carte mémoire",   en: "USB drive / Memory card" },
+    dev_raid:  { fr: "RAID / NAS / Serveur",       en: "RAID / NAS / Server" },
+    dev_phone: { fr: "Téléphone / Tablette",       en: "Phone / Tablet" },
+    dev_other: { fr: "Autre / Je ne sais pas",     en: "Other / Not sure" }
+};
+
+const SYMPTOM_OPTIONS = {
+    sym_click:     { fr: "Bruit, claquement",             en: "Clicking / grinding noise" },
+    sym_nodisk:    { fr: "Ne démarre plus / Non détecté", en: "Won't power on / Not detected" },
+    sym_water:     { fr: "Dégât liquide ou choc",         en: "Water damage or physical drop" },
+    sym_delete:    { fr: "Données effacées ou formaté",   en: "Files deleted or formatted" },
+    sym_partition: { fr: "Erreur de lecture / Partition", en: "Read errors / Lost partition" },
+    sym_other:     { fr: "Autre symptôme",                en: "Other symptom" }
+};
+
+const URGENCY_OPTIONS = {
+    urg_standard: { fr: "Standard (3–7 jours)",  en: "Standard (3–7 days)" },
+    urg_priority: { fr: "Prioritaire (24–48 h)", en: "Priority (24–48 h)" },
+    urg_critical: { fr: "Urgent / Légal",         en: "Urgent / Legal" }
+};
+
+// Resolve a button/list ID to a human-readable label; fall back to raw text.
+const resolveOption = (id, options, locale) => {
+    const opt = options[sanitize(id, 64)];
+    if (opt) return opt[locale] || opt.fr;
+    return sanitize(id, 100);
+};
+
+// Extract the selected ID from an interactive (button or list) message object.
+const extractInteractiveId = (msg) => {
+    if (!msg) return null;
+    if (msg.type === "button") return sanitize(msg.button?.payload || msg.button?.text, 256) || null;
+    if (msg.type === "interactive") {
+        return sanitize(
+            msg.interactive?.button_reply?.id
+            || msg.interactive?.list_reply?.id
+            || msg.interactive?.button_reply?.title
+            || msg.interactive?.list_reply?.title,
+            256
+        ) || null;
+    }
+    if (msg.type === "text") return sanitize(msg.text?.body, 256) || null;
+    return null;
+};
+
+// Device-type list sections (bilingual).
+const deviceSections = (locale) => [
+    {
+        title: locale === "en" ? "Storage" : "Stockage",
+        rows: [
+            { id: "dev_hdd",   title: locale === "en" ? "HDD (int./ext.)"   : "Disque dur int./ext." },
+            { id: "dev_ssd",   title: "SSD / M.2 / NVMe" },
+            { id: "dev_usb",   title: locale === "en" ? "USB / Memory card" : "Clé USB / Carte mém." }
+        ]
+    },
+    {
+        title: locale === "en" ? "Server" : "Serveur",
+        rows: [
+            { id: "dev_raid",  title: "RAID / NAS / Server" }
+        ]
+    },
+    {
+        title: "Mobile",
+        rows: [
+            { id: "dev_phone", title: locale === "en" ? "Phone / Tablet"    : "Téléphone / Tablette" },
+            { id: "dev_other", title: locale === "en" ? "Other / Not sure"  : "Autre / Je ne sais pas" }
+        ]
+    }
+];
+
+// Symptom list sections (bilingual).
+const symptomSections = (locale) => [
+    {
+        title: locale === "en" ? "Physical damage" : "Défaillance physique",
+        rows: [
+            { id: "sym_click",  title: locale === "en" ? "Clicking / grinding" : "Bruit, claquement" },
+            { id: "sym_nodisk", title: locale === "en" ? "Won't power on"       : "Ne démarre plus" },
+            { id: "sym_water",  title: locale === "en" ? "Water / drop"         : "Eau / choc physique" }
+        ]
+    },
+    {
+        title: locale === "en" ? "Logical issue" : "Défaillance logique",
+        rows: [
+            { id: "sym_delete",    title: locale === "en" ? "Deleted / Formatted" : "Effacé / Formaté" },
+            { id: "sym_partition", title: locale === "en" ? "Read error / Partition" : "Erreur / Partition" },
+            { id: "sym_other",     title: locale === "en" ? "Other"                  : "Autre" }
+        ]
+    }
+];
+
+// Urgency buttons (3 max — fits WhatsApp interactive button limit).
+const urgencyButtons = (locale) => [
+    { id: "urg_standard", title: locale === "en" ? "Standard (3-7 days)"  : "Standard (3-7 j.)" },
+    { id: "urg_priority", title: locale === "en" ? "Priority (24-48 h)"   : "Prioritaire (24-48h)" },
+    { id: "urg_critical", title: locale === "en" ? "Urgent / Legal"        : "Urgent / Légal" }
+];
+
+// Intake message copy (bilingual).
+const intakeCopy = {
+    welcome: {
+        fr: "Bienvenue chez NEXURA DATA. Pour lancer votre diagnostic gratuit, répondez à 3 courtes questions. Quel appareil est affecté ?",
+        en: "Welcome to NEXURA DATA. To start your free assessment, answer 3 quick questions. Which device is affected?"
+    },
+    chooseBtn: { fr: "Choisir", en: "Choose" },
+    symptomsPrompt: (locale, device) => locale === "en"
+        ? `Device: *${device}*. What is the main symptom?`
+        : `Appareil : *${device}*. Quel est le symptôme principal ?`,
+    urgencyPrompt: (locale, symptoms) => locale === "en"
+        ? `Symptom: *${symptoms}*. What level of urgency?`
+        : `Symptôme : *${symptoms}*. Quel niveau d'urgence ?`,
+    complete: (locale, qual) => {
+        const d = qual.device || "—";
+        const s = qual.symptoms || "—";
+        const u = qual.urgency || "—";
+        return locale === "en"
+            ? `Summary:\n• Device: ${d}\n• Symptom: ${s}\n• Urgency: ${u}\n\nA NEXURA DATA examiner will follow up. For immediate help, call 438\u00a0813-0592 or email dossiers@nexuradata.ca.`
+            : `Résumé :\n• Appareil : ${d}\n• Symptôme : ${s}\n• Urgence : ${u}\n\nUn examinateur NEXURA DATA vous contactera. Pour une aide immédiate, appelez le 438\u00a0813-0592 ou écrivez à dossiers@nexuradata.ca.`;
+    }
+};
+
+// Parse qualification_json safely. Returns null on error or empty string.
+export const parseQualification = (jsonStr) => {
+    if (!jsonStr) return null;
+    try { return JSON.parse(jsonStr); } catch { return null; }
+};
+
+// Returns true when the thread is actively inside the intake flow (step != COMPLETE).
+export const isInIntakeFlow = (thread) => {
+    const q = parseQualification(thread?.qualification_json);
+    return Boolean(q && q.step && q.step !== "COMPLETE");
+};
+
+// Returns true when a brand-new thread should trigger the intake flow.
+export const shouldStartIntake = (thread) => {
+    if (!thread) return true;
+    const q = parseQualification(thread.qualification_json);
+    return !q && (thread.status === "auto" || !thread.status);
+};
+
+// Persist qualification state to D1.
+export const saveQualification = async (env, waId, qual) => {
+    if (!env?.INTAKE_DB || !waId) return;
+    await env.INTAKE_DB
+        .prepare("UPDATE whatsapp_threads SET qualification_json = ?, updated_at = ? WHERE wa_id = ?")
+        .bind(JSON.stringify(qual), new Date().toISOString(), sanitize(waId, 32))
+        .run();
+};
+
+// Start the intake flow: save initial state and send device-type list.
+// Caller must have already created the thread row via upsertThread.
+export const startIntake = async (env, waId, locale) => {
+    const qual = { step: "DEVICE", device: null, symptoms: null, urgency: null, locale };
+    await saveQualification(env, waId, qual);
+    await sendWhatsAppList(
+        env, waId,
+        intakeCopy.welcome[locale] || intakeCopy.welcome.fr,
+        intakeCopy.chooseBtn[locale] || intakeCopy.chooseBtn.fr,
+        deviceSections(locale)
+    );
+    return qual;
+};
+
+// Advance the intake state machine one step.
+// msg: the raw WhatsApp message object (for ID extraction).
+// Returns { handled: true, newQual } when the intake handled the message,
+// or { handled: false } when the intake is complete/inactive (fall through to AI).
+export const runIntakeStep = async (env, waId, qual, msg, locale) => {
+    const step = qual?.step;
+    if (!step || step === "COMPLETE") return { handled: false };
+
+    const selectedId = extractInteractiveId(msg) || "";
+
+    if (step === "DEVICE") {
+        const device = resolveOption(selectedId, DEVICE_OPTIONS, locale);
+        const newQual = { ...qual, step: "SYMPTOMS", device, locale };
+        await saveQualification(env, waId, newQual);
+        await sendWhatsAppList(
+            env, waId,
+            intakeCopy.symptomsPrompt(locale, device),
+            intakeCopy.chooseBtn[locale] || intakeCopy.chooseBtn.fr,
+            symptomSections(locale)
+        );
+        return { handled: true, newQual };
+    }
+
+    if (step === "SYMPTOMS") {
+        const symptoms = resolveOption(selectedId, SYMPTOM_OPTIONS, locale);
+        const newQual = { ...qual, step: "URGENCY", symptoms, locale };
+        await saveQualification(env, waId, newQual);
+        await sendWhatsAppButtons(
+            env, waId,
+            intakeCopy.urgencyPrompt(locale, symptoms),
+            urgencyButtons(locale)
+        );
+        return { handled: true, newQual };
+    }
+
+    if (step === "URGENCY") {
+        const urgency = resolveOption(selectedId, URGENCY_OPTIONS, locale);
+        const newQual = { ...qual, step: "COMPLETE", urgency, locale };
+        await saveQualification(env, waId, newQual);
+        await sendWhatsAppText(env, waId, intakeCopy.complete(locale, newQual));
+        // Notify lab via Resend (fire-and-forget — do not block reply).
+        notifyIntakeLead(env, waId, newQual).catch(() => {});
+        return { handled: true, newQual };
+    }
+
+    return { handled: false };
+};
+
+// Send intake lead notification email to the lab inbox via Resend.
+const notifyIntakeLead = async (env, waId, qual) => {
+    const apiKey = sanitize(env?.RESEND_API_KEY, 256);
+    const from = sanitize(env?.RESEND_FROM_EMAIL, 200);
+    const to = sanitize(env?.LAB_INBOX_EMAIL, 200);
+    if (!apiKey || !from || !to) return;
+    const subject = `[WhatsApp] Lead qualifié — ${qual.device || "Appareil inconnu"}`;
+    const lines = [
+        "Nouveau lead WhatsApp qualifié.",
+        "",
+        `Numéro WhatsApp : ${waId}`,
+        `Appareil        : ${qual.device || "—"}`,
+        `Symptôme        : ${qual.symptoms || "—"}`,
+        `Urgence         : ${qual.urgency || "—"}`,
+        `Langue          : ${qual.locale || "fr"}`,
+        `Horodatage      : ${new Date().toISOString()}`
+    ];
+    await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "content-type": "application/json"
+        },
+        body: JSON.stringify({ from, to, subject, text: lines.join("\n") })
+    });
+};

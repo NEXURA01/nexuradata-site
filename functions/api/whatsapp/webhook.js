@@ -24,7 +24,12 @@ import {
     detectIntent,
     shouldEscalate,
     escalationMessage,
-    sanitize
+    sanitize,
+    shouldStartIntake,
+    isInIntakeFlow,
+    parseQualification,
+    startIntake,
+    runIntakeStep
 } from "../../_lib/whatsapp.js";
 
 const text = (body, status = 200) =>
@@ -130,21 +135,106 @@ async function handleInbound(env, msg, displayName) {
 
     const locale = detectLocale(body);
     const thread = await loadThread(env, waId);
-    const status = thread?.status || "auto";
-    const autoCount = Number(thread?.auto_replies_count || 0);
 
+    // -----------------------------------------------------------------------
+    // New contact: create thread row, then launch structured intake flow.
+    // Check escalation keywords first — even first messages can be urgent.
+    // -----------------------------------------------------------------------
+    if (shouldStartIntake(thread)) {
+        await upsertThread(env, waId, {
+            displayName,
+            locale,
+            status: "auto",
+            intent: detectIntent(body),
+            lastInboundAt: occurredAt
+        });
+
+        // Escalate immediately if first message triggers a sensitive keyword.
+        if (shouldEscalate(body, 0)) {
+            const reply = escalationMessage(locale);
+            const send = await sendWhatsAppText(env, waId, reply);
+            if (send.ok) {
+                await recordMessage(env, {
+                    waMessageId: send.messageId || `local-${Date.now()}`,
+                    waId,
+                    direction: "outbound",
+                    body: reply,
+                    msgType: "text",
+                    aiGenerated: 0,
+                    intent: "escalation",
+                    occurredAt: new Date().toISOString()
+                });
+                await upsertThread(env, waId, {
+                    status: "escalated",
+                    intent: "escalation",
+                    escalatedAt: new Date().toISOString(),
+                    lastOutboundAt: new Date().toISOString()
+                });
+            }
+            return;
+        }
+
+        await startIntake(env, waId, locale);
+        // Record the outbound list message for audit log.
+        await recordMessage(env, {
+            waMessageId: `intake-start-${Date.now()}`,
+            waId,
+            direction: "outbound",
+            body: `[intake:DEVICE locale=${locale}]`,
+            msgType: "interactive",
+            aiGenerated: 0,
+            intent: "intake_device",
+            occurredAt: new Date().toISOString()
+        });
+        await upsertThread(env, waId, { lastOutboundAt: new Date().toISOString() });
+        return;
+    }
+
+    // Update thread with latest name/locale.
+    const currentStatus = thread?.status || "auto";
     await upsertThread(env, waId, {
         displayName,
         locale,
-        status: status === "human" || status === "escalated" ? status : "auto",
+        status: currentStatus === "human" || currentStatus === "escalated" ? currentStatus : "auto",
         intent: detectIntent(body),
         lastInboundAt: occurredAt
     });
 
-    // If a human took over, do not auto-reply.
-    if (status === "human" || status === "escalated") return;
+    // If a human has taken over, do not auto-reply.
+    if (currentStatus === "human" || currentStatus === "escalated") return;
 
+    // -----------------------------------------------------------------------
+    // Active intake flow: advance the state machine.
+    // -----------------------------------------------------------------------
+    if (isInIntakeFlow(thread)) {
+        const qual = parseQualification(thread.qualification_json);
+        const result = await runIntakeStep(env, waId, qual, msg, locale);
+        if (result.handled) {
+            const intent = result.newQual.step === "COMPLETE" ? "qualified"
+                : `intake_${result.newQual.step.toLowerCase()}`;
+            await recordMessage(env, {
+                waMessageId: `intake-${result.newQual.step}-${Date.now()}`,
+                waId,
+                direction: "outbound",
+                body: `[intake:${result.newQual.step}]`,
+                msgType: "interactive",
+                aiGenerated: 0,
+                intent,
+                occurredAt: new Date().toISOString()
+            });
+            await upsertThread(env, waId, {
+                intent,
+                lastOutboundAt: new Date().toISOString()
+            });
+            return;
+        }
+        // step === COMPLETE: fall through to AI for follow-up questions.
+    }
+
+    // -----------------------------------------------------------------------
     // Escalation path (sensitive keyword OR > N auto replies).
+    // -----------------------------------------------------------------------
+    const autoCount = Number(thread?.auto_replies_count || 0);
     if (shouldEscalate(body, autoCount)) {
         const reply = escalationMessage(locale);
         const send = await sendWhatsAppText(env, waId, reply);
@@ -169,7 +259,9 @@ async function handleInbound(env, msg, displayName) {
         return;
     }
 
-    // Generate AI reply.
+    // -----------------------------------------------------------------------
+    // AI follow-up reply (post-intake or returning contacts).
+    // -----------------------------------------------------------------------
     const history = await loadRecentMessages(env, waId, 12);
     const reply = await generateAiReply(env, history, locale);
     const send = await sendWhatsAppText(env, waId, reply);

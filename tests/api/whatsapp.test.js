@@ -5,7 +5,12 @@ import {
     detectIntent,
     shouldEscalate,
     verifySignature,
-    sanitize
+    sanitize,
+    parseQualification,
+    isInIntakeFlow,
+    shouldStartIntake,
+    runIntakeStep,
+    startIntake
 } from "../../functions/_lib/whatsapp.js";
 
 const makeReq = (raw, headers = {}) =>
@@ -130,12 +135,12 @@ describe("POST /api/whatsapp/webhook (signature + processing)", () => {
         expect(res.status).toBe(200);
     });
 
-    it("processes inbound text message: persists, calls AI, sends reply", async () => {
+    it("new contact: starts intake flow, sends device-type list (not AI)", async () => {
         const db = mockDb();
-        // No prior thread, no prior messages
+        // No prior thread → shouldStartIntake returns true
         db._first.mockResolvedValueOnce(null); // loadThread
 
-        const aiRun = vi.fn().mockResolvedValue({ response: "Bonjour, quel appareil ?" });
+        const aiRun = vi.fn();
         const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
             new Response(JSON.stringify({ messages: [{ id: "wamid.OUT1" }] }), {
                 status: 200,
@@ -170,11 +175,64 @@ describe("POST /api/whatsapp/webhook (signature + processing)", () => {
             }
         });
         expect(res.status).toBe(200);
-        expect(aiRun).toHaveBeenCalled();
+        // Intake flow: AI must NOT be called on first message.
+        expect(aiRun).not.toHaveBeenCalled();
+        // An interactive list (device selection) must be sent via the Graph API.
         expect(fetchSpy).toHaveBeenCalledWith(
             expect.stringContaining("graph.facebook.com"),
             expect.objectContaining({ method: "POST" })
         );
+        const sentBody = JSON.parse(fetchSpy.mock.calls[0][1].body);
+        expect(sentBody.type).toBe("interactive");
+        expect(sentBody.interactive.type).toBe("list");
+        fetchSpy.mockRestore();
+    });
+
+    it("returning contact with completed intake: AI reply is sent", async () => {
+        const db = mockDb();
+        // Existing thread with completed intake
+        db._first
+            .mockResolvedValueOnce({
+                wa_id: "15145550099",
+                status: "auto",
+                auto_replies_count: 1,
+                qualification_json: JSON.stringify({ step: "COMPLETE", device: "HDD", symptoms: "Bruit", urgency: "Standard (3-7 j.)", locale: "fr" })
+            }) // loadThread
+            .mockResolvedValueOnce(null); // loadRecentMessages inner first (none)
+        db._all.mockResolvedValueOnce({ results: [] }); // loadRecentMessages
+
+        const aiRun = vi.fn().mockResolvedValue({ response: "Bonjour, voici nos tarifs…" });
+        const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+            new Response(JSON.stringify({ messages: [{ id: "wamid.OUT9" }] }), { status: 200 })
+        );
+
+        const payload = {
+            entry: [{
+                changes: [{
+                    value: {
+                        contacts: [{ wa_id: "15145550099", profile: { name: "Carol" } }],
+                        messages: [{
+                            from: "15145550099",
+                            id: "wamid.IN9",
+                            type: "text",
+                            timestamp: "1714200009",
+                            text: { body: "Combien ça coûte ?" }
+                        }]
+                    }
+                }]
+            }]
+        };
+        const res = await onRequestPost({
+            request: makeReq(JSON.stringify(payload)),
+            env: {
+                INTAKE_DB: db,
+                AI: { run: aiRun },
+                WHATSAPP_PHONE_NUMBER_ID: "PHONE",
+                WHATSAPP_ACCESS_TOKEN: "TOKEN"
+            }
+        });
+        expect(res.status).toBe(200);
+        expect(aiRun).toHaveBeenCalled();
         fetchSpy.mockRestore();
     });
 
@@ -218,6 +276,136 @@ describe("POST /api/whatsapp/webhook (signature + processing)", () => {
         // Reply body must contain the human handoff phrase
         const sentBody = JSON.parse(fetchSpy.mock.calls[0][1].body);
         expect(sentBody.text.body.toLowerCase()).toContain("examinateur");
+        fetchSpy.mockRestore();
+    });
+});
+
+// ---------------------------------------------------------------------------
+// Intake state-machine unit tests
+// ---------------------------------------------------------------------------
+
+describe("intake helper functions", () => {
+    it("parseQualification returns null for empty string", () => {
+        expect(parseQualification("")).toBeNull();
+        expect(parseQualification(null)).toBeNull();
+        expect(parseQualification("not-json")).toBeNull();
+    });
+
+    it("parseQualification parses valid JSON", () => {
+        const q = { step: "DEVICE", device: null, symptoms: null, urgency: null, locale: "fr" };
+        expect(parseQualification(JSON.stringify(q))).toEqual(q);
+    });
+
+    it("isInIntakeFlow returns false for null thread", () => {
+        expect(isInIntakeFlow(null)).toBe(false);
+    });
+
+    it("isInIntakeFlow returns true when step is DEVICE", () => {
+        const thread = {
+            qualification_json: JSON.stringify({ step: "DEVICE", device: null, symptoms: null, urgency: null, locale: "fr" })
+        };
+        expect(isInIntakeFlow(thread)).toBe(true);
+    });
+
+    it("isInIntakeFlow returns false when step is COMPLETE", () => {
+        const thread = {
+            qualification_json: JSON.stringify({ step: "COMPLETE", device: "HDD", symptoms: "Bruit", urgency: "Standard", locale: "fr" })
+        };
+        expect(isInIntakeFlow(thread)).toBe(false);
+    });
+
+    it("shouldStartIntake returns true for null thread (brand-new contact)", () => {
+        expect(shouldStartIntake(null)).toBe(true);
+    });
+
+    it("shouldStartIntake returns true for thread with empty qualification_json and auto status", () => {
+        expect(shouldStartIntake({ status: "auto", qualification_json: "" })).toBe(true);
+        expect(shouldStartIntake({ status: "auto", qualification_json: null })).toBe(true);
+    });
+
+    it("shouldStartIntake returns false for thread with active intake in progress", () => {
+        const thread = {
+            status: "auto",
+            qualification_json: JSON.stringify({ step: "DEVICE", device: null, symptoms: null, urgency: null, locale: "fr" })
+        };
+        expect(shouldStartIntake(thread)).toBe(false);
+    });
+
+    it("shouldStartIntake returns false for thread with human status", () => {
+        expect(shouldStartIntake({ status: "human", qualification_json: "" })).toBe(false);
+    });
+});
+
+describe("runIntakeStep state machine", () => {
+    const makeDb = () => ({
+        prepare: vi.fn().mockReturnThis(),
+        bind: vi.fn().mockReturnThis(),
+        run: vi.fn().mockResolvedValue({}),
+        first: vi.fn().mockResolvedValue(null),
+        all: vi.fn().mockResolvedValue({ results: [] })
+    });
+
+    const makeEnv = (db) => ({
+        INTAKE_DB: db,
+        WHATSAPP_PHONE_NUMBER_ID: "PHONE",
+        WHATSAPP_ACCESS_TOKEN: "TOKEN"
+    });
+
+    it("returns handled:false for COMPLETE step", async () => {
+        const qual = { step: "COMPLETE", device: "HDD", symptoms: "Bruit", urgency: "Standard", locale: "fr" };
+        const result = await runIntakeStep(makeEnv(makeDb()), "15140000001", qual, { type: "text", text: { body: "test" } }, "fr");
+        expect(result.handled).toBe(false);
+    });
+
+    it("DEVICE step: advances to SYMPTOMS and returns handled:true", async () => {
+        const db = makeDb();
+        const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+            new Response(JSON.stringify({ messages: [{ id: "out1" }] }), { status: 200 })
+        );
+        const qual = { step: "DEVICE", device: null, symptoms: null, urgency: null, locale: "fr" };
+        const msg = { type: "interactive", interactive: { list_reply: { id: "dev_hdd", title: "Disque dur" } } };
+        const result = await runIntakeStep(makeEnv(db), "15140000002", qual, msg, "fr");
+
+        expect(result.handled).toBe(true);
+        expect(result.newQual.step).toBe("SYMPTOMS");
+        expect(result.newQual.device).toBeTruthy();
+        expect(fetchSpy).toHaveBeenCalledWith(
+            expect.stringContaining("graph.facebook.com"),
+            expect.objectContaining({ method: "POST" })
+        );
+        fetchSpy.mockRestore();
+    });
+
+    it("SYMPTOMS step: advances to URGENCY with button reply", async () => {
+        const db = makeDb();
+        const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+            new Response(JSON.stringify({ messages: [{ id: "out2" }] }), { status: 200 })
+        );
+        const qual = { step: "SYMPTOMS", device: "SSD", symptoms: null, urgency: null, locale: "en" };
+        const msg = { type: "interactive", interactive: { list_reply: { id: "sym_delete", title: "Deleted" } } };
+        const result = await runIntakeStep(makeEnv(db), "15140000003", qual, msg, "en");
+
+        expect(result.handled).toBe(true);
+        expect(result.newQual.step).toBe("URGENCY");
+        expect(result.newQual.symptoms).toBeTruthy();
+        fetchSpy.mockRestore();
+    });
+
+    it("URGENCY step: marks COMPLETE and sends summary text", async () => {
+        const db = makeDb();
+        const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+            new Response(JSON.stringify({ messages: [{ id: "out3" }] }), { status: 200 })
+        );
+        const qual = { step: "URGENCY", device: "Phone", symptoms: "Water damage", urgency: null, locale: "en" };
+        const msg = { type: "button", button: { payload: "urg_standard", text: "Standard" } };
+        const result = await runIntakeStep(makeEnv(db), "15140000004", qual, msg, "en");
+
+        expect(result.handled).toBe(true);
+        expect(result.newQual.step).toBe("COMPLETE");
+        expect(result.newQual.urgency).toBeTruthy();
+        // Summary must be a plain text message
+        const sentBody = JSON.parse(fetchSpy.mock.calls[0][1].body);
+        expect(sentBody.type).toBe("text");
         fetchSpy.mockRestore();
     });
 });

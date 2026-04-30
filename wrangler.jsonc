@@ -1,24 +1,35 @@
-{
+{npx wrangler pages secret put STRIPE_SECRET_KEY
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "nexuradata",
-  "pages_build_output_dir": "./release-cloudflare",
+  "ai": {
+    "binding": "AI"
+  },
   "compatibility_date": "2026-04-04",
   "d1_databases": [
     {
       "binding": "INTAKE_DB",
-      "database_name": "nexuradata-launch",
       "database_id": "0b16daf7-2de8-490a-857e-23d34d718dcc",
-      "preview_database_id": "c246c5c8-c476-4afe-b393-349679d432f5",
-      "migrations_dir": "./migrations"
+      "database_name": "nexuradata-launch",
+      "migrations_dir": "./migrations",
+      "preview_database_id": "c246c5c8-c476-4afe-b393-349679d432f5"
     }
   ],
-  "ai": {
-    "binding": "AI"
-  },
+  "name": "nexuradata",
+  "pages_build_output_dir": "./release-cloudflare",
   "vars": {
-    "PUBLIC_SITE_ORIGIN": "https://nexuradata.ca",
     "LAB_INBOX_EMAIL": "o.blanchet13@gmail.com",
-    "RESEND_FROM_EMAIL": "NEXURADATA <dossiers@nexuradata.ca>",
-    "OPS_ACCESS_ALLOWED_DOMAIN": "nexuradata.ca"
+    "OPS_ACCESS_ALLOWED_DOMAIN": "nexuradata.ca",
+    "PUBLIC_SITE_ORIGIN": "https://nexuradata.ca",
+    "RESEND_FROM_EMAIL": "NEXURADATA <dossiers@nexuradata.ca>"
   }
+  // Required Pages secrets — set via: npx wrangler pages secret put <NAME>
+  // (Never commit actual values; these comments are documentation only.)
+  //
+  //   WHATSAPP_ACCESS_TOKEN      — Meta system user bearer token
+  //   WHATSAPP_PHONE_NUMBER_ID   — Meta phone number ID (numeric string, e.g. "123456789")
+  //   WHATSAPP_APP_SECRET        — Meta app secret for HMAC-SHA256 signature verification
+  //   WHATSAPP_VERIFY_TOKEN      — Random string; paste into Meta webhook config as well
+  //   RESEND_API_KEY             — Resend API key (re_…) for outbound email
+  //   ACCESS_CODE_SECRET         — Shared secret for ops dashboard access-code validation
+  //   STRIPE_SECRET_KEY          — Stripe secret key (sk_test_… or sk_live_…)
+  //   STRIPE_WEBHOOK_SECRET      — Stripe webhook signing secret (whsec_…)
 }

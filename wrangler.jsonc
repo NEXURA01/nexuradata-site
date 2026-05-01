@@ -1,4 +1,4 @@
-{npx wrangler pages secret put STRIPE_SECRET_KEY
+{
   "$schema": "./node_modules/wrangler/config-schema.json",
   "ai": {
     "binding": "AI"
